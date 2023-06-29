@@ -1,0 +1,11 @@
+header {
+	.gnb {
+		li {
+			a {
+				&.on {
+					color: aquamarine;
+				}
+			}
+		}
+	}
+}

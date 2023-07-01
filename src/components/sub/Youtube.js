@@ -1,5 +1,11 @@
+import SubLayout from '../common/SubLayout';
+
 function Youtube() {
-	return <div>Youtube</div>;
+	return (
+		<SubLayout subPageName={'sub-youtube'} breadCrumb={'HOME / YOUTUBE'} subPageTitle={['PLAYLIST', <br />, 'FOR BOOK']}>
+			<h2>Youtube Content</h2>
+		</SubLayout>
+	);
 }
 
 export default Youtube;

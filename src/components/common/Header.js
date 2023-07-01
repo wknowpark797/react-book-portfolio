@@ -1,4 +1,6 @@
 import { Link, NavLink } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
 
 function Header({ type }) {
 	const activeClass = 'on';
@@ -45,7 +47,7 @@ function Header({ type }) {
 
 				{/* 모바일 메뉴 버튼 */}
 				<button type='button' className='btn-menu'>
-					{/* <i class='fa-solid fa-bars'></i> */}
+					<FontAwesomeIcon icon={faBars} />
 				</button>
 			</div>
 		</header>

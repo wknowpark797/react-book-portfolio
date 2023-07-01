@@ -1,6 +1,6 @@
 import { Link, NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebook, faTwitter, faInstagram } from '@fortawesome/free-brands-svg-icons';
+import { faFacebookF, faTwitter, faInstagram } from '@fortawesome/free-brands-svg-icons';
 
 function Footer() {
 	return (
@@ -13,7 +13,7 @@ function Footer() {
 
 					<div className='sns-wrap'>
 						<NavLink to=''>
-							<FontAwesomeIcon icon={faFacebook} />
+							<FontAwesomeIcon icon={faFacebookF} />
 						</NavLink>
 						<NavLink to=''>
 							<FontAwesomeIcon icon={faTwitter} />

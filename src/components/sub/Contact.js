@@ -1,5 +1,6 @@
-import { Link } from 'react-router-dom';
 import SubLayout from '../common/SubLayout';
+import ContactForm from './ContactForm';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot, faGlobe, faPhone } from '@fortawesome/free-solid-svg-icons';
 import { faInstagram, faYoutube, faFacebookF } from '@fortawesome/free-brands-svg-icons';
@@ -60,35 +61,7 @@ function Contact() {
 
 						<div className='contact-wrap'>
 							<h2>Contact Us.</h2>
-
-							<form action='' method='get' id='formContact' className='form-contact'>
-								<input type='hidden' name='contact_number' />
-
-								<div className='input-box'>
-									<label for='username' className='tit'>
-										Name
-									</label>
-									<input type='text' name='username' id='username' placeholder='이름을 입력하세요.' />
-								</div>
-
-								<div className='input-box'>
-									<label for='email' className='tit'>
-										E-mail
-									</label>
-									<input type='email' name='email' id='email' placeholder='이메일 주소를 입력하세요.' />
-								</div>
-
-								<div className='input-box msg-box'>
-									<label for='message' className='tit'>
-										Message
-									</label>
-									<textarea name='message' id='message' placeholder='문의사항을 입력하세요.'></textarea>
-								</div>
-
-								<div className='btn-wrap'>
-									<input type='submit' value='SEND' />
-								</div>
-							</form>
+							<ContactForm />
 						</div>
 					</div>
 				</div>

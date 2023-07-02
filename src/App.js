@@ -8,7 +8,7 @@ import Members from './components/sub/Members';
 import Gallery from './components/sub/Gallery';
 import Youtube from './components/sub/Youtube';
 import Comment from './components/sub/Comment';
-import Location from './components/sub/Location';
+import Contact from './components/sub/Contact';
 import Signup from './components/sub/Signup';
 import BtnTop from './components/common/BtnTop';
 
@@ -24,7 +24,7 @@ function App() {
 			<Route path='/gallery' component={Gallery} />
 			<Route path='/youtube' component={Youtube} />
 			<Route path='/comment' component={Comment} />
-			<Route path='/location' component={Location} />
+			<Route path='/contact' component={Contact} />
 			<Route path='/signup' component={Signup} />
 
 			<Footer />

@@ -39,7 +39,7 @@ function Footer() {
 							<NavLink to='/comment'>COMMENT</NavLink>
 						</li>
 						<li>
-							<NavLink to='/location'>LOCATION</NavLink>
+							<NavLink to='/contact'>CONTACT</NavLink>
 						</li>
 					</ul>
 

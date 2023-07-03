@@ -10,6 +10,7 @@ import Youtube from './components/sub/Youtube';
 import Comment from './components/sub/Comment';
 import Contact from './components/sub/Contact';
 import Signup from './components/sub/Signup';
+import Signin from './components/sub/Signin';
 import BtnTop from './components/common/BtnTop';
 
 function App() {
@@ -26,6 +27,7 @@ function App() {
 			<Route path='/comment' component={Comment} />
 			<Route path='/contact' component={Contact} />
 			<Route path='/signup' component={Signup} />
+			<Route path='/signin' component={Signin} />
 
 			<Footer />
 			<BtnTop />

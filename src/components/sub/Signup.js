@@ -1,8 +1,98 @@
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faOptinMonster, faEarlybirds, faFacebookF, faGooglePlusG, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
+import { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 
 function Signup() {
+	const history = useHistory();
+
+	const initValue = {
+		userid: '',
+		pwd1: '',
+		pwd2: '',
+		email: '',
+		edu: '',
+		gender: false,
+		hobby: false,
+		comments: '',
+	};
+	const [Value, setValue] = useState(initValue);
+	const [Errors, setErrors] = useState({});
+	const [Submit, setSubmit] = useState(false);
+
+	useEffect(() => {
+		const errLength = Object.keys(Errors).length;
+		if (errLength === 0 && Submit) {
+			alert('모든 인증을 통과하였습니다.');
+			history.push('/signin');
+		}
+	}, [Errors]);
+
+	const checkValid = (value) => {
+		const errors = {};
+		const eng = /[a-zA-Z]/;
+		const num = /[0-9]/;
+		const spc = /[~!@#$%^&*()_+]/;
+
+		if (value.userid.length < 5) {
+			errors.userid = '아이디는 5글자 이상 입력하세요.';
+		}
+		if (value.pwd1.length < 4 || !eng.test(value.pwd1) || !num.test(value.pwd1) || !spc.test(value.pwd1)) {
+			errors.pwd1 = '비밀번호는 4글자 이상, 특수문자와 영문자 그리고 숫자를 포함하여 입력하세요.';
+		}
+		if (value.pwd1 !== value.pwd2 || !value.pwd2) {
+			errors.pwd2 = '두개의 비밀번호를 동일하게 입력하세요.';
+		}
+		if (value.email.length < 8 || !/@/.test(value.email)) {
+			errors.email = '이메일주소는 @를 포함하여 8글자 이상 입력하세요.';
+		}
+		if (value.edu === '') {
+			errors.edu = '최종학력을 선택하세요.';
+		}
+		if (!value.gender) {
+			errors.gender = '성별을 선택하세요.';
+		}
+		if (!value.hobby) {
+			errors.hobby = '관심사를 하나 이상 선택하세요.';
+		}
+		if (value.comments.length < 10) {
+			errors.comments = '남기는 글은 10글자 이상 입력하세요.';
+		}
+
+		return errors;
+	};
+
+	const handleSubmit = (e) => {
+		e.preventDefault();
+		setErrors(checkValid(Value));
+		setSubmit(true);
+	};
+
+	const changeInput = (e) => {
+		const { name, value } = e.target;
+		setValue({ ...Value, [name]: value });
+	};
+
+	const changeSelect = (e) => {
+		const { name, value } = e.target;
+		setValue({ ...Value, [name]: value });
+	};
+
+	const changeRadio = (e) => {
+		const { name, checked } = e.target;
+		setValue({ ...Value, [name]: checked });
+	};
+
+	const changeCheck = (e) => {
+		const { name } = e.target;
+		let isChecked = false;
+		const inputs = e.target.closest('.check-wrap').querySelectorAll('input');
+		inputs.forEach((el) => el.checked && (isChecked = true));
+
+		setValue({ ...Value, [name]: isChecked });
+	};
+
 	return (
 		<section className='sign-up'>
 			<div className='inner-container'>
@@ -52,7 +142,7 @@ function Signup() {
 						<p>or use your email for registration:</p>
 					</div>
 
-					<form id='formSignup' className='form-signup'>
+					<form id='formSignup' className='form-signup' onSubmit={handleSubmit}>
 						<fieldset>
 							<legend className='h'>회원가입 form 입력 항목</legend>
 
@@ -61,7 +151,9 @@ function Signup() {
 								<label htmlFor='userid' className='tit'>
 									User ID
 								</label>
-								<input type='text' name='userid' id='userid' placeholder='아이디를 입력하세요.' />
+								<input type='text' name='userid' id='userid' placeholder='아이디를 입력하세요.' onChange={changeInput} value={Value.userid} />
+
+								{Errors.userid && <p className='error'>{Errors.userid}</p>}
 							</div>
 
 							{/* password */}
@@ -69,14 +161,18 @@ function Signup() {
 								<label htmlFor='pwd1' className='tit'>
 									Password
 								</label>
-								<input type='password' name='pwd1' id='pwd1' placeholder='비밀번호를 입력하세요.' />
+								<input type='password' name='pwd1' id='pwd1' placeholder='비밀번호를 입력하세요.' onChange={changeInput} value={Value.pwd1} />
+
+								{Errors.pwd1 && <p className='error'>{Errors.pwd1}</p>}
 							</div>
 
 							<div className='input-box'>
 								<label htmlFor='pwd2' className='tit'>
 									Re Passsword
 								</label>
-								<input type='password' name='pwd2' id='pwd2' placeholder='비밀번호를 재 입력하세요.' />
+								<input type='password' name='pwd2' id='pwd2' placeholder='비밀번호를 재 입력하세요.' onChange={changeInput} value={Value.pwd2} />
+
+								{Errors.pwd2 && <p className='error'>{Errors.pwd2}</p>}
 							</div>
 
 							{/* Email */}
@@ -84,7 +180,9 @@ function Signup() {
 								<label htmlFor='email' className='tit'>
 									E-mail
 								</label>
-								<input type='email' name='email' id='email' placeholder='이메일 주소를 입력하세요.' />
+								<input type='text' name='email' id='email' placeholder='이메일 주소를 입력하세요.' onChange={changeInput} value={Value.email} />
+
+								{Errors.email && <p className='error'>{Errors.email}</p>}
 							</div>
 
 							{/* Education */}
@@ -93,13 +191,15 @@ function Signup() {
 									Education
 								</label>
 
-								<select name='edu' id='edu'>
+								<select name='edu' id='edu' onChange={changeSelect}>
 									<option value=''>최종학력을 선택해주세요.</option>
 									<option value='elementary school'>초등학교 졸업</option>
 									<option value='middle school'>중학교 졸업</option>
 									<option value='high school'>고등학교 졸업</option>
 									<option value='college'>대학교 졸업</option>
 								</select>
+
+								{Errors.edu && <p className='error'>{Errors.edu}</p>}
 							</div>
 
 							{/* Gender */}
@@ -108,15 +208,17 @@ function Signup() {
 
 								<div className='radio-wrap'>
 									<div>
-										<input type='radio' name='gender' id='male' value='male' />
+										<input type='radio' name='gender' id='male' value='male' onChange={changeRadio} />
 										<label htmlFor='male'>Male</label>
 									</div>
 
 									<div>
-										<input type='radio' name='gender' id='female' value='female' />
+										<input type='radio' name='gender' id='female' value='female' onChange={changeRadio} />
 										<label htmlFor='female'>Female</label>
 									</div>
 								</div>
+
+								{Errors.gender && <p className='error'>{Errors.gender}</p>}
 							</div>
 
 							{/* Interests */}
@@ -125,25 +227,27 @@ function Signup() {
 
 								<div className='check-wrap'>
 									<div>
-										<input type='checkbox' name='hobby' id='sports' value='sports' />
+										<input type='checkbox' name='hobby' id='sports' value='sports' onChange={changeCheck} />
 										<label htmlFor='sports'>Sports</label>
 									</div>
 
 									<div>
-										<input type='checkbox' name='hobby' id='music' value='music' />
+										<input type='checkbox' name='hobby' id='music' value='music' onChange={changeCheck} />
 										<label htmlFor='music'>Music</label>
 									</div>
 
 									<div>
-										<input type='checkbox' name='hobby' id='game' value='game' />
+										<input type='checkbox' name='hobby' id='game' value='game' onChange={changeCheck} />
 										<label htmlFor='game'>Game</label>
 									</div>
 
 									<div>
-										<input type='checkbox' name='hobby' id='reading' value='reading' />
+										<input type='checkbox' name='hobby' id='reading' value='reading' onChange={changeCheck} />
 										<label htmlFor='reading'>Reading</label>
 									</div>
 								</div>
+
+								{Errors.hobby && <p className='error'>{Errors.hobby}</p>}
 							</div>
 
 							{/* Comments */}
@@ -151,11 +255,13 @@ function Signup() {
 								<label htmlFor='comments' className='tit'>
 									Comments
 								</label>
-								<textarea name='comments' id='comments' cols='30' rows='7' placeholder='남기는 글을 입력하세요.'></textarea>
+								<textarea name='comments' id='comments' cols='30' rows='7' placeholder='남기는 글을 입력하세요.' onChange={changeInput} value={Value.comments}></textarea>
+
+								{Errors.comments && <p className='error'>{Errors.comments}</p>}
 							</div>
 
 							<div className='btn-wrap'>
-								<input type='reset' value='RESET' />
+								<input type='reset' value='RESET' onClick={() => setValue(initValue)} />
 								<input type='submit' value='SIGN UP' />
 							</div>
 						</fieldset>

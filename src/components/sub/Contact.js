@@ -1,15 +1,17 @@
 import SubLayout from '../common/SubLayout';
 import ContactForm from './ContactForm';
-import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot, faGlobe, faPhone } from '@fortawesome/free-solid-svg-icons';
 import { faInstagram, faYoutube, faFacebookF } from '@fortawesome/free-brands-svg-icons';
+import { useState, useEffect, useRef } from 'react';
 
 function Contact() {
 	const { kakao } = window;
 	const mapContainer = useRef(null);
-	const [Index, setIndex] = useState(0);
+	const [Map, setMap] = useState(null); // 지도 인스턴스
+	const [Index, setIndex] = useState(0); // 선택된 도서관 index
+	const [Traffic, setTraffic] = useState(false);
 
 	const markerInfo = [
 		{
@@ -74,9 +76,28 @@ function Contact() {
 	const marker = new kakao.maps.Marker({ position: mapOption.center, image: markerImage });
 
 	useEffect(() => {
-		const map = new kakao.maps.Map(mapContainer.current, mapOption);
-		marker.setMap(map);
+		mapContainer.current.innerHTML = ''; // 지도 초기화
+
+		const map = new kakao.maps.Map(mapContainer.current, mapOption); // 지도 인스턴스 생성
+		marker.setMap(map); // 마커 표시
+		map.addControl(new kakao.maps.MapTypeControl(), kakao.maps.ControlPosition.TOPRIGHT); // 지도타입 컨트롤 표시
+		map.addControl(new kakao.maps.ZoomControl(), kakao.maps.ControlPosition.RIGHT); // 확대 축소 컨트롤 표시
+		map.setZoomable(false); // 마우스 휠 기능 비활성화
+
+		setMap(map);
+
+		// 지도 중심 이동 설정
+		const setCenter = () => {
+			map.setCenter(markerInfo[Index].position);
+		};
+		window.addEventListener('resize', setCenter);
+		return () => window.removeEventListener('resize', setCenter);
 	}, [Index]);
+
+	useEffect(() => {
+		// 교통정보 표시
+		Traffic ? Map?.addOverlayMapTypeId(kakao.maps.MapTypeId.TRAFFIC) : Map?.removeOverlayMapTypeId(kakao.maps.MapTypeId.TRAFFIC);
+	}, [Traffic]);
 
 	return (
 		<SubLayout subPageName={'sub-contact'} breadCrumb={'HOME / CONTACT'} subPageTitle={['WHERE', <br />, 'WE ARE']}>
@@ -95,8 +116,8 @@ function Contact() {
 							})}
 						</ul>
 
-						<button type='button' className='btn-traffic'>
-							교통정보 OFF
+						<button type='button' className='btn-traffic' onClick={() => setTraffic(!Traffic)}>
+							{Traffic ? '교통정보 ON' : '교통정보 OFF'}
 						</button>
 					</div>
 
@@ -111,9 +132,9 @@ function Contact() {
 								<li>
 									<FontAwesomeIcon icon={faGlobe} />
 									<p>
-										<Link to={markerInfo[Index].website.link} target='_blank'>
+										<a rel='noopener noreferrer' href={markerInfo[Index].website.link} target='_blank'>
 											{markerInfo[Index].website.title}
-										</Link>
+										</a>
 									</p>
 								</li>
 								<li>

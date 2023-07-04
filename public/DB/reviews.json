@@ -1,0 +1,39 @@
+{
+  "reviews": [
+    {
+      "bookName": "일상의 빈칸",
+      "reviewContent": "Lorem ipsum dolor sit amet consectetur adipisicing elit.",
+      "profileImg": "my-profile.jpg",
+      "userName": "Woo Ara",
+      "date": "2023.06.17"
+    },
+    {
+      "bookName": "일상의 한칸",
+      "reviewContent": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Id temporibus exercitationem culpa saepe, nulla veniam aliquam.",
+      "profileImg": "example_user2.jpg",
+      "userName": "Emily Simpson",
+      "date": "2023.06.18"
+    },
+    {
+      "bookName": "일상의 두칸",
+      "reviewContent": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Id temporibus exercitationem culpa saepe, nulla veniam aliquam. Ea dicta officia dolorum.",
+      "profileImg": "example_user3.jpg",
+      "userName": "Paul Davison",
+      "date": "2023.06.19"
+    },
+    {
+      "bookName": "일상의 빈칸",
+      "reviewContent": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Id temporibus exercitationem culpa saepe, nulla veniam aliquam. Ea dicta officia dolorum.",
+      "profileImg": "my-profile.jpg",
+      "userName": "Woo Ara",
+      "date": "2023.06.20"
+    },
+    {
+      "bookName": "일상의 한칸",
+      "reviewContent": "Lorem ipsum dolor sit amet consectetur adipisicing elit. Id temporibus exercitationem culpa saepe, nulla veniam aliquam. Ea dicta officia dolorum.",
+      "profileImg": "example_user3.jpg",
+      "userName": "Paul Davison",
+      "date": "2023.06.21"
+    }
+  ]
+}

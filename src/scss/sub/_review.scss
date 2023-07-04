@@ -5,8 +5,8 @@
 		.inner-container {
 			width: $subContainer;
 			margin: 0 auto;
+
 			display: flex;
-			justify-content: space-between;
 			align-items: flex-start;
 
 			.input-wrap {
@@ -80,12 +80,14 @@
 			.show-wrap {
 				flex: 1;
 				background: #f7f7f7;
+				border-radius: 15px;
 				padding: 30px;
 
 				article {
 					background: #fff;
+					border-radius: 10px;
 					box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
-					padding: 30px;
+					padding: 25px 30px;
 
 					&:not(:first-child) {
 						margin-top: 30px;
@@ -93,7 +95,7 @@
 
 					h2 {
 						font-family: 'Noto Serif KR';
-						font-size: 24px;
+						font-size: 22px;
 						font-weight: 900;
 						color: #333;
 						margin-bottom: 15px;
@@ -106,13 +108,12 @@
 						color: #777;
 
 						&.user {
-							font-size: 16px;
 							font-weight: 700;
 							color: #333;
 						}
 					}
 
-					.info-box {
+					.info-wrap {
 						display: flex;
 						align-items: center;
 						margin-top: 30px;
@@ -123,7 +124,7 @@
 							background: #eee;
 							border-radius: 50%;
 							overflow: hidden;
-							margin-right: 10px;
+							margin-right: 15px;
 						}
 					}
 
@@ -131,23 +132,19 @@
 						display: flex;
 						justify-content: flex-end;
 						align-items: center;
-						margin-top: 30px;
+						margin-top: 20px;
 
 						button {
 							font-size: 14px;
-							font-weight: 300;
-							color: #fff;
-							border: none;
-							background: #444;
-							padding: 5px 10px;
+							color: orange;
 							cursor: pointer;
 
 							&:not(:first-child) {
-								margin-left: 10px;
+								margin-left: 20px;
 							}
 
 							&.btn-delete {
-								background: #ca3034;
+								color: #ca3034;
 							}
 						}
 					}

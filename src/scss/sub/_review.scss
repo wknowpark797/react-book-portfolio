@@ -1,0 +1,158 @@
+.sub-review {
+	.review-wrap {
+		padding: 100px 0 120px;
+
+		.inner-container {
+			width: $subContainer;
+			margin: 0 auto;
+			display: flex;
+			justify-content: space-between;
+			align-items: flex-start;
+
+			.input-wrap {
+				width: 350px;
+				margin-right: 50px;
+
+				.input-box {
+					&:not(:first-child) {
+						margin-top: 20px;
+					}
+
+					.tit {
+						display: block;
+						font-size: 14px;
+						color: #999;
+						margin-bottom: 7px;
+					}
+
+					input[type='text'],
+					textarea {
+						width: 100%;
+						height: 50px;
+						background: #f7f7f7;
+						padding: 0 15px;
+						border: none;
+						outline: none;
+						font-family: 'Noto Sans KR';
+						font-size: 14px;
+						color: #333;
+
+						&::placeholder {
+							font-size: 13px;
+							color: #bfbfbf;
+						}
+					}
+
+					textarea {
+						height: 150px;
+						padding: 15px;
+						resize: none;
+					}
+				}
+
+				.btn-wrap {
+					display: flex;
+					align-items: center;
+					margin-top: 20px;
+
+					button {
+						flex: 1;
+						height: 45px;
+						font-size: 14px;
+						font-weight: 300;
+						line-height: 45px;
+						color: #fff;
+						border: none;
+						background: #444;
+						cursor: pointer;
+
+						&:not(:first-child) {
+							margin-left: 10px;
+						}
+
+						&.btn-write {
+							background: #4eb3b3;
+						}
+					}
+				}
+			}
+
+			.show-wrap {
+				flex: 1;
+				background: #f7f7f7;
+				padding: 30px;
+
+				article {
+					background: #fff;
+					box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.1);
+					padding: 30px;
+
+					&:not(:first-child) {
+						margin-top: 30px;
+					}
+
+					h2 {
+						font-family: 'Noto Serif KR';
+						font-size: 24px;
+						font-weight: 900;
+						color: #333;
+						margin-bottom: 15px;
+					}
+
+					p {
+						font-size: 15px;
+						font-weight: 300;
+						line-height: 1.5;
+						color: #777;
+
+						&.user {
+							font-size: 16px;
+							font-weight: 700;
+							color: #333;
+						}
+					}
+
+					.info-box {
+						display: flex;
+						align-items: center;
+						margin-top: 30px;
+
+						.profile-box {
+							width: 50px;
+							height: 50px;
+							background: #eee;
+							border-radius: 50%;
+							overflow: hidden;
+							margin-right: 10px;
+						}
+					}
+
+					.btn-wrap {
+						display: flex;
+						justify-content: flex-end;
+						align-items: center;
+						margin-top: 30px;
+
+						button {
+							font-size: 14px;
+							font-weight: 300;
+							color: #fff;
+							border: none;
+							background: #444;
+							padding: 5px 10px;
+							cursor: pointer;
+
+							&:not(:first-child) {
+								margin-left: 10px;
+							}
+
+							&.btn-delete {
+								background: #ca3034;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+}

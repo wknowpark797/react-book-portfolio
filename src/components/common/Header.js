@@ -29,8 +29,8 @@ function Header({ type }) {
 						</NavLink>
 					</li>
 					<li>
-						<NavLink to='/comment' activeClassName={activeClass}>
-							COMMENT
+						<NavLink to='/review' activeClassName={activeClass}>
+							REVIEW
 						</NavLink>
 					</li>
 					<li>

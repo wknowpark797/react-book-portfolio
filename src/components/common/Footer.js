@@ -36,7 +36,7 @@ function Footer() {
 							<NavLink to='/youtube'>YOUTUBE</NavLink>
 						</li>
 						<li>
-							<NavLink to='/comment'>COMMENT</NavLink>
+							<NavLink to='/review'>REVIEW</NavLink>
 						</li>
 						<li>
 							<NavLink to='/contact'>CONTACT</NavLink>

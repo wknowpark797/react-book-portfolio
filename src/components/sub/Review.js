@@ -49,6 +49,11 @@ function Review() {
 		resetForm();
 	};
 
+	const deleteReview = (index) => {
+		if (!window.confirm('게시물을 삭제하시겠습니까?')) return;
+		setReviews(Reviews.filter((_, idx) => idx !== index));
+	};
+
 	return (
 		<SubLayout subPageName={'sub-review'} breadCrumb={'HOME / REVIEW'} subPageTitle={['EXPERIENCES', <br />, 'FOR BOOK']}>
 			<div className='review-wrap'>
@@ -101,7 +106,7 @@ function Review() {
 									{review.userName === 'Woo Ara' && (
 										<div className='btn-wrap'>
 											<button type='button'>EDIT</button>
-											<button type='button' className='btn-delete'>
+											<button type='button' className='btn-delete' onClick={() => deleteReview(idx)}>
 												DELETE
 											</button>
 										</div>

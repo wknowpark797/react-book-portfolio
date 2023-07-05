@@ -5,6 +5,8 @@ import axios from 'axios';
 function Review() {
 	const inputBookName = useRef(null);
 	const inputReviewContent = useRef(null);
+	const editBookName = useRef(null);
+	const editReviewContent = useRef(null);
 	const [Reviews, setReviews] = useState([]);
 
 	useEffect(() => {
@@ -54,6 +56,24 @@ function Review() {
 		setReviews(Reviews.filter((_, idx) => idx !== index));
 	};
 
+	const enableUpdate = (index) => {
+		setReviews(
+			Reviews.map((review, idx) => {
+				if (idx === index) review.enableUpdate = true;
+				return review;
+			})
+		);
+	};
+
+	const disableUpdate = (index) => {
+		setReviews(
+			Reviews.map((review, idx) => {
+				if (idx === index) review.enableUpdate = false;
+				return review;
+			})
+		);
+	};
+
 	return (
 		<SubLayout subPageName={'sub-review'} breadCrumb={'HOME / REVIEW'} subPageTitle={['EXPERIENCES', <br />, 'FOR BOOK']}>
 			<div className='review-wrap'>
@@ -89,8 +109,23 @@ function Review() {
 						{Reviews.map((review, idx) => {
 							return (
 								<article key={idx}>
-									<h2>{review.bookName}</h2>
-									<p>{review.reviewContent}</p>
+									{review.enableUpdate ? (
+										<>
+											{/* 수정모드 */}
+											<div className='input-box'>
+												<input type='text' ref={editBookName} defaultValue={review.bookName} />
+											</div>
+											<div className='input-box'>
+												<textarea ref={editReviewContent} defaultValue={review.reviewContent}></textarea>
+											</div>
+										</>
+									) : (
+										<>
+											{/* 출력모드 */}
+											<h2>{review.bookName}</h2>
+											<p>{review.reviewContent}</p>
+										</>
+									)}
 
 									<div className='info-wrap'>
 										<div className='profile-box'>
@@ -103,13 +138,34 @@ function Review() {
 									</div>
 
 									{/* 내가 작성한 게시물에서만 노출 */}
-									{review.userName === 'Woo Ara' && (
-										<div className='btn-wrap'>
-											<button type='button'>EDIT</button>
-											<button type='button' className='btn-delete' onClick={() => deleteReview(idx)}>
-												DELETE
-											</button>
-										</div>
+									{review.enableUpdate ? (
+										<>
+											{/* 수정모드 */}
+											{review.userName === 'Woo Ara' && (
+												<div className='btn-wrap'>
+													<button type='button' onClick={() => disableUpdate(idx)}>
+														CANCEL
+													</button>
+													<button type='button' className='btn-update'>
+														UPDATE
+													</button>
+												</div>
+											)}
+										</>
+									) : (
+										<>
+											{/* 출력모드 */}
+											{review.userName === 'Woo Ara' && (
+												<div className='btn-wrap'>
+													<button type='button' onClick={() => enableUpdate(idx)}>
+														EDIT
+													</button>
+													<button type='button' className='btn-delete' onClick={() => deleteReview(idx)}>
+														DELETE
+													</button>
+												</div>
+											)}
+										</>
 									)}
 								</article>
 							);

@@ -5,50 +5,49 @@
 		.inner-container {
 			width: $subContainer;
 			margin: 0 auto;
-
 			display: flex;
 			align-items: flex-start;
 
-			.input-wrap {
-				width: 350px;
-				margin-right: 50px;
+			.input-box {
+				&:not(:first-child) {
+					margin-top: 20px;
+				}
 
-				.input-box {
-					&:not(:first-child) {
-						margin-top: 20px;
-					}
+				.tit {
+					display: block;
+					font-size: 14px;
+					color: #999;
+					margin-bottom: 7px;
+				}
 
-					.tit {
-						display: block;
-						font-size: 14px;
-						color: #999;
-						margin-bottom: 7px;
-					}
+				input[type='text'],
+				textarea {
+					width: 100%;
+					height: 50px;
+					background: #f7f7f7;
+					padding: 0 15px;
+					border: none;
+					outline: none;
+					font-family: 'Noto Sans KR';
+					font-size: 14px;
+					color: #333;
 
-					input[type='text'],
-					textarea {
-						width: 100%;
-						height: 50px;
-						background: #f7f7f7;
-						padding: 0 15px;
-						border: none;
-						outline: none;
-						font-family: 'Noto Sans KR';
-						font-size: 14px;
-						color: #333;
-
-						&::placeholder {
-							font-size: 13px;
-							color: #bfbfbf;
-						}
-					}
-
-					textarea {
-						height: 150px;
-						padding: 15px;
-						resize: none;
+					&::placeholder {
+						font-size: 13px;
+						color: #bfbfbf;
 					}
 				}
+
+				textarea {
+					height: 100px;
+					padding: 15px;
+					resize: none;
+				}
+			}
+
+			.input-wrap {
+				width: 450px;
+				margin-right: 50px;
 
 				.btn-wrap {
 					display: flex;
@@ -147,6 +146,10 @@
 
 							&:not(:first-child) {
 								margin-left: 20px;
+							}
+
+							&.btn-update {
+								color: #2ba9a9;
 							}
 
 							&.btn-delete {

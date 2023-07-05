@@ -8,6 +8,7 @@ function Review() {
 	const editBookName = useRef(null);
 	const editReviewContent = useRef(null);
 	const [Reviews, setReviews] = useState([]);
+	const [Updating, setUpdating] = useState(false);
 
 	useEffect(() => {
 		dataFetch();
@@ -57,6 +58,8 @@ function Review() {
 	};
 
 	const enableUpdate = (index) => {
+		if (Updating) return alert('수정 중인 리뷰가 있습니다.');
+		setUpdating(true);
 		setReviews(
 			Reviews.map((review, idx) => {
 				if (idx === index) review.enableUpdate = true;
@@ -72,6 +75,26 @@ function Review() {
 				return review;
 			})
 		);
+		setUpdating(false);
+	};
+
+	const updateReview = (index) => {
+		if (!editBookName.current.value.trim() || !editReviewContent.current.value.trim()) {
+			return alert('수정할 도서명과 리뷰 내용을 모두 입력하세요.');
+		}
+
+		setReviews(
+			Reviews.map((review, idx) => {
+				if (idx === index) {
+					review.bookName = editBookName.current.value;
+					review.reviewContent = editReviewContent.current.value;
+					review.enableUpdate = false;
+				}
+				return review;
+			})
+		);
+
+		setUpdating(false);
 	};
 
 	return (
@@ -146,7 +169,7 @@ function Review() {
 													<button type='button' onClick={() => disableUpdate(idx)}>
 														CANCEL
 													</button>
-													<button type='button' className='btn-update'>
+													<button type='button' className='btn-update' onClick={() => updateReview(idx)}>
 														UPDATE
 													</button>
 												</div>

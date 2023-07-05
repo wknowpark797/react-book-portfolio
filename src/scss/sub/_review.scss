@@ -47,7 +47,11 @@
 
 			.input-wrap {
 				width: 450px;
+				padding-top: 30px;
 				margin-right: 50px;
+				position: -webkit-sticky;
+				position: sticky;
+				top: 0;
 
 				.btn-wrap {
 					display: flex;

@@ -1,23 +1,40 @@
 import SubLayout from '../common/SubLayout';
 import { useState, useEffect, useRef } from 'react';
-import axios from 'axios';
 
 function Review() {
+	const dummyReviews = [
+		{
+			bookName: '일상의 빈칸',
+			reviewContent: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Id temporibus exercitationem culpa saepe, nulla veniam aliquam. Ea dicta officia dolorum.',
+			profileImg: 'my-profile.jpg',
+			userName: 'Woo Ara',
+			date: '2023.06.20',
+		},
+		{
+			bookName: '일상의 한칸',
+			reviewContent: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Id temporibus exercitationem culpa saepe, nulla veniam aliquam. Ea dicta officia dolorum.',
+			profileImg: 'example_user3.jpg',
+			userName: 'Paul Davison',
+			date: '2023.06.21',
+		},
+	];
+
+	const getLocalData = () => {
+		const data = localStorage.getItem('reviews');
+		if (data) return JSON.parse(data);
+		else return dummyReviews;
+	};
+
 	const inputBookName = useRef(null);
 	const inputReviewContent = useRef(null);
 	const editBookName = useRef(null);
 	const editReviewContent = useRef(null);
-	const [Reviews, setReviews] = useState([]);
+	const [Reviews, setReviews] = useState(getLocalData);
 	const [Updating, setUpdating] = useState(false);
 
 	useEffect(() => {
-		dataFetch();
-	}, []);
-
-	const dataFetch = async () => {
-		const result = await axios.get(`${process.env.PUBLIC_URL}/DB/reviews.json`);
-		setReviews(result.data.reviews);
-	};
+		localStorage.setItem('reviews', JSON.stringify(Reviews));
+	}, [Reviews]);
 
 	const setToday = () => {
 		const today = new Date();

@@ -9,6 +9,7 @@ function Review() {
 			profileImg: 'my-profile.jpg',
 			userName: 'Woo Ara',
 			date: '2023.06.20',
+			updateDate: '2023.06.21',
 		},
 		{
 			bookName: '일상의 한칸',
@@ -105,6 +106,7 @@ function Review() {
 				if (idx === index) {
 					review.bookName = editBookName.current.value;
 					review.reviewContent = editReviewContent.current.value;
+					review.updateDate = setToday();
 					review.enableUpdate = false;
 				}
 				return review;
@@ -174,6 +176,7 @@ function Review() {
 										<div className='info-box'>
 											<p className='user'>{review.userName}</p>
 											<p>{review.date}</p>
+											{review.updateDate && <p>{review.updateDate} [마지막 수정 날짜]</p>}
 										</div>
 									</div>
 

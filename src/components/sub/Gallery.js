@@ -2,7 +2,7 @@ import SubLayout from '../common/SubLayout';
 
 function Gallery() {
 	return (
-		<SubLayout subPageName={'sub-gallery'} breadCrumb={'HOME / GALLERY'} subPageTitle={['PHOTOS', <br />, 'FOR BOOK']}>
+		<SubLayout subPageName={'sub-gallery'} breadCrumb={'HOME / GALLERY'} subPageTitle={'PHOTOS-FOR BOOK'}>
 			<h2>Gallery Content</h2>
 		</SubLayout>
 	);

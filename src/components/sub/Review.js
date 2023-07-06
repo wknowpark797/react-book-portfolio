@@ -117,7 +117,7 @@ function Review() {
 	};
 
 	return (
-		<SubLayout subPageName={'sub-review'} breadCrumb={'HOME / REVIEW'} subPageTitle={['EXPERIENCES', <br />, 'FOR BOOK']}>
+		<SubLayout subPageName={'sub-review'} breadCrumb={'HOME / REVIEW'} subPageTitle={'EXPERIENCES-FOR BOOK'}>
 			<div className='review-wrap'>
 				<div className='inner-container'>
 					{/* review input */}

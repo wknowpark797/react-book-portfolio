@@ -19,7 +19,7 @@ function Members() {
 	}, []);
 
 	return (
-		<SubLayout subPageName={'members'} breadCrumb={'HOME / MEMBERS'} subPageTitle={['WHO', <br />, 'WE ARE']}>
+		<SubLayout subPageName={'members'} breadCrumb={'HOME / MEMBERS'} subPageTitle={'WHO-WE ARE'}>
 			<div className='intro-wrap'>
 				<div id='directorsWrap' className='img-wrap'>
 					{Directors.map((director, idx) => {

@@ -52,7 +52,7 @@ function Youtube() {
 
 	return (
 		<>
-			<SubLayout subPageName={'sub-youtube'} breadCrumb={'HOME / YOUTUBE'} subPageTitle={['PLAYLIST', <br />, 'FOR BOOK']}>
+			<SubLayout subPageName={'sub-youtube'} breadCrumb={'HOME / YOUTUBE'} subPageTitle={'PLAYLIST-FOR BOOK'}>
 				<div className='top-wrap'>
 					<div className='inner-container'>
 						<div id='musicListWrap' className='list-wrap'>

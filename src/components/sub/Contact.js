@@ -100,7 +100,7 @@ function Contact() {
 	}, [Traffic]);
 
 	return (
-		<SubLayout subPageName={'sub-contact'} breadCrumb={'HOME / CONTACT'} subPageTitle={['WHERE', <br />, 'WE ARE']}>
+		<SubLayout subPageName={'sub-contact'} breadCrumb={'HOME / CONTACT'} subPageTitle={'WHERE-WE ARE'}>
 			<div className='library-wrap'>
 				<div className='inner-container'>
 					<div className='map-wrap'>

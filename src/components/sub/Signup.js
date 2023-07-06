@@ -1,11 +1,15 @@
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faOptinMonster, faEarlybirds, faFacebookF, faGooglePlusG, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 
 function Signup() {
 	const history = useHistory();
+
+	const selectEl = useRef(null);
+	const radioGroup = useRef(null);
+	const checkGroup = useRef(null);
 
 	const initValue = {
 		userid: '',
@@ -13,8 +17,8 @@ function Signup() {
 		pwd2: '',
 		email: '',
 		edu: '',
-		gender: false,
-		hobby: false,
+		gender: '',
+		hobby: [],
 		comments: '',
 	};
 	const [Value, setValue] = useState(initValue);
@@ -25,9 +29,21 @@ function Signup() {
 		const errLength = Object.keys(Errors).length;
 		if (errLength === 0 && Submit) {
 			alert('모든 인증을 통과하였습니다.');
-			history.push('/signin');
+			// history.push('/signin');
+			resetForm();
 		}
 	}, [Errors]);
+
+	const resetForm = () => {
+		const select = selectEl.current.options[0];
+		const radios = radioGroup.current.querySelectorAll('input');
+		const checks = checkGroup.current.querySelectorAll('input');
+
+		select.selected = true;
+		radios.forEach((el) => (el.checked = false));
+		checks.forEach((el) => (el.checked = false));
+		setValue(initValue);
+	};
 
 	const checkValid = (value) => {
 		const errors = {};
@@ -50,10 +66,10 @@ function Signup() {
 		if (value.edu === '') {
 			errors.edu = '최종학력을 선택하세요.';
 		}
-		if (!value.gender) {
+		if (value.gender === '') {
 			errors.gender = '성별을 선택하세요.';
 		}
-		if (!value.hobby) {
+		if (value.hobby.length === 0) {
 			errors.hobby = '관심사를 하나 이상 선택하세요.';
 		}
 		if (value.comments.length < 10) {
@@ -80,17 +96,20 @@ function Signup() {
 	};
 
 	const changeRadio = (e) => {
-		const { name, checked } = e.target;
-		setValue({ ...Value, [name]: checked });
+		const { name, value } = e.target;
+		setValue({ ...Value, [name]: value });
 	};
 
 	const changeCheck = (e) => {
 		const { name } = e.target;
-		let isChecked = false;
 		const inputs = e.target.closest('.check-wrap').querySelectorAll('input');
-		inputs.forEach((el) => el.checked && (isChecked = true));
 
-		setValue({ ...Value, [name]: isChecked });
+		let checkArr = [];
+		inputs.forEach((input) => {
+			if (input.checked) checkArr.push(input.value);
+		});
+
+		setValue({ ...Value, [name]: checkArr });
 	};
 
 	return (
@@ -191,7 +210,7 @@ function Signup() {
 									Education
 								</label>
 
-								<select name='edu' id='edu' onChange={changeSelect}>
+								<select name='edu' id='edu' onChange={changeSelect} ref={selectEl}>
 									<option value=''>최종학력을 선택해주세요.</option>
 									<option value='elementary school'>초등학교 졸업</option>
 									<option value='middle school'>중학교 졸업</option>
@@ -206,7 +225,7 @@ function Signup() {
 							<div className='input-box'>
 								<p className='tit'>Gender</p>
 
-								<div className='radio-wrap'>
+								<div className='radio-wrap' ref={radioGroup}>
 									<div>
 										<input type='radio' name='gender' id='male' value='male' onChange={changeRadio} />
 										<label htmlFor='male'>Male</label>
@@ -225,7 +244,7 @@ function Signup() {
 							<div className='input-box'>
 								<p className='tit'>Interests</p>
 
-								<div className='check-wrap'>
+								<div className='check-wrap' ref={checkGroup}>
 									<div>
 										<input type='checkbox' name='hobby' id='sports' value='sports' onChange={changeCheck} />
 										<label htmlFor='sports'>Sports</label>

@@ -1,10 +1,10 @@
 import SubLayout from '../common/SubLayout';
+import Modal from '../common/Modal';
+import Masonry from 'react-masonry-component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import Masonry from 'react-masonry-component';
-import Modal from '../common/Modal';
+import { useState, useEffect, useRef } from 'react';
 
 function Gallery() {
 	const frame = useRef(null);
@@ -13,20 +13,20 @@ function Gallery() {
 	const searchInput = useRef(null);
 	const enableEvent = useRef(true); // 재이벤트 방지
 	const enableUser = useRef(true); // 프로필 데이터 재호출 방지
-	const [Loader, setLoader] = useState(true);
 	const [Items, setItems] = useState([]);
+	const [Loader, setLoader] = useState(true);
 
 	const modal = useRef(null);
 	const [ModalIndex, setModalIndex] = useState(0);
 
+	// flickr API 호출 함수
 	const getData = async (options) => {
-		// Flickr 데이터 호출
 		const baseURL = 'https://www.flickr.com/services/rest/?format=json&nojsoncallback=1';
 		const key = '7f259a4112d06fbef0736c84af20f014';
 		const method_interest = 'flickr.interestingness.getList';
 		const method_search = 'flickr.photos.search';
 		const method_user = 'flickr.people.getPhotos';
-		const num = 10;
+		const num = 30;
 		let url = '';
 
 		if (options.type === 'interest') url = `${baseURL}&api_key=${key}&method=${method_interest}&per_page=${num}`;
@@ -34,22 +34,29 @@ function Gallery() {
 		if (options.type === 'user') url = `${baseURL}&api_key=${key}&method=${method_user}&per_page=${num}&user_id=${options.user}`;
 
 		const result = await axios.get(url);
+		getDataCheck(result.data.photos.photo);
+		dataLoading();
+	};
 
-		// 검색어 결과가 없을 경우
-		if (result.data.photos.photo.length === 0) {
+	// 호출 데이터 체크 함수
+	const getDataCheck = (data) => {
+		if (data.length === 0) {
 			setLoader(false);
 			frame.current.classList.add('on');
 			enableEvent.current = true;
 
 			const btns = btnSet.current.querySelectorAll('button');
-			btns[btnActive.current].classList.add('on');
+			btns.forEach((btn) => btn.classList.remove('on'));
+			if (btnActive.current >= 0) btns[btnActive.current].classList.add('on');
 
 			return alert('검색어 결과가 없습니다.');
 		}
 
-		setItems(result.data.photos.photo);
+		setItems(data);
+	};
 
-		// 데이터 로딩 처리
+	// 데이터 로딩 처리 함수
+	const dataLoading = () => {
 		let counter = 0;
 
 		const imgs = frame.current.querySelectorAll('img');
@@ -67,10 +74,10 @@ function Gallery() {
 	};
 
 	// 갤러리 초기화 함수
-	const resetGallery = (e) => {
+	const resetGallery = () => {
 		const btns = btnSet.current.querySelectorAll('button');
 		btns.forEach((btn) => btn.classList.remove('on'));
-		e.target.classList.add('on');
+		if (btnActive.current >= 0) btns[btnActive.current].classList.add('on');
 
 		setLoader(true);
 		frame.current.classList.remove('on');
@@ -82,7 +89,7 @@ function Gallery() {
 		if (e.target.classList.contains('on')) return;
 
 		btnActive.current = index;
-		resetGallery(e);
+		resetGallery();
 		getData({ type: 'interest' });
 
 		enableUser.current = true;
@@ -93,32 +100,40 @@ function Gallery() {
 		if (e.target.classList.contains('on')) return;
 
 		btnActive.current = index;
-		resetGallery(e);
+		resetGallery();
 		getData({ type: 'user', user: '198471371@N05' });
-	};
 
-	const showProfile = (e, userid) => {
-		if (!enableUser.current) return;
 		enableUser.current = false;
-
-		resetGallery(e);
-		getData({ type: 'user', user: userid });
 	};
 
-	const showSearch = (e) => {
+	const showProfile = (userid) => {
+		if (!enableEvent.current) return;
+		if (!enableUser.current) return;
+
+		btnActive.current = -1;
+		resetGallery();
+		getData({ type: 'user', user: userid });
+
+		enableUser.current = false;
+	};
+
+	const showSearch = () => {
 		const tag = searchInput.current.value.trim();
 		if (tag === '') return alert('검색어를 입력하세요.');
 		if (!enableEvent.current) return;
 
-		resetGallery(e);
+		resetGallery();
 		getData({ type: 'search', tags: tag });
 		searchInput.current.value = '';
-		enableUser.current = true;
+
+		btnActive.current === 0 ? (enableUser.current = true) : (enableUser.current = false);
 	};
 
 	useEffect(() => {
 		const btns = btnSet.current.querySelectorAll('button');
-		btns[btnActive.current].classList.add('on');
+		btns.forEach((btn) => btn.classList.remove('on'));
+		btns[0].classList.add('on');
+
 		getData({ type: 'interest' });
 	}, []);
 
@@ -134,7 +149,7 @@ function Gallery() {
 								placeholder='검색어를 입력해주세요.'
 								ref={searchInput}
 								onKeyPress={(e) => {
-									e.key === 'Enter' && showSearch(e);
+									e.key === 'Enter' && showSearch();
 								}}
 							/>
 							<button type='button' className='btn-search' onClick={showSearch}>
@@ -177,7 +192,7 @@ function Gallery() {
 											</div>
 
 											<div className='info-wrap'>
-												<div className='profile-wrap' onClick={(e) => showProfile(e, item.owner)}>
+												<div className='profile-wrap' onClick={() => showProfile(item.owner)}>
 													<img
 														className='profile-img'
 														src={`http://farm${item.farm}.staticflickr.com/${item.server}/buddyicons/${item.owner}.jpg`}

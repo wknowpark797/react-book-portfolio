@@ -1,8 +1,43 @@
 import SubLayout from '../common/SubLayout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import Masonry from 'react-masonry-component';
 
 function Gallery() {
+	const [Items, setItems] = useState([]);
+	console.log(Items);
+
+	const getData = async (options) => {
+		const baseURL = 'https://www.flickr.com/services/rest/?format=json&nojsoncallback=1';
+		const key = '7f259a4112d06fbef0736c84af20f014';
+		const method_interest = 'flickr.interestingness.getList';
+		const method_search = 'flickr.photos.search';
+		const method_user = 'flickr.people.getPhotos';
+		const num = 10;
+		let url = '';
+
+		if (options.type === 'interest') url = `${baseURL}&api_key=${key}&method=${method_interest}&per_page=${num}`;
+		if (options.type === 'search') url = `${baseURL}&api_key=${key}&method=${method_search}&per_page=${num}&tags=${options.tags}`;
+		if (options.type === 'user') url = `${baseURL}&api_key=${key}&method=${method_user}&per_page=${num}&user_id=${options.user}`;
+
+		const result = await axios.get(url);
+		setItems(result.data.photos.photo);
+	};
+
+	const showInterest = () => {
+		getData({ type: 'interest' });
+	};
+
+	const showUser = () => {
+		getData({ type: 'user', user: '198471371@N05' });
+	};
+
+	useEffect(() => {
+		getData({ type: 'interest' });
+	}, []);
+
 	return (
 		<SubLayout subPageName={'sub-gallery'} breadCrumb={'HOME / GALLERY'} subPageTitle={'PHOTOS-FOR BOOK'}>
 			<div className='search-wrap'>
@@ -15,10 +50,10 @@ function Gallery() {
 					</div>
 
 					<div className='btn-option'>
-						<button type='button' className='option-interest'>
+						<button type='button' className='option-interest' onClick={showInterest}>
 							Interest
 						</button>
-						<button type='button' className='option-mine'>
+						<button type='button' className='option-mine' onClick={showUser}>
 							Mine
 						</button>
 					</div>
@@ -29,23 +64,38 @@ function Gallery() {
 
 			<div className='pictures-wrap'>
 				<div className='inner-container'>
-					<ul id='galleryWrap'>
-						<li className='item'>
-							<div>
-								<div className='img-box'>
-									<img className='picture' src='' alt='' />
-								</div>
+					<Masonry elementType={'ul'} options={{ transitionDuration: '0.5s' }} id='galleryWrap'>
+						{Items.map((item, idx) => {
+							return (
+								<li className='item' key={idx}>
+									<div>
+										<div className='img-box'>
+											<img
+												className='picture'
+												src={`https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_m.jpg`}
+												alt={item.title}
+											/>
+										</div>
 
-								<div className='info-wrap'>
-									<div className='profile-wrap'>
-										<img className='profile-img' src='' alt='' />
-										<p className='profile-user'>User Name</p>
+										<div className='info-wrap'>
+											<div className='profile-wrap'>
+												<img
+													className='profile-img'
+													src={`http://farm${item.farm}.staticflickr.com/${item.server}/buddyicons/${item.owner}.jpg`}
+													alt={item.owner}
+													onError={(e) => {
+														e.target.setAttribute('src', 'https://www.flickr.com/images/buddyicon.gif');
+													}}
+												/>
+												<p className='profile-user'>{item.owner}</p>
+											</div>
+											<h3>{item.title}</h3>
+										</div>
 									</div>
-									<h3>Lorem ipsum dolor sit amet consectetur adipisicing elit. Sapiente, maiores!</h3>
-								</div>
-							</div>
-						</li>
-					</ul>
+								</li>
+							);
+						})}
+					</Masonry>
 				</div>
 			</div>
 		</SubLayout>

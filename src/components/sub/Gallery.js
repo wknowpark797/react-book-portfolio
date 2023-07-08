@@ -11,6 +11,7 @@ function Gallery() {
 	const btnActive = useRef(0);
 	const searchInput = useRef(null);
 	const enableEvent = useRef(true); // 재이벤트 방지
+	const enableUser = useRef(true); // 프로필 데이터 재호출 방지
 	const [Loader, setLoader] = useState(true);
 	const [Items, setItems] = useState([]);
 
@@ -52,7 +53,7 @@ function Gallery() {
 			img.onload = () => {
 				++counter;
 
-				if (counter === imgs.length) {
+				if (counter === imgs.length - 2) {
 					setLoader(false);
 					frame.current.classList.add('on');
 					enableEvent.current = true;
@@ -79,6 +80,8 @@ function Gallery() {
 		btnActive.current = index;
 		resetGallery(e);
 		getData({ type: 'interest' });
+
+		enableUser.current = true;
 	};
 
 	const showUser = (e, index) => {
@@ -90,6 +93,14 @@ function Gallery() {
 		getData({ type: 'user', user: '198471371@N05' });
 	};
 
+	const showProfile = (e, userid) => {
+		if (!enableUser.current) return;
+		enableUser.current = false;
+
+		resetGallery(e);
+		getData({ type: 'user', user: userid });
+	};
+
 	const showSearch = (e) => {
 		const tag = searchInput.current.value.trim();
 		if (tag === '') return alert('검색어를 입력하세요.');
@@ -98,6 +109,7 @@ function Gallery() {
 		resetGallery(e);
 		getData({ type: 'search', tags: tag });
 		searchInput.current.value = '';
+		enableUser.current = true;
 	};
 
 	useEffect(() => {
@@ -154,7 +166,7 @@ function Gallery() {
 										</div>
 
 										<div className='info-wrap'>
-											<div className='profile-wrap'>
+											<div className='profile-wrap' onClick={(e) => showProfile(e, item.owner)}>
 												<img
 													className='profile-img'
 													src={`http://farm${item.farm}.staticflickr.com/${item.server}/buddyicons/${item.owner}.jpg`}

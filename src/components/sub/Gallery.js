@@ -8,6 +8,8 @@ import Masonry from 'react-masonry-component';
 function Gallery() {
 	const frame = useRef(null);
 	const btnSet = useRef(null);
+	const btnActive = useRef(0);
+	const searchInput = useRef(null);
 	const enableEvent = useRef(true); // 재이벤트 방지
 	const [Loader, setLoader] = useState(true);
 	const [Items, setItems] = useState([]);
@@ -27,6 +29,19 @@ function Gallery() {
 		if (options.type === 'user') url = `${baseURL}&api_key=${key}&method=${method_user}&per_page=${num}&user_id=${options.user}`;
 
 		const result = await axios.get(url);
+
+		// 검색어 결과가 없을 경우
+		if (result.data.photos.photo.length === 0) {
+			setLoader(false);
+			frame.current.classList.add('on');
+			enableEvent.current = true;
+
+			const btns = btnSet.current.querySelectorAll('button');
+			btns[btnActive.current].classList.add('on');
+
+			return alert('검색어 결과가 없습니다.');
+		}
+
 		setItems(result.data.photos.photo);
 
 		// 데이터 로딩 처리
@@ -57,23 +72,37 @@ function Gallery() {
 		enableEvent.current = false;
 	};
 
-	const showInterest = (e) => {
+	const showInterest = (e, index) => {
 		if (!enableEvent.current) return;
 		if (e.target.classList.contains('on')) return;
 
+		btnActive.current = index;
 		resetGallery(e);
 		getData({ type: 'interest' });
 	};
 
-	const showUser = (e) => {
+	const showUser = (e, index) => {
 		if (!enableEvent.current) return;
 		if (e.target.classList.contains('on')) return;
 
+		btnActive.current = index;
 		resetGallery(e);
 		getData({ type: 'user', user: '198471371@N05' });
 	};
 
+	const showSearch = (e) => {
+		const tag = searchInput.current.value.trim();
+		if (tag === '') return alert('검색어를 입력하세요.');
+		if (!enableEvent.current) return;
+
+		resetGallery(e);
+		getData({ type: 'search', tags: tag });
+		searchInput.current.value = '';
+	};
+
 	useEffect(() => {
+		const btns = btnSet.current.querySelectorAll('button');
+		btns[btnActive.current].classList.add('on');
 		getData({ type: 'interest' });
 	}, []);
 
@@ -82,17 +111,25 @@ function Gallery() {
 			<div className='search-wrap'>
 				<div className='inner-container'>
 					<div className='search-box'>
-						<input type='text' id='search' placeholder='검색어를 입력해주세요.' />
-						<button type='button' className='btn-search'>
+						<input
+							type='text'
+							id='search'
+							placeholder='검색어를 입력해주세요.'
+							ref={searchInput}
+							onKeyPress={(e) => {
+								e.key === 'Enter' && showSearch(e);
+							}}
+						/>
+						<button type='button' className='btn-search' onClick={showSearch}>
 							<FontAwesomeIcon icon={faMagnifyingGlass} />
 						</button>
 					</div>
 
 					<div className='btn-option' ref={btnSet}>
-						<button type='button' className='option-interest on' onClick={showInterest}>
+						<button type='button' className='option-interest' onClick={(e) => showInterest(e, 0)}>
 							Interest
 						</button>
-						<button type='button' className='option-mine' onClick={showUser}>
+						<button type='button' className='option-mine' onClick={(e) => showUser(e, 1)}>
 							Mine
 						</button>
 					</div>

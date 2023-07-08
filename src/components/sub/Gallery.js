@@ -8,6 +8,7 @@ import Masonry from 'react-masonry-component';
 function Gallery() {
 	const frame = useRef(null);
 	const btnSet = useRef(null);
+	const enableEvent = useRef(true); // 재이벤트 방지
 	const [Loader, setLoader] = useState(true);
 	const [Items, setItems] = useState([]);
 
@@ -39,6 +40,7 @@ function Gallery() {
 				if (counter === imgs.length) {
 					setLoader(false);
 					frame.current.classList.add('on');
+					enableEvent.current = true;
 				}
 			};
 		});
@@ -52,14 +54,21 @@ function Gallery() {
 
 		setLoader(true);
 		frame.current.classList.remove('on');
+		enableEvent.current = false;
 	};
 
 	const showInterest = (e) => {
+		if (!enableEvent.current) return;
+		if (e.target.classList.contains('on')) return;
+
 		resetGallery(e);
 		getData({ type: 'interest' });
 	};
 
 	const showUser = (e) => {
+		if (!enableEvent.current) return;
+		if (e.target.classList.contains('on')) return;
+
 		resetGallery(e);
 		getData({ type: 'user', user: '198471371@N05' });
 	};

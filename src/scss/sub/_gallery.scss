@@ -54,6 +54,10 @@
 					font-size: 14px;
 					color: #fff;
 					cursor: pointer;
+
+					&.on {
+						background: #058686;
+					}
 				}
 			}
 		}
@@ -86,17 +90,16 @@
 		.inner-container {
 			width: $subContainer;
 			margin: 0 auto;
+			opacity: 0;
+			transform: translateY(100px);
+			transition: 0.3s;
+
+			&.on {
+				opacity: 1;
+				transform: translateY(0);
+			}
 
 			ul {
-				// opacity: 0;
-				transform: translateY(100px);
-				transition: 0.3s;
-
-				&.on {
-					opacity: 1;
-					transform: translateY(0);
-				}
-
 				&::after {
 					content: '';
 					display: block;

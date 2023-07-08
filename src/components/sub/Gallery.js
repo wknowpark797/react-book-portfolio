@@ -1,15 +1,18 @@
 import SubLayout from '../common/SubLayout';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import Masonry from 'react-masonry-component';
 
 function Gallery() {
+	const frame = useRef(null);
+	const btnSet = useRef(null);
+	const [Loader, setLoader] = useState(true);
 	const [Items, setItems] = useState([]);
-	console.log(Items);
 
 	const getData = async (options) => {
+		// Flickr 데이터 호출
 		const baseURL = 'https://www.flickr.com/services/rest/?format=json&nojsoncallback=1';
 		const key = '7f259a4112d06fbef0736c84af20f014';
 		const method_interest = 'flickr.interestingness.getList';
@@ -24,13 +27,40 @@ function Gallery() {
 
 		const result = await axios.get(url);
 		setItems(result.data.photos.photo);
+
+		// 데이터 로딩 처리
+		let counter = 0;
+
+		const imgs = frame.current.querySelectorAll('img');
+		imgs.forEach((img) => {
+			img.onload = () => {
+				++counter;
+
+				if (counter === imgs.length) {
+					setLoader(false);
+					frame.current.classList.add('on');
+				}
+			};
+		});
 	};
 
-	const showInterest = () => {
+	// 갤러리 초기화 함수
+	const resetGallery = (e) => {
+		const btns = btnSet.current.querySelectorAll('button');
+		btns.forEach((btn) => btn.classList.remove('on'));
+		e.target.classList.add('on');
+
+		setLoader(true);
+		frame.current.classList.remove('on');
+	};
+
+	const showInterest = (e) => {
+		resetGallery(e);
 		getData({ type: 'interest' });
 	};
 
-	const showUser = () => {
+	const showUser = (e) => {
+		resetGallery(e);
 		getData({ type: 'user', user: '198471371@N05' });
 	};
 
@@ -49,8 +79,8 @@ function Gallery() {
 						</button>
 					</div>
 
-					<div className='btn-option'>
-						<button type='button' className='option-interest' onClick={showInterest}>
+					<div className='btn-option' ref={btnSet}>
+						<button type='button' className='option-interest on' onClick={showInterest}>
 							Interest
 						</button>
 						<button type='button' className='option-mine' onClick={showUser}>
@@ -60,10 +90,10 @@ function Gallery() {
 				</div>
 			</div>
 
-			{/* <div className='loading-wrap'>LOADING...</div> */}
+			{Loader && <div className='loading-wrap'>LOADING...</div>}
 
 			<div className='pictures-wrap'>
-				<div className='inner-container'>
+				<div className='inner-container' ref={frame}>
 					<Masonry elementType={'ul'} options={{ transitionDuration: '0.5s' }} id='galleryWrap'>
 						{Items.map((item, idx) => {
 							return (

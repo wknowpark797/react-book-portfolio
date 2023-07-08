@@ -4,6 +4,7 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import Masonry from 'react-masonry-component';
+import Modal from '../common/Modal';
 
 function Gallery() {
 	const frame = useRef(null);
@@ -14,6 +15,9 @@ function Gallery() {
 	const enableUser = useRef(true); // 프로필 데이터 재호출 방지
 	const [Loader, setLoader] = useState(true);
 	const [Items, setItems] = useState([]);
+
+	const modal = useRef(null);
+	const [ModalIndex, setModalIndex] = useState(0);
 
 	const getData = async (options) => {
 		// Flickr 데이터 호출
@@ -119,74 +123,91 @@ function Gallery() {
 	}, []);
 
 	return (
-		<SubLayout subPageName={'sub-gallery'} breadCrumb={'HOME / GALLERY'} subPageTitle={'PHOTOS-FOR BOOK'}>
-			<div className='search-wrap'>
-				<div className='inner-container'>
-					<div className='search-box'>
-						<input
-							type='text'
-							id='search'
-							placeholder='검색어를 입력해주세요.'
-							ref={searchInput}
-							onKeyPress={(e) => {
-								e.key === 'Enter' && showSearch(e);
-							}}
-						/>
-						<button type='button' className='btn-search' onClick={showSearch}>
-							<FontAwesomeIcon icon={faMagnifyingGlass} />
-						</button>
-					</div>
+		<>
+			<SubLayout subPageName={'sub-gallery'} breadCrumb={'HOME / GALLERY'} subPageTitle={'PHOTOS-FOR BOOK'}>
+				<div className='search-wrap'>
+					<div className='inner-container'>
+						<div className='search-box'>
+							<input
+								type='text'
+								id='search'
+								placeholder='검색어를 입력해주세요.'
+								ref={searchInput}
+								onKeyPress={(e) => {
+									e.key === 'Enter' && showSearch(e);
+								}}
+							/>
+							<button type='button' className='btn-search' onClick={showSearch}>
+								<FontAwesomeIcon icon={faMagnifyingGlass} />
+							</button>
+						</div>
 
-					<div className='btn-option' ref={btnSet}>
-						<button type='button' className='option-interest' onClick={(e) => showInterest(e, 0)}>
-							Interest
-						</button>
-						<button type='button' className='option-mine' onClick={(e) => showUser(e, 1)}>
-							Mine
-						</button>
+						<div className='btn-option' ref={btnSet}>
+							<button type='button' className='option-interest' onClick={(e) => showInterest(e, 0)}>
+								Interest
+							</button>
+							<button type='button' className='option-mine' onClick={(e) => showUser(e, 1)}>
+								Mine
+							</button>
+						</div>
 					</div>
 				</div>
-			</div>
 
-			{Loader && <div className='loading-wrap'>LOADING...</div>}
+				{Loader && <div className='loading-wrap'>LOADING...</div>}
 
-			<div className='pictures-wrap'>
-				<div className='inner-container' ref={frame}>
-					<Masonry elementType={'ul'} options={{ transitionDuration: '0.5s' }} id='galleryWrap'>
-						{Items.map((item, idx) => {
-							return (
-								<li className='item' key={idx}>
-									<div>
-										<div className='img-box'>
-											<img
-												className='picture'
-												src={`https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_m.jpg`}
-												alt={item.title}
-											/>
-										</div>
-
-										<div className='info-wrap'>
-											<div className='profile-wrap' onClick={(e) => showProfile(e, item.owner)}>
+				<div className='pictures-wrap'>
+					<div className='inner-container' ref={frame}>
+						<Masonry elementType={'ul'} options={{ transitionDuration: '0.5s' }} id='galleryWrap'>
+							{Items.map((item, idx) => {
+								return (
+									<li className='item' key={idx}>
+										<div>
+											<div
+												className='img-box'
+												onClick={() => {
+													setModalIndex(idx);
+													modal.current.open();
+												}}
+											>
 												<img
-													className='profile-img'
-													src={`http://farm${item.farm}.staticflickr.com/${item.server}/buddyicons/${item.owner}.jpg`}
-													alt={item.owner}
-													onError={(e) => {
-														e.target.setAttribute('src', 'https://www.flickr.com/images/buddyicon.gif');
-													}}
+													className='picture'
+													src={`https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_m.jpg`}
+													alt={item.title}
 												/>
-												<p className='profile-user'>{item.owner}</p>
 											</div>
-											<h3>{item.title}</h3>
+
+											<div className='info-wrap'>
+												<div className='profile-wrap' onClick={(e) => showProfile(e, item.owner)}>
+													<img
+														className='profile-img'
+														src={`http://farm${item.farm}.staticflickr.com/${item.server}/buddyicons/${item.owner}.jpg`}
+														alt={item.owner}
+														onError={(e) => {
+															e.target.setAttribute('src', 'https://www.flickr.com/images/buddyicon.gif');
+														}}
+													/>
+													<p className='profile-user'>{item.owner}</p>
+												</div>
+												<h3>{item.title}</h3>
+											</div>
 										</div>
-									</div>
-								</li>
-							);
-						})}
-					</Masonry>
+									</li>
+								);
+							})}
+						</Masonry>
+					</div>
 				</div>
-			</div>
-		</SubLayout>
+			</SubLayout>
+
+			<Modal ref={modal}>
+				<div className='media-box'>
+					<img
+						src={`https://live.staticflickr.com/${Items[ModalIndex]?.server}/${Items[ModalIndex]?.id}_${Items[ModalIndex]?.secret}_b.jpg`}
+						alt={Items[ModalIndex]?.title}
+					/>
+				</div>
+			</Modal>
+		</>
 	);
 }
 

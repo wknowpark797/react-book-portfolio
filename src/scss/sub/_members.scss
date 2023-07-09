@@ -140,11 +140,8 @@
 		.tab {
 			overflow: hidden;
 
-			ul {
-				display: flex;
-				align-items: center;
-
-				li {
+			.swiper-wrapper {
+				.swiper-slide {
 					width: auto;
 					font-size: 32px;
 					font-weight: 700;

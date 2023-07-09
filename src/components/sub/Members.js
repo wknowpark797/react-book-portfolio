@@ -4,8 +4,16 @@ import { Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCirclePlay } from '@fortawesome/free-regular-svg-icons';
-import { faGooglePlay, faGoogleWallet, faGooglePlusG, faGooglePay, faGoogleDrive } from '@fortawesome/free-brands-svg-icons';
+import {
+	faGooglePlay,
+	faGoogleWallet,
+	faGooglePlusG,
+	faGooglePay,
+	faGoogleDrive,
+} from '@fortawesome/free-brands-svg-icons';
 import { faVrCardboard } from '@fortawesome/free-solid-svg-icons';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
 
 function Members() {
 	const [Members, setMembers] = useState([]);
@@ -39,7 +47,10 @@ function Members() {
 
 				<div className='inner-wrap'>
 					<h2>Creative Directors</h2>
-					<p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Natus saepe iure aspernatur dicta repellendus cum nihil aliquid, minus quod! Maxime.</p>
+					<p>
+						Lorem ipsum, dolor sit amet consectetur adipisicing elit. Natus saepe iure aspernatur dicta repellendus cum
+						nihil aliquid, minus quod! Maxime.
+					</p>
 
 					<ul>
 						<li>
@@ -56,27 +67,22 @@ function Members() {
 
 			<div className='intro-person'>
 				<div className='tab membersSwiper'>
-					<ul className='swiper-wrapper'>
-						<li className='swiper-slide' data-key='developer'>
-							DEVELOPERS
-						</li>
-						<li className='swiper-slide' data-key='designer'>
-							DESIGNERS
-						</li>
-						<li className='swiper-slide' data-key='photographer'>
-							PHOTOGRAPHERS
-						</li>
-						<li className='swiper-slide' data-key='publisher'>
-							PUBLISHERS
-						</li>
-					</ul>
+					<Swiper slidesPerView={'auto'} spaceBetween={30} centeredSlides={true}>
+						<SwiperSlide data-key='developer'>DEVELOPERS</SwiperSlide>
+						<SwiperSlide data-key='designer'>DESIGNERS</SwiperSlide>
+						<SwiperSlide data-key='photographer'>PHOTOGRAPHERS</SwiperSlide>
+						<SwiperSlide data-key='publisher'>PUBLISHERS</SwiperSlide>
+					</Swiper>
 				</div>
 
 				<div className='inner-person'>
 					<div className='inner-container'>
 						<div className='left'>
 							<p>Creative Members</p>
-							<h2>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Velit, dolore dolorem qui expedita voluptas nesciunt!</h2>
+							<h2>
+								Lorem ipsum dolor sit, amet consectetur adipisicing elit. Velit, dolore dolorem qui expedita voluptas
+								nesciunt!
+							</h2>
 
 							<Link to='' className='btn-more'>
 								<FontAwesomeIcon icon={faCirclePlay} />

@@ -47,7 +47,7 @@ $slideLength: 5;
 			height: 100%;
 			display: flex;
 
-			> div {
+			.swiper-slide {
 				width: calc(100% / $slideLength);
 				height: 100%;
 				display: flex;

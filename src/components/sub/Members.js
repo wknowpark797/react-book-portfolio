@@ -1,7 +1,7 @@
 import SubLayout from '../common/SubLayout';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCirclePlay } from '@fortawesome/free-regular-svg-icons';
 import {
@@ -16,14 +16,31 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 
 function Members() {
+	const swiperFrame = useRef(null);
 	const [Members, setMembers] = useState([]);
 	const [Directors, setDirectors] = useState([]);
+	const [Slides, setSlides] = useState(null);
+	const [Active, setActive] = useState(0);
+
+	const getMembersData = async () => {
+		const items = swiperFrame.current.querySelectorAll('.swiper-slide');
+		const key = items[Active].dataset.key;
+
+		const result = await axios.get(`${process.env.PUBLIC_URL}/DB/members.json`);
+		setMembers(result.data.members.filter((member) => member.department === key));
+	};
+
+	const getDirectorsData = async () => {
+		const result = await axios.get(`${process.env.PUBLIC_URL}/DB/members.json`);
+		setDirectors(result.data.directors);
+	};
 
 	useEffect(() => {
-		axios.get(`${process.env.PUBLIC_URL}/DB/members.json`).then((data) => {
-			setMembers(data.data.members);
-			setDirectors(data.data.directors);
-		});
+		getMembersData();
+	}, [Active]);
+
+	useEffect(() => {
+		getDirectorsData();
 	}, []);
 
 	return (
@@ -67,7 +84,15 @@ function Members() {
 
 			<div className='intro-person'>
 				<div className='tab membersSwiper'>
-					<Swiper slidesPerView={'auto'} spaceBetween={30} centeredSlides={true}>
+					<Swiper
+						ref={swiperFrame}
+						slidesPerView={'auto'}
+						spaceBetween={30}
+						centeredSlides={true}
+						onSwiper={(swiper) => setSlides(swiper)}
+						onSlideChange={(e) => setActive(e.activeIndex)}
+						onClick={(e) => Slides.slideTo(e.clickedIndex)}
+					>
 						<SwiperSlide data-key='developer'>DEVELOPERS</SwiperSlide>
 						<SwiperSlide data-key='designer'>DESIGNERS</SwiperSlide>
 						<SwiperSlide data-key='photographer'>PHOTOGRAPHERS</SwiperSlide>

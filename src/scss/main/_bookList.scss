@@ -60,7 +60,7 @@ $slideWidth: 220px;
 				display: flex;
 				align-items: flex-start;
 
-				> div {
+				.swiper-slide {
 					width: $slideWidth;
 					cursor: pointer;
 

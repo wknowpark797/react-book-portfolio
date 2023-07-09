@@ -76,7 +76,7 @@ function Visual() {
 												<FontAwesomeIcon icon={faStar} />
 											</span>
 										</div>
-										<p>3.0</p>
+										<p>{ratingList[idx] + '.0'}</p>
 									</div>
 
 									<p className='content'>{item.volumeInfo.description}</p>

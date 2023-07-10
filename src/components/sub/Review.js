@@ -2,28 +2,9 @@ import SubLayout from '../common/SubLayout';
 import { useState, useEffect, useRef } from 'react';
 
 function Review() {
-	const dummyReviews = [
-		{
-			bookName: '일상의 빈칸',
-			reviewContent: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Id temporibus exercitationem culpa saepe, nulla veniam aliquam. Ea dicta officia dolorum.',
-			profileImg: 'my-profile.jpg',
-			userName: 'Woo Ara',
-			date: '2023.06.20',
-			updateDate: '2023.06.21',
-		},
-		{
-			bookName: '일상의 한칸',
-			reviewContent: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Id temporibus exercitationem culpa saepe, nulla veniam aliquam. Ea dicta officia dolorum.',
-			profileImg: 'example_user3.jpg',
-			userName: 'Paul Davison',
-			date: '2023.06.21',
-		},
-	];
-
 	const getLocalData = () => {
 		const data = localStorage.getItem('reviews');
-		if (data) return JSON.parse(data);
-		else return dummyReviews;
+		return JSON.parse(data);
 	};
 
 	const inputBookName = useRef(null);

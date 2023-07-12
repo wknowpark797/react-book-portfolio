@@ -15,7 +15,7 @@ function MainLocation() {
 				<div className='company-wrap'>
 					<article>
 						<div className='img-box'>
-							<img src='img/example_library2.jpg' alt='' />
+							<img src={`${process.env.PUBLIC_URL}/image/example_library2.jpg`} alt='' />
 						</div>
 						<div className='info-box'>
 							<h2>남산 도서관</h2>
@@ -32,7 +32,7 @@ function MainLocation() {
 
 					<article>
 						<div className='img-box'>
-							<img src='img/example_library3.jpg' alt='' />
+							<img src={`${process.env.PUBLIC_URL}/image/example_library3.jpg`} alt='' />
 						</div>
 						<div className='info-box'>
 							<h2>별마당 도서관</h2>

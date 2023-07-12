@@ -14,40 +14,33 @@ function Youtube() {
 	const [BookList, setBookList] = useState([]);
 
 	useEffect(() => {
-		const key = 'AIzaSyDwb_57BfoNHLxlZ-Mwn2O3VNVt2tFNNMw';
+		const key = 'AIzaSyA4f3SqOYivsLVITR7K6g5K0QrKhvUZ7hw';
 		const baseURL = `https://www.googleapis.com/youtube/v3/playlistItems?key=${key}&part=snippet`;
-
 		musicListFetch(baseURL);
-		bestListFetch(baseURL);
-		bookListFecth(baseURL);
+		readListFetch(baseURL);
 	}, []);
 
-	// Music Playlist Axios 함수
+	// music 재생목록 fetching
 	const musicListFetch = async (base) => {
-		const playlistId = 'PLEJLcTMBRARd4AKwM7CM_0gf2mKviNR3J';
-		const maxResults = 6;
+		const playlistId = 'PLuYjs7JL1VFD0-B09gEumiJn43AM-qpNR';
+		const maxResults = 3;
 		const listURL = `${base}&playlistId=${playlistId}&maxResults=${maxResults}`;
 
 		const result = await axios.get(listURL);
 		setMusicList(result.data.items);
 	};
-	// Best Playlist Axios 함수
-	const bestListFetch = async (base) => {
-		const playlistId = 'PLEJLcTMBRARf9Oh5Ba53RTD69_uhRbXqS';
-		const maxResults = 1;
+
+	// read 재생목록 fetching
+	const readListFetch = async (base) => {
+		const playlistId = 'PLuYjs7JL1VFB-ciaLcIPXzqp2xmSiL_Wd';
+		const maxResults = 4;
 		const listURL = `${base}&playlistId=${playlistId}&maxResults=${maxResults}`;
 
 		const result = await axios.get(listURL);
-		setBestList(result.data.items);
-	};
-	// Book Playlist Axios 함수
-	const bookListFecth = async (base) => {
-		const playlistId = 'PLEJLcTMBRAReQQjFb4VKHfgOsgE1Yj8d-';
-		const maxResults = 3;
-		const listURL = `${base}&playlistId=${playlistId}&maxResults=${maxResults}`;
+		const items = result.data.items;
 
-		const result = await axios.get(listURL);
-		setBookList(result.data.items);
+		setBestList(items.slice(0, 1));
+		setBookList(items.slice(1, 4));
 	};
 
 	return (

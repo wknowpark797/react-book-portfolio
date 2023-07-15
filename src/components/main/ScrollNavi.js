@@ -40,14 +40,13 @@ function ScrollNavi() {
 	useEffect(() => {
 		getPosition();
 
+		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
 		window.addEventListener('resize', getPosition);
 		window.addEventListener('scroll', activation);
-		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
 
 		return () => {
 			window.removeEventListener('resize', getPosition);
 			window.removeEventListener('scroll', activation);
-			window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
 		};
 	}, []);
 

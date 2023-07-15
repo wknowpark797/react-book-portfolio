@@ -1,6 +1,12 @@
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faOptinMonster, faEarlybirds, faFacebookF, faGooglePlusG, faLinkedinIn } from '@fortawesome/free-brands-svg-icons';
+import {
+	faOptinMonster,
+	faEarlybirds,
+	faFacebookF,
+	faGooglePlusG,
+	faLinkedinIn,
+} from '@fortawesome/free-brands-svg-icons';
 import { useState, useEffect, useRef } from 'react';
 import { useHistory } from 'react-router-dom';
 
@@ -24,6 +30,10 @@ function Signup() {
 	const [Value, setValue] = useState(initValue);
 	const [Errors, setErrors] = useState({});
 	const [Submit, setSubmit] = useState(false);
+
+	useEffect(() => {
+		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+	}, []);
 
 	useEffect(() => {
 		const errLength = Object.keys(Errors).length;
@@ -133,11 +143,15 @@ function Signup() {
 					<ul className='list-notice'>
 						<li>
 							<FontAwesomeIcon icon={faOptinMonster} />
-							<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem dolores perferendis asperiores.</p>
+							<p>
+								Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem dolores perferendis asperiores.
+							</p>
 						</li>
 						<li>
 							<FontAwesomeIcon icon={faEarlybirds} />
-							<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem dolores perferendis asperiores.</p>
+							<p>
+								Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem dolores perferendis asperiores.
+							</p>
 						</li>
 					</ul>
 				</div>
@@ -170,7 +184,14 @@ function Signup() {
 								<label htmlFor='userid' className='tit'>
 									User ID
 								</label>
-								<input type='text' name='userid' id='userid' placeholder='아이디를 입력하세요.' onChange={changeInput} value={Value.userid} />
+								<input
+									type='text'
+									name='userid'
+									id='userid'
+									placeholder='아이디를 입력하세요.'
+									onChange={changeInput}
+									value={Value.userid}
+								/>
 
 								{Errors.userid && <p className='error'>{Errors.userid}</p>}
 							</div>
@@ -180,7 +201,14 @@ function Signup() {
 								<label htmlFor='pwd1' className='tit'>
 									Password
 								</label>
-								<input type='password' name='pwd1' id='pwd1' placeholder='비밀번호를 입력하세요.' onChange={changeInput} value={Value.pwd1} />
+								<input
+									type='password'
+									name='pwd1'
+									id='pwd1'
+									placeholder='비밀번호를 입력하세요.'
+									onChange={changeInput}
+									value={Value.pwd1}
+								/>
 
 								{Errors.pwd1 && <p className='error'>{Errors.pwd1}</p>}
 							</div>
@@ -189,7 +217,14 @@ function Signup() {
 								<label htmlFor='pwd2' className='tit'>
 									Re Passsword
 								</label>
-								<input type='password' name='pwd2' id='pwd2' placeholder='비밀번호를 재 입력하세요.' onChange={changeInput} value={Value.pwd2} />
+								<input
+									type='password'
+									name='pwd2'
+									id='pwd2'
+									placeholder='비밀번호를 재 입력하세요.'
+									onChange={changeInput}
+									value={Value.pwd2}
+								/>
 
 								{Errors.pwd2 && <p className='error'>{Errors.pwd2}</p>}
 							</div>
@@ -199,7 +234,14 @@ function Signup() {
 								<label htmlFor='email' className='tit'>
 									E-mail
 								</label>
-								<input type='text' name='email' id='email' placeholder='이메일 주소를 입력하세요.' onChange={changeInput} value={Value.email} />
+								<input
+									type='text'
+									name='email'
+									id='email'
+									placeholder='이메일 주소를 입력하세요.'
+									onChange={changeInput}
+									value={Value.email}
+								/>
 
 								{Errors.email && <p className='error'>{Errors.email}</p>}
 							</div>
@@ -274,7 +316,15 @@ function Signup() {
 								<label htmlFor='comments' className='tit'>
 									Comments
 								</label>
-								<textarea name='comments' id='comments' cols='30' rows='7' placeholder='남기는 글을 입력하세요.' onChange={changeInput} value={Value.comments}></textarea>
+								<textarea
+									name='comments'
+									id='comments'
+									cols='30'
+									rows='7'
+									placeholder='남기는 글을 입력하세요.'
+									onChange={changeInput}
+									value={Value.comments}
+								></textarea>
 
 								{Errors.comments && <p className='error'>{Errors.comments}</p>}
 							</div>

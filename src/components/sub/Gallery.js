@@ -30,8 +30,10 @@ function Gallery() {
 		let url = '';
 
 		if (options.type === 'interest') url = `${baseURL}&api_key=${key}&method=${method_interest}&per_page=${num}`;
-		if (options.type === 'search') url = `${baseURL}&api_key=${key}&method=${method_search}&per_page=${num}&tags=${options.tags}`;
-		if (options.type === 'user') url = `${baseURL}&api_key=${key}&method=${method_user}&per_page=${num}&user_id=${options.user}`;
+		if (options.type === 'search')
+			url = `${baseURL}&api_key=${key}&method=${method_search}&per_page=${num}&tags=${options.tags}`;
+		if (options.type === 'user')
+			url = `${baseURL}&api_key=${key}&method=${method_user}&per_page=${num}&user_id=${options.user}`;
 
 		const result = await axios.get(url);
 		getDataCheck(result.data.photos.photo);
@@ -135,6 +137,8 @@ function Gallery() {
 		btns[0].classList.add('on');
 
 		getData({ type: 'interest' });
+
+		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
 	}, []);
 
 	return (

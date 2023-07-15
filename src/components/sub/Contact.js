@@ -76,6 +76,10 @@ function Contact() {
 	const marker = new kakao.maps.Marker({ position: mapOption.center, image: markerImage });
 
 	useEffect(() => {
+		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+	}, []);
+
+	useEffect(() => {
 		mapContainer.current.innerHTML = ''; // 지도 초기화
 
 		const map = new kakao.maps.Map(mapContainer.current, mapOption); // 지도 인스턴스 생성
@@ -96,7 +100,9 @@ function Contact() {
 
 	useEffect(() => {
 		// 교통정보 표시
-		Traffic ? Map?.addOverlayMapTypeId(kakao.maps.MapTypeId.TRAFFIC) : Map?.removeOverlayMapTypeId(kakao.maps.MapTypeId.TRAFFIC);
+		Traffic
+			? Map?.addOverlayMapTypeId(kakao.maps.MapTypeId.TRAFFIC)
+			: Map?.removeOverlayMapTypeId(kakao.maps.MapTypeId.TRAFFIC);
 	}, [Traffic]);
 
 	return (

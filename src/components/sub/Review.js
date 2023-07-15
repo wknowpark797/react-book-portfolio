@@ -15,6 +15,10 @@ function Review() {
 	const [Updating, setUpdating] = useState(false);
 
 	useEffect(() => {
+		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+	}, []);
+
+	useEffect(() => {
 		localStorage.setItem('reviews', JSON.stringify(Reviews));
 	}, [Reviews]);
 

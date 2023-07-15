@@ -18,6 +18,8 @@ function Youtube() {
 		const baseURL = `https://www.googleapis.com/youtube/v3/playlistItems?key=${key}&part=snippet`;
 		musicListFetch(baseURL);
 		readListFetch(baseURL);
+
+		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
 	}, []);
 
 	// music 재생목록 fetching

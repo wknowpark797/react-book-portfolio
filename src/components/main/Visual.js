@@ -27,7 +27,7 @@ function Visual() {
 	}, []);
 
 	return (
-		<section id='main-visual' className='my-scroll on'>
+		<section id='main-visual' className='my-scroll'>
 			<div className='bg-wrap'>
 				<div></div>
 				<div></div>

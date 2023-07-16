@@ -2,7 +2,7 @@ import { Link, NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
 
-function Header({ type }) {
+function Header({ type, menu }) {
 	const activeClass = 'on';
 
 	return (
@@ -46,7 +46,7 @@ function Header({ type }) {
 				</div>
 
 				{/* 모바일 메뉴 버튼 */}
-				<button type='button' className='btn-menu'>
+				<button type='button' className='btn-menu' onClick={() => menu.current.open()}>
 					<FontAwesomeIcon icon={faBars} />
 				</button>
 			</div>

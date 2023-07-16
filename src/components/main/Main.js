@@ -7,10 +7,10 @@ import MainComment from './MainComment';
 import MainLocation from './MainLocation';
 import ScrollNavi from './ScrollNavi';
 
-function Main() {
+function Main({ menu }) {
 	return (
 		<main>
-			<Header type={'main'} />
+			<Header type={'main'} menu={menu} />
 
 			<Visual />
 			<BookList />

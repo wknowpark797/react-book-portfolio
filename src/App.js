@@ -12,13 +12,18 @@ import Contact from './components/sub/Contact';
 import Signup from './components/sub/Signup';
 import Signin from './components/sub/Signin';
 import BtnTop from './components/common/BtnTop';
+import Menu from './components/common/Menu';
+
+import { useRef } from 'react';
 
 function App() {
+	const menu = useRef(null);
+
 	return (
 		<>
 			<Switch>
-				<Route exact path='/' component={Main} />
-				<Route path='/' render={() => <Header type={'sub'} />} />
+				<Route exact path='/' render={() => <Main menu={menu} />} />
+				<Route path='/' render={() => <Header type={'sub'} menu={menu} />} />
 			</Switch>
 
 			<Route path='/members' component={Members} />
@@ -29,6 +34,7 @@ function App() {
 			<Route path='/signup' component={Signup} />
 			<Route path='/signin' component={Signin} />
 
+			<Menu ref={menu} />
 			<Footer />
 			<BtnTop />
 		</>

@@ -1,5 +1,6 @@
-import { useState, forwardRef, useImperativeHandle } from 'react';
+import { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { Link, NavLink } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const Menu = forwardRef((props, ref) => {
 	const activeClass = 'on';
@@ -9,11 +10,31 @@ const Menu = forwardRef((props, ref) => {
 		return { open: () => setIsOpen(!IsOpen) };
 	});
 
+	useEffect(() => {
+		window.addEventListener('resize', () => {
+			if (window.innerWidth >= 999) setIsOpen(false);
+		});
+	}, []);
+
+	useEffect(() => {
+		IsOpen ? (document.body.style.overflow = 'hidden') : (document.body.style.overflow = 'auto');
+	}, [IsOpen]);
+
 	return (
-		<>
+		<AnimatePresence>
 			{IsOpen && (
-				<nav className='mobile-menu'>
-					<div className='inner-menu'>
+				<motion.nav
+					className='mobile-menu'
+					initial={{ opacity: 0 }}
+					animate={{ opacity: 1, transition: { duration: 0.2 } }}
+					exit={{ opacity: 0, transition: { duration: 0.2 } }}
+				>
+					<motion.div
+						className='inner-menu'
+						initial={{ opacity: 0, x: '70%' }}
+						animate={{ opacity: 1, x: '0', transition: { duration: 0.3, delay: 0.2 } }}
+						exit={{ opacity: 0, x: '70%', transition: { duration: 0.3, delay: 0 } }}
+					>
 						<button type='button' className='menu-close' onClick={() => setIsOpen(false)}>
 							close
 						</button>
@@ -58,10 +79,10 @@ const Menu = forwardRef((props, ref) => {
 								SIGN UP
 							</NavLink>
 						</div>
-					</div>
-				</nav>
+					</motion.div>
+				</motion.nav>
 			)}
-		</>
+		</AnimatePresence>
 	);
 });
 

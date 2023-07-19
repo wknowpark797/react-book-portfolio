@@ -1,16 +1,40 @@
-import { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
+import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const Modal = forwardRef((props, ref) => {
+	const frame = useRef(null);
+	const counter = useRef(0);
+	const [Loader, setLoader] = useState(true);
 	const [IsOpen, setIsOpen] = useState(false);
+
 	useImperativeHandle(ref, () => {
 		return { open: () => setIsOpen(true) };
 	});
 
 	useEffect(() => {
-		IsOpen ? (document.body.style.overflow = 'hidden') : (document.body.style.overflow = 'auto');
+		if (IsOpen) {
+			counter.current = 0;
+			setLoader(true);
+			frame.current.classList.remove('on');
+
+			const imgs = frame.current.querySelectorAll('img');
+			imgs.forEach((img) => {
+				img.onload = () => {
+					++counter.current;
+
+					if (counter.current === imgs.length) {
+						setLoader(false);
+						frame.current.classList.add('on');
+					}
+				};
+			});
+
+			document.body.style.overflow = 'hidden';
+		} else {
+			document.body.style.overflow = 'auto';
+		}
 	}, [IsOpen]);
 
 	return (
@@ -28,7 +52,10 @@ const Modal = forwardRef((props, ref) => {
 						animate={{ opacity: 1, y: 0, transition: { duration: 0.3, delay: 0.2 } }}
 						exit={{ opacity: 0, y: 100, transition: { duration: 0.3, delay: 0 } }}
 					>
-						<div className='inner-content'>{props.children}</div>
+						<div className='inner-content' ref={frame}>
+							{props.children}
+						</div>
+						{Loader && <div className='loading-wrap'>LOADING...</div>}
 
 						<motion.button
 							type='button'

@@ -1,7 +1,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCirclePlay } from '@fortawesome/free-regular-svg-icons';
+import { useSelector } from 'react-redux';
 
 function MainYoutube() {
+	const BookList = useSelector((store) => store.youtubeRead.data.slice(0, 2));
+
 	return (
 		<section id='main-youtube-list' className='my-scroll'>
 			<div className='inner-container'>
@@ -23,9 +26,13 @@ function MainYoutube() {
 					</p>
 
 					<div id='mainYoutubeWrap' className='video-wrap'>
-						<article>
-							<img src='' alt='' />
-						</article>
+						{BookList.map((item, idx) => {
+							return (
+								<article key={idx}>
+									<img src={item.snippet.thumbnails.standard.url} alt='' />
+								</article>
+							);
+						})}
 					</div>
 				</div>
 			</div>

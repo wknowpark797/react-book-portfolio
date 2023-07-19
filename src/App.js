@@ -14,10 +14,19 @@ import Signin from './components/sub/Signin';
 import BtnTop from './components/common/BtnTop';
 import Menu from './components/common/Menu';
 
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux';
+import { fetchYoutubeMusic } from './redux/youtubeMusicSlice';
+import { fetchYoutubeRead } from './redux/youtubeReadSlice';
 
 function App() {
 	const menu = useRef(null);
+	const dispatch = useDispatch();
+
+	useEffect(() => {
+		dispatch(fetchYoutubeMusic());
+		dispatch(fetchYoutubeRead());
+	}, [dispatch]);
 
 	return (
 		<>

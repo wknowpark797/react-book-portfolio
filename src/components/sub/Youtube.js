@@ -1,49 +1,21 @@
 import SubLayout from '../common/SubLayout';
 import Modal from '../common/Modal';
-import axios from 'axios';
-import { useState, useEffect, useRef, Fragment } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCirclePlay } from '@fortawesome/free-regular-svg-icons';
+import { useState, useEffect, useRef, Fragment } from 'react';
+import { useSelector } from 'react-redux';
 
 function Youtube() {
 	const modal = useRef(null);
 	const [Selected, setSelected] = useState(0);
 
-	const [MusicList, setMusicList] = useState([]);
-	const [BestList, setBestList] = useState([]);
-	const [BookList, setBookList] = useState([]);
+	const MusicList = useSelector((store) => store.youtubeMusic.data);
+	const BestList = useSelector((store) => store.youtubeRead.data.slice(0, 1));
+	const BookList = useSelector((store) => store.youtubeRead.data.slice(1, 4));
 
 	useEffect(() => {
-		const key = 'AIzaSyA4f3SqOYivsLVITR7K6g5K0QrKhvUZ7hw';
-		const baseURL = `https://www.googleapis.com/youtube/v3/playlistItems?key=${key}&part=snippet`;
-		musicListFetch(baseURL);
-		readListFetch(baseURL);
-
 		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
 	}, []);
-
-	// music 재생목록 fetching
-	const musicListFetch = async (base) => {
-		const playlistId = 'PLuYjs7JL1VFD0-B09gEumiJn43AM-qpNR';
-		const maxResults = 3;
-		const listURL = `${base}&playlistId=${playlistId}&maxResults=${maxResults}`;
-
-		const result = await axios.get(listURL);
-		setMusicList(result.data.items);
-	};
-
-	// read 재생목록 fetching
-	const readListFetch = async (base) => {
-		const playlistId = 'PLuYjs7JL1VFB-ciaLcIPXzqp2xmSiL_Wd';
-		const maxResults = 4;
-		const listURL = `${base}&playlistId=${playlistId}&maxResults=${maxResults}`;
-
-		const result = await axios.get(listURL);
-		const items = result.data.items;
-
-		setBestList(items.slice(0, 1));
-		setBookList(items.slice(1, 4));
-	};
 
 	return (
 		<>

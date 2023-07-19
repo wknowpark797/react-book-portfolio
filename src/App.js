@@ -19,6 +19,7 @@ import { useDispatch } from 'react-redux';
 import { fetchYoutubeMusic } from './redux/youtubeMusicSlice';
 import { fetchYoutubeRead } from './redux/youtubeReadSlice';
 import { fetchBookVisual } from './redux/bookVisualSlice';
+import { fetchBookInterest } from './redux/bookInterestSlice';
 import { fetchBookDetail } from './redux/bookDetailSlice';
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
 		dispatch(fetchYoutubeMusic());
 		dispatch(fetchYoutubeRead());
 		dispatch(fetchBookVisual());
+		dispatch(fetchBookInterest());
 		dispatch(fetchBookDetail(''));
 	}, [dispatch]);
 

@@ -7,6 +7,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import youtubeMusicReducer from './redux/youtubeMusicSlice';
 import youtubeReadReducer from './redux/youtubeReadSlice';
 import bookVisualReducer from './redux/bookVisualSlice';
+import bookInterestReducer from './redux/bookInterestSlice';
 import bookDetailReducer from './redux/bookDetailSlice';
 
 const store = configureStore({
@@ -14,6 +15,7 @@ const store = configureStore({
 		youtubeMusic: youtubeMusicReducer,
 		youtubeRead: youtubeReadReducer,
 		bookVisual: bookVisualReducer,
+		bookInterest: bookInterestReducer,
 		bookDetail: bookDetailReducer,
 	},
 });

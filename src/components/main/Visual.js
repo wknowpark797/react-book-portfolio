@@ -1,38 +1,23 @@
+import Modal from '../common/Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
-import { useState, useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
-import axios from 'axios';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Navigation } from 'swiper/modules';
+import { useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchBookDetail } from '../../redux/bookDetailSlice';
 import 'swiper/css';
-import Modal from '../common/Modal';
 
 function Visual() {
+	const modal = useRef(null);
 	const btnPrev = useRef(null);
 	const btnNext = useRef(null);
 	const fractionFrame = useRef(null);
-	const Items = useSelector((store) => {
-		console.log(store.bookVisual.data);
-		return store.bookVisual.data;
-	});
 	const ratingList = [5, 4, 3, 4, 5];
 
-	const modal = useRef(null);
-	const [SelectedBookId, setSelectedBookId] = useState('');
-	const [Detail, setDetail] = useState({});
-
-	const getBookDetail = async () => {
-		if (SelectedBookId === '') return;
-
-		const detailURL = `https://www.googleapis.com/books/v1/volumes/${SelectedBookId}`;
-		const result = await axios.get(detailURL);
-		setDetail(result.data.volumeInfo);
-	};
-
-	useEffect(() => {
-		getBookDetail();
-	}, [SelectedBookId]);
+	const dispatch = useDispatch();
+	const Items = useSelector((store) => store.bookVisual.data);
+	const Detail = useSelector((store) => store.bookDetail.data);
 
 	return (
 		<>
@@ -94,7 +79,7 @@ function Visual() {
 											type='button'
 											className='btn-more'
 											onClick={() => {
-												setSelectedBookId(item.id);
+												dispatch(fetchBookDetail(item.id));
 												modal.current.open();
 											}}
 										>
@@ -143,18 +128,18 @@ function Visual() {
 			<Modal ref={modal}>
 				<div className='inner-detail'>
 					<div className='img-box'>
-						<img src={Detail.imageLinks?.small.replace('edge=curl', 'edge=')} alt={Detail.title} />
+						<img src={Detail?.imageLinks?.small.replace('edge=curl', 'edge=')} alt={Detail?.title} />
 					</div>
 
 					<div className='info-wrap'>
-						<h1>{Detail.title}</h1>
-						<h2>{Detail.subtitle || ''}</h2>
+						<h1>{Detail?.title}</h1>
+						<h2>{Detail?.subtitle || ''}</h2>
 
-						<p className='authors'>작가 : {Detail.authors}</p>
-						<div className='description' dangerouslySetInnerHTML={{ __html: Detail.description }}></div>
-						<p>카테고리 : {Detail.categories}</p>
-						<p>출판사 : {Detail.publisher}</p>
-						<p>출판일 : {Detail.publishedDate}</p>
+						<p className='authors'>작가 : {Detail?.authors}</p>
+						<div className='description' dangerouslySetInnerHTML={{ __html: Detail?.description }}></div>
+						<p>카테고리 : {Detail?.categories}</p>
+						<p>출판사 : {Detail?.publisher}</p>
+						<p>출판일 : {Detail?.publishedDate}</p>
 					</div>
 				</div>
 			</Modal>

@@ -20,6 +20,13 @@ const Modal = forwardRef((props, ref) => {
 			frame.current.classList.remove('on');
 
 			const imgs = frame.current.querySelectorAll('img');
+
+			if (imgs.length === 0) {
+				setLoader(false);
+				frame.current.classList.add('on');
+				return;
+			}
+
 			imgs.forEach((img) => {
 				img.onload = () => {
 					++counter.current;
@@ -30,11 +37,11 @@ const Modal = forwardRef((props, ref) => {
 					}
 				};
 			});
-
-			document.body.style.overflow = 'hidden';
-		} else {
-			document.body.style.overflow = 'auto';
 		}
+	}, [props]);
+
+	useEffect(() => {
+		IsOpen ? (document.body.style.overflow = 'hidden') : (document.body.style.overflow = 'auto');
 	}, [IsOpen]);
 
 	return (

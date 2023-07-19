@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination, Navigation } from 'swiper/modules';
@@ -11,7 +12,10 @@ function Visual() {
 	const btnPrev = useRef(null);
 	const btnNext = useRef(null);
 	const fractionFrame = useRef(null);
-	const [Items, setItems] = useState([]);
+	const Items = useSelector((store) => {
+		console.log(store.bookVisual.data);
+		return store.bookVisual.data;
+	});
 	const ratingList = [5, 4, 3, 4, 5];
 
 	const modal = useRef(null);
@@ -26,22 +30,9 @@ function Visual() {
 		setDetail(result.data.volumeInfo);
 	};
 
-	const getBookData = async () => {
-		const userId = '105834502729522452212';
-		const shelf = '1002';
-		const listURL = `https://www.googleapis.com/books/v1/users/${userId}/bookshelves/${shelf}/volumes?maxResults=30`;
-
-		const result = await axios.get(listURL);
-		setItems(result.data.items);
-	};
-
 	useEffect(() => {
 		getBookDetail();
 	}, [SelectedBookId]);
-
-	useEffect(() => {
-		getBookData();
-	}, []);
 
 	return (
 		<>

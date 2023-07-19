@@ -6,11 +6,13 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import youtubeMusicReducer from './redux/youtubeMusicSlice';
 import youtubeReadReducer from './redux/youtubeReadSlice';
+import bookVisualReducer from './redux/bookVisualSlice';
 
 const store = configureStore({
 	reducer: {
 		youtubeMusic: youtubeMusicReducer,
 		youtubeRead: youtubeReadReducer,
+		bookVisual: bookVisualReducer,
 	},
 });
 

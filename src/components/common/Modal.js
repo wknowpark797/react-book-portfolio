@@ -38,7 +38,7 @@ const Modal = forwardRef((props, ref) => {
 				};
 			});
 		}
-	}, [props]);
+	}, [props, IsOpen]);
 
 	useEffect(() => {
 		IsOpen ? (document.body.style.overflow = 'hidden') : (document.body.style.overflow = 'auto');

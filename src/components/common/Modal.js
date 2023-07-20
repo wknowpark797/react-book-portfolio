@@ -2,6 +2,8 @@ import { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 're
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleXmark } from '@fortawesome/free-solid-svg-icons';
 import { motion, AnimatePresence } from 'framer-motion';
+import Lottie from 'lottie-react';
+import loaderLottie from '../../asset/lottie/loaderLottie.json';
 
 const Modal = forwardRef((props, ref) => {
 	const frame = useRef(null);
@@ -62,7 +64,12 @@ const Modal = forwardRef((props, ref) => {
 						<div className='inner-content' ref={frame}>
 							{props.children}
 						</div>
-						{Loader && <div className='loading-wrap'>LOADING...</div>}
+						{Loader && (
+							<div className='loading-wrap'>
+								<Lottie animationData={loaderLottie} className='lottie-wrap' />
+								<p>LOADING...</p>
+							</div>
+						)}
 
 						<motion.button
 							type='button'

@@ -3,6 +3,8 @@ import Modal from '../common/Modal';
 import Masonry from 'react-masonry-component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
+import Lottie from 'lottie-react';
+import loaderLottie from '../../asset/lottie/loaderLottie.json';
 import axios from 'axios';
 import { useState, useEffect, useRef } from 'react';
 
@@ -172,7 +174,12 @@ function Gallery() {
 					</div>
 				</div>
 
-				{Loader && <div className='loading-wrap'>LOADING...</div>}
+				{Loader && (
+					<div className='loading-wrap'>
+						<Lottie animationData={loaderLottie} className='lottie-wrap' />
+						<p>LOADING...</p>
+					</div>
+				)}
 
 				<div className='pictures-wrap'>
 					<div className='inner-container' ref={frame}>

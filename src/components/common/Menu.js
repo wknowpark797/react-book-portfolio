@@ -1,20 +1,19 @@
-import { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
+import { useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useSelector, useDispatch } from 'react-redux';
+import { close } from '../../redux/menuSlice';
 
-const Menu = forwardRef((props, ref) => {
+function Menu() {
 	const activeClass = 'on';
-	const [IsOpen, setIsOpen] = useState(false);
-
-	useImperativeHandle(ref, () => {
-		return { open: () => setIsOpen(!IsOpen) };
-	});
+	const dispatch = useDispatch();
+	const IsOpen = useSelector((store) => store.menu.open);
 
 	useEffect(() => {
 		window.addEventListener('resize', () => {
-			if (window.innerWidth >= 999) setIsOpen(false);
+			if (window.innerWidth >= 999) dispatch(close());
 		});
-	}, []);
+	}, [dispatch]);
 
 	useEffect(() => {
 		IsOpen ? (document.body.style.overflow = 'hidden') : (document.body.style.overflow = 'auto');
@@ -28,6 +27,9 @@ const Menu = forwardRef((props, ref) => {
 					initial={{ opacity: 0 }}
 					animate={{ opacity: 1, transition: { duration: 0.2 } }}
 					exit={{ opacity: 0, transition: { duration: 0.2 } }}
+					onClick={() => {
+						dispatch(close());
+					}}
 				>
 					<motion.div
 						className='inner-menu'
@@ -35,7 +37,13 @@ const Menu = forwardRef((props, ref) => {
 						animate={{ opacity: 1, x: '0', transition: { duration: 0.3, delay: 0.2 } }}
 						exit={{ opacity: 0, x: '70%', transition: { duration: 0.3, delay: 0 } }}
 					>
-						<button type='button' className='menu-close' onClick={() => setIsOpen(false)}>
+						<button
+							type='button'
+							className='menu-close'
+							onClick={() => {
+								dispatch(close());
+							}}
+						>
 							close
 						</button>
 
@@ -84,6 +92,6 @@ const Menu = forwardRef((props, ref) => {
 			)}
 		</AnimatePresence>
 	);
-});
+}
 
 export default Menu;

@@ -14,7 +14,7 @@ import Signin from './components/sub/Signin';
 import BtnTop from './components/common/BtnTop';
 import Menu from './components/common/Menu';
 
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { fetchYoutubeMusic } from './redux/youtubeMusicSlice';
 import { fetchYoutubeRead } from './redux/youtubeReadSlice';
@@ -23,7 +23,6 @@ import { fetchBookInterest } from './redux/bookInterestSlice';
 import { fetchBookDetail } from './redux/bookDetailSlice';
 
 function App() {
-	const menu = useRef(null);
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -37,8 +36,8 @@ function App() {
 	return (
 		<>
 			<Switch>
-				<Route exact path='/' render={() => <Main menu={menu} />} />
-				<Route path='/' render={() => <Header type={'sub'} menu={menu} />} />
+				<Route exact path='/' render={() => <Main />} />
+				<Route path='/' render={() => <Header type={'sub'} />} />
 			</Switch>
 
 			<Route path='/members' component={Members} />
@@ -49,7 +48,7 @@ function App() {
 			<Route path='/signup' component={Signup} />
 			<Route path='/signin' component={Signin} />
 
-			<Menu ref={menu} />
+			<Menu />
 			<Footer />
 			<BtnTop />
 		</>

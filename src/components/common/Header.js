@@ -1,9 +1,12 @@
 import { Link, NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
+import { useDispatch } from 'react-redux';
+import { toggle } from '../../redux/menuSlice';
 
-function Header({ type, menu }) {
+function Header({ type }) {
 	const activeClass = 'on';
+	const dispatch = useDispatch();
 
 	return (
 		<header id='header' className={type}>
@@ -46,7 +49,13 @@ function Header({ type, menu }) {
 				</div>
 
 				{/* 모바일 메뉴 버튼 */}
-				<button type='button' className='btn-menu' onClick={() => menu.current.open()}>
+				<button
+					type='button'
+					className='btn-menu'
+					onClick={() => {
+						dispatch(toggle());
+					}}
+				>
 					<FontAwesomeIcon icon={faBars} />
 				</button>
 			</div>

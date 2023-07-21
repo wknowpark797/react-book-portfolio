@@ -9,6 +9,7 @@ import youtubeReadReducer from './redux/youtubeReadSlice';
 import bookVisualReducer from './redux/bookVisualSlice';
 import bookInterestReducer from './redux/bookInterestSlice';
 import bookDetailReducer from './redux/bookDetailSlice';
+import menuReducer from './redux/menuSlice';
 
 const store = configureStore({
 	reducer: {
@@ -17,6 +18,7 @@ const store = configureStore({
 		bookVisual: bookVisualReducer,
 		bookInterest: bookInterestReducer,
 		bookDetail: bookDetailReducer,
+		menu: menuReducer,
 	},
 });
 

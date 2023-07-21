@@ -25,7 +25,6 @@ $slideWidth: 500px;
 
 		.slide-wrap {
 			overflow: hidden;
-			padding-bottom: 85px;
 			position: relative;
 
 			.panel {
@@ -35,6 +34,7 @@ $slideWidth: 500px;
 
 				.swiper-slide {
 					width: $slideWidth;
+					padding-bottom: 85px;
 
 					.profile-box {
 						width: 70px;

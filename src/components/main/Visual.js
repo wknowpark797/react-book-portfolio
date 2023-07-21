@@ -2,7 +2,7 @@ import Modal from '../common/Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Pagination, Navigation } from 'swiper/modules';
+import { Autoplay, Pagination, Navigation } from 'swiper';
 import { useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchBookDetail } from '../../redux/bookDetailSlice';
@@ -10,8 +10,8 @@ import 'swiper/css';
 
 function Visual() {
 	const modal = useRef(null);
-	const btnPrev = useRef(null);
-	const btnNext = useRef(null);
+	const btnPrevVisual = useRef(null);
+	const btnNextVisual = useRef(null);
 	const fractionFrame = useRef(null);
 	const ratingList = [5, 4, 3, 4, 5];
 
@@ -33,6 +33,8 @@ function Visual() {
 					<Swiper
 						id='visualPanel'
 						className='panel'
+						slidesPerView={1}
+						autoplay={{ delay: 5000, disableOnInteraction: true }}
 						pagination={{
 							el: fractionFrame.current,
 							type: 'fraction',
@@ -43,8 +45,8 @@ function Visual() {
 								return num < 10 && (num = '0' + num);
 							},
 						}}
-						navigation={{ nextEl: btnNext.current, prevEl: btnPrev.current }}
-						modules={[Pagination, Navigation]}
+						navigation={{ nextEl: btnNextVisual.current, prevEl: btnPrevVisual.current }}
+						modules={[Autoplay, Pagination, Navigation]}
 					>
 						{Items.map((item, idx) => {
 							return (
@@ -114,10 +116,10 @@ function Visual() {
 						</div>
 
 						<div className='btn-arrow'>
-							<button type='button' id='btnPrevVisual' ref={btnPrev}>
+							<button type='button' id='btnPrevVisual' ref={btnPrevVisual}>
 								<FontAwesomeIcon icon={faArrowLeft} />
 							</button>
-							<button type='button' id='btnNextVisual' ref={btnNext}>
+							<button type='button' id='btnNextVisual' ref={btnNextVisual}>
 								<FontAwesomeIcon icon={faArrowRight} />
 							</button>
 						</div>

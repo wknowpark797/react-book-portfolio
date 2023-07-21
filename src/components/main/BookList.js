@@ -2,7 +2,7 @@ import Modal from '../common/Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Navigation } from 'swiper/modules';
+import { Autoplay, Navigation } from 'swiper';
 import { useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchBookDetail } from '../../redux/bookDetailSlice';
@@ -10,8 +10,8 @@ import 'swiper/css';
 
 function BookList() {
 	const modal = useRef(null);
-	const btnPrev = useRef(null);
-	const btnNext = useRef(null);
+	const btnPrevBook = useRef(null);
+	const btnNextBook = useRef(null);
 
 	const dispatch = useDispatch();
 	const Items = useSelector((store) => store.bookInterest.data);
@@ -26,10 +26,10 @@ function BookList() {
 						<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Minima, exercitationem.</p>
 
 						<div className='arrow'>
-							<button type='button' id='btnPrevBook' className='prev' ref={btnPrev}>
+							<button type='button' id='btnPrevBook' className='prev' ref={btnPrevBook}>
 								<FontAwesomeIcon icon={faChevronLeft} />
 							</button>
-							<button type='button' id='btnNextBook' className='next' ref={btnNext}>
+							<button type='button' id='btnNextBook' className='next' ref={btnNextBook}>
 								<FontAwesomeIcon icon={faChevronRight} />
 							</button>
 						</div>
@@ -41,8 +41,9 @@ function BookList() {
 							className='panel'
 							slidesPerView={'auto'}
 							spaceBetween={30}
-							navigation={{ nextEl: btnNext.current, prevEl: btnPrev.current }}
-							modules={[Navigation]}
+							autoplay={{ delay: 1000, disableOnInteraction: true }}
+							navigation={{ nextEl: btnNextBook.current, prevEl: btnPrevBook.current }}
+							modules={[Autoplay, Navigation]}
 						>
 							{Items.map((item, idx) => {
 								return (

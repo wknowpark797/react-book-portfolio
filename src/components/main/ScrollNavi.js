@@ -5,7 +5,6 @@ function ScrollNavi() {
 	const position = useRef([]); // 각 section의 offset값
 	const [NaviLength, setNaviLength] = useState(0);
 
-	// TODO: api로 불러오는 컨텐츠에 의해 높이값이 제대로 생성되지 않았을때의 section offset값 때문에 정확한 위치값을 잡지 못하는 문제 발생
 	const getPosition = () => {
 		position.current = [];
 		const sections = scrollNavi.current.parentElement.querySelectorAll('.my-scroll');
@@ -38,7 +37,9 @@ function ScrollNavi() {
 	};
 
 	useEffect(() => {
-		getPosition();
+		setTimeout(() => {
+			getPosition();
+		}, 1500);
 
 		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
 		window.addEventListener('resize', getPosition);

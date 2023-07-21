@@ -29,11 +29,11 @@ $slideWidth: 500px;
 			position: relative;
 
 			.panel {
-				width: calc($slideWidth * $slideLength);
+				// width: calc($slideWidth * $slideLength);
 				display: flex;
 				align-items: center;
 
-				> div {
+				.swiper-slide {
 					width: $slideWidth;
 
 					.profile-box {

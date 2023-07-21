@@ -1,6 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { useState, useEffect } from 'react';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Autoplay, Navigation } from 'swiper';
+import { useState, useEffect, useRef } from 'react';
+import 'swiper/css';
 
 function MainComment() {
 	const dummyReviews = [
@@ -21,7 +24,18 @@ function MainComment() {
 			userName: 'Paul Davison',
 			date: '2023.06.21',
 		},
+		{
+			bookName: '일상의 두칸',
+			reviewContent:
+				'Lorem ipsum dolor sit amet consectetur adipisicing elit. Id temporibus exercitationem culpa saepe, nulla veniam aliquam. Ea dicta officia dolorum.',
+			profileImg: 'example_user3.jpg',
+			userName: 'Paul Davison',
+			date: '2023.06.23',
+		},
 	];
+
+	const btnPrevComment = useRef(null);
+	const btnNextComment = useRef(null);
 
 	const getLocalData = () => {
 		const data = localStorage.getItem('reviews');
@@ -44,10 +58,18 @@ function MainComment() {
 				</div>
 
 				<div className='slide-wrap commentListSwiper'>
-					<article id='commentListPanel' className='panel swiper-wrapper'>
+					<Swiper
+						id='commentListPanel'
+						className='panel'
+						slidesPerView={'auto'}
+						spaceBetween={30}
+						autoplay={{ delay: 2500, disableOnInteraction: true }}
+						navigation={{ nextEl: btnNextComment.current, prevEl: btnPrevComment.current }}
+						modules={[Autoplay, Navigation]}
+					>
 						{Reviews.map((review, idx) => {
 							return (
-								<div className='swiper-slide' key={idx}>
+								<SwiperSlide key={idx}>
 									<div className='profile-box'>
 										<img src={`${process.env.PUBLIC_URL}/image/${review.profileImg}`} alt='' />
 									</div>
@@ -58,16 +80,16 @@ function MainComment() {
 										<p>{review.date}</p>
 										{review.updateDate && <p>{review.updateDate} [마지막 수정 날짜]</p>}
 									</div>
-								</div>
+								</SwiperSlide>
 							);
 						})}
-					</article>
+					</Swiper>
 
 					<div className='arrow'>
-						<button type='button' id='btnPrevComment' className='prev'>
+						<button type='button' id='btnPrevComment' className='prev' ref={btnPrevComment}>
 							<FontAwesomeIcon icon={faChevronLeft} />
 						</button>
-						<button type='button' id='btnNextComment' className='next'>
+						<button type='button' id='btnNextComment' className='next' ref={btnNextComment}>
 							<FontAwesomeIcon icon={faChevronRight} />
 						</button>
 					</div>

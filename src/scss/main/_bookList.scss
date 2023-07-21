@@ -56,7 +56,7 @@ $slideWidth: 220px;
 			overflow: hidden;
 
 			.panel {
-				width: calc($slideWidth * $slideLength);
+				// width: calc($slideWidth * $slideLength);
 				display: flex;
 				align-items: flex-start;
 

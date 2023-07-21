@@ -155,9 +155,9 @@ $slideWidth: 500px;
 		.inner-container {
 			.slide-wrap {
 				.panel {
-					width: calc(100% * $slideLength);
+					// width: calc(100% * $slideLength);
 
-					> div {
+					.swiper-slide {
 						width: calc(100% / $slideLength);
 					}
 				}

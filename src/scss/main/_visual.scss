@@ -300,7 +300,7 @@ $slideLength: 5;
 	#main-visual {
 		.slide-wrap {
 			.panel {
-				> div {
+				.swiper-slide {
 					.detail-wrap {
 						h1 {
 							width: 100%;
@@ -318,7 +318,7 @@ $slideLength: 5;
 
 		.slide-wrap {
 			.panel {
-				> div {
+				.swiper-slide {
 					.ratio-wrap {
 						padding: 0 115px 0 50px;
 
@@ -340,7 +340,7 @@ $slideLength: 5;
 	#main-visual {
 		.slide-wrap {
 			.panel {
-				> div {
+				.swiper-slide {
 					.detail-wrap {
 						padding-right: 30px;
 
@@ -366,7 +366,7 @@ $slideLength: 5;
 	#main-visual {
 		.slide-wrap {
 			.panel {
-				> div {
+				.swiper-slide {
 					.detail-wrap {
 						h1 {
 							font-size: 34px;
@@ -384,7 +384,7 @@ $slideLength: 5;
 
 		.slide-wrap {
 			.panel {
-				> div {
+				.swiper-slide {
 					display: block;
 
 					.detail-wrap {
@@ -403,7 +403,7 @@ $slideLength: 5;
 
 							.star-box {
 								span {
-									i {
+									svg {
 										font-size: 20px;
 									}
 								}

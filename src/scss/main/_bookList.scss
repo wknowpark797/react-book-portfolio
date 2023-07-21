@@ -142,7 +142,7 @@ $slideWidth: 220px;
 				margin-top: 30px;
 
 				.panel {
-					> div {
+					.swiper-slide {
 						width: 135px;
 					}
 				}

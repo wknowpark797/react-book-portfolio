@@ -5,8 +5,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import Lottie from 'lottie-react';
 import loaderLottie from '../../asset/lottie/loaderLottie.json';
-import axios from 'axios';
 import { useState, useEffect, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchFlickr } from '../../redux/flickrSlice';
 
 function Gallery() {
 	const frame = useRef(null);
@@ -15,49 +16,13 @@ function Gallery() {
 	const searchInput = useRef(null);
 	const enableEvent = useRef(true); // 재이벤트 방지
 	const enableUser = useRef(true); // 프로필 데이터 재호출 방지
-	const [Items, setItems] = useState([]);
+	const firstLoaded = useRef(true);
 	const [Loader, setLoader] = useState(true);
-
 	const modal = useRef(null);
 	const [ModalIndex, setModalIndex] = useState(0);
 
-	// flickr API 호출 함수
-	const getData = async (options) => {
-		const baseURL = 'https://www.flickr.com/services/rest/?format=json&nojsoncallback=1';
-		const key = '7f259a4112d06fbef0736c84af20f014';
-		const method_interest = 'flickr.interestingness.getList';
-		const method_search = 'flickr.photos.search';
-		const method_user = 'flickr.people.getPhotos';
-		const num = 30;
-		let url = '';
-
-		if (options.type === 'interest') url = `${baseURL}&api_key=${key}&method=${method_interest}&per_page=${num}`;
-		if (options.type === 'search')
-			url = `${baseURL}&api_key=${key}&method=${method_search}&per_page=${num}&tags=${options.tags}`;
-		if (options.type === 'user')
-			url = `${baseURL}&api_key=${key}&method=${method_user}&per_page=${num}&user_id=${options.user}`;
-
-		const result = await axios.get(url);
-		getDataCheck(result.data.photos.photo);
-		dataLoading();
-	};
-
-	// 호출 데이터 체크 함수
-	const getDataCheck = (data) => {
-		if (data.length === 0) {
-			setLoader(false);
-			frame.current.classList.add('on');
-			enableEvent.current = true;
-
-			const btns = btnSet.current.querySelectorAll('button');
-			btns.forEach((btn) => btn.classList.remove('on'));
-			if (btnActive.current >= 0) btns[btnActive.current].classList.add('on');
-
-			return alert('검색어 결과가 없습니다.');
-		}
-
-		setItems(data);
-	};
+	const dispatch = useDispatch();
+	const Items = useSelector((store) => store.flickr.data);
 
 	// 데이터 로딩 처리 함수
 	const dataLoading = () => {
@@ -88,58 +53,74 @@ function Gallery() {
 		enableEvent.current = false;
 	};
 
+	// Interest 갤러리 호출 함수
 	const showInterest = (e, index) => {
 		if (!enableEvent.current) return;
 		if (e.target.classList.contains('on')) return;
 
 		btnActive.current = index;
 		resetGallery();
-		getData({ type: 'interest' });
+		dispatch(fetchFlickr({ type: 'interest' }));
 
 		enableUser.current = true;
 	};
 
+	// My 갤러리 호출 함수
 	const showUser = (e, index) => {
 		if (!enableEvent.current) return;
 		if (e.target.classList.contains('on')) return;
 
 		btnActive.current = index;
 		resetGallery();
-		getData({ type: 'user', user: '198471371@N05' });
+		dispatch(fetchFlickr({ type: 'user', user: '198471371@N05' }));
 
 		enableUser.current = false;
 	};
 
+	// 특정 사용자 갤러리 호출 함수
 	const showProfile = (userid) => {
 		if (!enableEvent.current) return;
 		if (!enableUser.current) return;
 
 		btnActive.current = -1;
 		resetGallery();
-		getData({ type: 'user', user: userid });
+		dispatch(fetchFlickr({ type: 'user', user: userid }));
 
 		enableUser.current = false;
 	};
 
+	// 검색어 갤러리 호출 함수
 	const showSearch = () => {
 		const tag = searchInput.current.value.trim();
 		if (tag === '') return alert('검색어를 입력하세요.');
 		if (!enableEvent.current) return;
 
+		btnActive.current = -1;
 		resetGallery();
-		getData({ type: 'search', tags: tag });
+		dispatch(fetchFlickr({ type: 'search', tags: tag }));
 		searchInput.current.value = '';
 
-		btnActive.current === 0 ? (enableUser.current = true) : (enableUser.current = false);
+		enableUser.current = true;
 	};
 
 	useEffect(() => {
-		const btns = btnSet.current.querySelectorAll('button');
-		btns.forEach((btn) => btn.classList.remove('on'));
-		btns[0].classList.add('on');
+		// 호출 데이터 유무 체크
+		if (Items.length === 0 && !firstLoaded.current) {
+			setLoader(false);
+			frame.current.classList.add('on');
+			enableEvent.current = true;
+			btnActive.current = -1;
 
-		getData({ type: 'interest' });
+			const btns = btnSet.current.querySelectorAll('button');
+			btns.forEach((btn) => btn.classList.remove('on'));
+			return;
+		}
+		firstLoaded.current = false;
 
+		dataLoading();
+	}, [Items]);
+
+	useEffect(() => {
 		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
 	}, []);
 
@@ -164,11 +145,11 @@ function Gallery() {
 						</div>
 
 						<div className='btn-option' ref={btnSet}>
-							<button type='button' className='option-interest' onClick={(e) => showInterest(e, 0)}>
+							<button type='button' className='option-interest on' onClick={(e) => showInterest(e, 0)}>
 								Interest
 							</button>
 							<button type='button' className='option-mine' onClick={(e) => showUser(e, 1)}>
-								Mine
+								Book
 							</button>
 						</div>
 					</div>
@@ -183,44 +164,48 @@ function Gallery() {
 
 				<div className='pictures-wrap'>
 					<div className='inner-container' ref={frame}>
-						<Masonry elementType={'ul'} options={{ transitionDuration: '0.5s' }} id='galleryWrap'>
-							{Items.map((item, idx) => {
-								return (
-									<li className='item' key={idx}>
-										<div>
-											<div
-												className='img-box'
-												onClick={() => {
-													setModalIndex(idx);
-													modal.current.open();
-												}}
-											>
-												<img
-													className='picture'
-													src={`https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_m.jpg`}
-													alt={item.title}
-												/>
-											</div>
-
-											<div className='info-wrap'>
-												<div className='profile-wrap' onClick={() => showProfile(item.owner)}>
+						{Items.length > 0 ? (
+							<Masonry elementType={'ul'} options={{ transitionDuration: '0.5s' }} id='galleryWrap'>
+								{Items.map((item, idx) => {
+									return (
+										<li className='item' key={idx}>
+											<div>
+												<div
+													className='img-box'
+													onClick={() => {
+														setModalIndex(idx);
+														modal.current.open();
+													}}
+												>
 													<img
-														className='profile-img'
-														src={`http://farm${item.farm}.staticflickr.com/${item.server}/buddyicons/${item.owner}.jpg`}
-														alt={item.owner}
-														onError={(e) => {
-															e.target.setAttribute('src', 'https://www.flickr.com/images/buddyicon.gif');
-														}}
+														className='picture'
+														src={`https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_m.jpg`}
+														alt={item.title}
 													/>
-													<p className='profile-user'>{item.owner}</p>
 												</div>
-												<h3>{item.title}</h3>
+
+												<div className='info-wrap'>
+													<div className='profile-wrap' onClick={() => showProfile(item.owner)}>
+														<img
+															className='profile-img'
+															src={`http://farm${item.farm}.staticflickr.com/${item.server}/buddyicons/${item.owner}.jpg`}
+															alt={item.owner}
+															onError={(e) => {
+																e.target.setAttribute('src', 'https://www.flickr.com/images/buddyicon.gif');
+															}}
+														/>
+														<p className='profile-user'>{item.owner}</p>
+													</div>
+													<h3>{item.title}</h3>
+												</div>
 											</div>
-										</div>
-									</li>
-								);
-							})}
-						</Masonry>
+										</li>
+									);
+								})}
+							</Masonry>
+						) : (
+							<p className='no-items'>해당 이미지가 없습니다.</p>
+						)}
 					</div>
 				</div>
 			</SubLayout>

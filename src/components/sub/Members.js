@@ -1,5 +1,4 @@
 import SubLayout from '../common/SubLayout';
-import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -14,25 +13,24 @@ import {
 import { faVrCardboard } from '@fortawesome/free-solid-svg-icons';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
+import { useSelector } from 'react-redux';
 
 function Members() {
 	const swiperFrame = useRef(null);
-	const [Members, setMembers] = useState([]);
-	const [Directors, setDirectors] = useState([]);
 	const [Slides, setSlides] = useState(null);
 	const [Active, setActive] = useState(0);
+	const [Members, setMembers] = useState([]);
+	const [Directors, setDirectors] = useState([]);
+	const memberList = useSelector((store) => store.member.data);
 
 	const getMembersData = async () => {
 		const items = swiperFrame.current.querySelectorAll('.swiper-slide');
 		const key = items[Active].dataset.key;
-
-		const result = await axios.get(`${process.env.PUBLIC_URL}/DB/members.json`);
-		setMembers(result.data.members.filter((member) => member.department === key));
+		setMembers(memberList.members.filter((member) => member.department === key));
 	};
 
 	const getDirectorsData = async () => {
-		const result = await axios.get(`${process.env.PUBLIC_URL}/DB/members.json`);
-		setDirectors(result.data.directors);
+		setDirectors(memberList.directors);
 	};
 
 	useEffect(() => {
@@ -41,7 +39,6 @@ function Members() {
 
 	useEffect(() => {
 		getDirectorsData();
-
 		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
 	}, []);
 

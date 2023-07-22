@@ -4,14 +4,15 @@ function ScrollNavi() {
 	const scrollNavi = useRef(null);
 	const position = useRef([]); // 각 section의 offset값
 	const [NaviLength, setNaviLength] = useState(0);
+	const [Mounted, setMounted] = useState(true);
 
 	const getPosition = () => {
 		position.current = [];
-		const sections = scrollNavi.current.parentElement.querySelectorAll('.my-scroll');
+		const sections = scrollNavi.current?.parentElement.querySelectorAll('.my-scroll');
 
-		for (const section of sections) {
+		sections?.forEach((section) => {
 			position.current.push(section.offsetTop);
-		}
+		});
 
 		setNaviLength(position.current.length);
 	};
@@ -38,7 +39,7 @@ function ScrollNavi() {
 
 	useEffect(() => {
 		setTimeout(() => {
-			getPosition();
+			Mounted && getPosition();
 		}, 1500);
 
 		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -48,8 +49,9 @@ function ScrollNavi() {
 		return () => {
 			window.removeEventListener('resize', getPosition);
 			window.removeEventListener('scroll', activation);
+			setMounted(false);
 		};
-	}, []);
+	}, [Mounted]);
 
 	return (
 		<ul className='scroll-navi' ref={scrollNavi}>

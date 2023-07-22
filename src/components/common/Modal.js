@@ -22,23 +22,36 @@ const Modal = forwardRef((props, ref) => {
 			frame.current.classList.remove('on');
 
 			const imgs = frame.current.querySelectorAll('img');
+			const iframes = frame.current.querySelectorAll('iframe');
 
-			if (imgs.length === 0) {
+			if (imgs.length === 0 && iframes.length === 0) {
 				setLoader(false);
 				frame.current.classList.add('on');
-				return;
 			}
+			if (imgs.length > 0) {
+				imgs.forEach((img) => {
+					img.onload = () => {
+						++counter.current;
 
-			imgs.forEach((img) => {
-				img.onload = () => {
-					++counter.current;
+						if (counter.current === imgs.length) {
+							setLoader(false);
+							frame.current.classList.add('on');
+						}
+					};
+				});
+			}
+			if (iframes.length > 0) {
+				iframes.forEach((iframe) => {
+					iframe.onload = () => {
+						++counter.current;
 
-					if (counter.current === imgs.length) {
-						setLoader(false);
-						frame.current.classList.add('on');
-					}
-				};
-			});
+						if (counter.current === iframes.length) {
+							setLoader(false);
+							frame.current.classList.add('on');
+						}
+					};
+				});
+			}
 		}
 	}, [props, IsOpen]);
 

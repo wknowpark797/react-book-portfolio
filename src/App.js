@@ -23,6 +23,7 @@ import { fetchBookInterest } from './redux/bookInterestSlice';
 import { fetchBookDetail } from './redux/bookDetailSlice';
 import { fetchMember } from './redux/memberSlice';
 import { fetchFlickr } from './redux/flickrSlice';
+import { fetchLocation } from './redux/locationSlice';
 
 function App() {
 	const dispatch = useDispatch();
@@ -35,6 +36,7 @@ function App() {
 		dispatch(fetchBookDetail(''));
 		dispatch(fetchMember());
 		dispatch(fetchFlickr({ type: 'interest' }));
+		dispatch(fetchLocation());
 	}, [dispatch]);
 
 	return (

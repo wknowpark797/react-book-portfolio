@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot, faGlobe, faPhone } from '@fortawesome/free-solid-svg-icons';
 import { faInstagram, faYoutube, faFacebookF } from '@fortawesome/free-brands-svg-icons';
 import { useState, useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
 
 function Contact() {
 	const { kakao } = window;
@@ -12,67 +13,17 @@ function Contact() {
 	const [Map, setMap] = useState(null); // 지도 인스턴스
 	const [Index, setIndex] = useState(0); // 선택된 도서관 index
 	const [Traffic, setTraffic] = useState(false);
+	const markerInfo = useSelector((store) => store.location.data);
 
-	const markerInfo = [
-		{
-			title: '국회도서관',
-			address: '서울특별시 영등포구 의사당대로 1',
-			website: {
-				title: 'nanet.go.kr',
-				link: 'https://www.nanet.go.kr/main.do',
-			},
-			phone: '02-6788-4211',
-			position: new kakao.maps.LatLng(37.531117, 126.917035),
-			imgSrc: `${process.env.PUBLIC_URL}/image/location-pin.png`,
-			imgSize: new kakao.maps.Size(50, 50),
-			imgOption: { offset: new kakao.maps.Point(25, 50) },
-		},
-		{
-			title: '남산도서관',
-			address: '서울특별시 용산구 소월로 109',
-			website: {
-				title: 'nslib.sen.go.kr',
-				link: 'http://nslib.sen.go.kr/nslib_index.jsp',
-			},
-			phone: '02-754-7338',
-			position: new kakao.maps.LatLng(37.552923, 126.981457),
-			imgSrc: `${process.env.PUBLIC_URL}/image/location-pin.png`,
-			imgSize: new kakao.maps.Size(50, 50),
-			imgOption: { offset: new kakao.maps.Point(25, 50) },
-		},
-		{
-			title: '별마당 도서관',
-			address: '서울특별시 강남구 영동대로 513 스타필드 코엑스몰 B1',
-			website: {
-				title: 'starfield.co.kr',
-				link: 'https://www.starfield.co.kr/coexmall/starfieldLibrary/library.do',
-			},
-			phone: '02-6002-3031',
-			position: new kakao.maps.LatLng(37.50999, 127.059986),
-			imgSrc: `${process.env.PUBLIC_URL}/image/location-pin.png`,
-			imgSize: new kakao.maps.Size(50, 50),
-			imgOption: { offset: new kakao.maps.Point(25, 50) },
-		},
-		{
-			title: '국립중앙도서관',
-			address: '서울특별시 서초구 반포대로 201',
-			website: {
-				title: 'nl.go.kr',
-				link: 'https://www.nl.go.kr/',
-			},
-			phone: '02-535-4142',
-			position: new kakao.maps.LatLng(37.497669, 127.002837),
-			imgSrc: `${process.env.PUBLIC_URL}/image/location-pin.png`,
-			imgSize: new kakao.maps.Size(50, 50),
-			imgOption: { offset: new kakao.maps.Point(25, 50) },
-		},
-	];
-
-	const mapOption = { center: markerInfo[Index].position, level: 3 };
-	const imageSrc = markerInfo[Index].imgSrc;
-	const imageSize = markerInfo[Index].imgSize;
-	const imageOption = markerInfo[Index].imgOption;
-	const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, imageOption);
+	const mapOption = {
+		center: new kakao.maps.LatLng(markerInfo[Index].position[0], markerInfo[Index].position[1]),
+		level: 3,
+	};
+	const imageSrc = `${process.env.PUBLIC_URL}/image/${markerInfo[Index].imgSrc}`;
+	const imageSize = new kakao.maps.Size(markerInfo[Index].imgSize[0], markerInfo[Index].imgSize[1]);
+	const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, {
+		offset: new kakao.maps.Point(markerInfo[Index].imgOption.offset[0], markerInfo[Index].imgOption.offset[1]),
+	});
 	const marker = new kakao.maps.Marker({ position: mapOption.center, image: markerImage });
 
 	useEffect(() => {

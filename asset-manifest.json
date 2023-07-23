@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/react-book-portfolio/static/css/main.989a1e79.css",
-    "main.js": "/react-book-portfolio/static/js/main.4000d637.js",
+    "main.css": "/react-book-portfolio/static/css/main.6157e677.css",
+    "main.js": "/react-book-portfolio/static/js/main.71c61b94.js",
     "static/media/noto-serif-kr-v20-korean_latin-700.woff2": "/react-book-portfolio/static/media/noto-serif-kr-v20-korean_latin-700.9c168719c6bf0698fb5f.woff2",
     "static/media/noto-serif-kr-v20-korean_latin-500.woff2": "/react-book-portfolio/static/media/noto-serif-kr-v20-korean_latin-500.c8e2b8b1a0e45518da85.woff2",
     "static/media/noto-serif-kr-v20-korean_latin-regular.woff2": "/react-book-portfolio/static/media/noto-serif-kr-v20-korean_latin-regular.6a0659a1feb5c994107a.woff2",
@@ -15,11 +15,11 @@
     "static/media/noto-sans-kr-v27-korean_latin-300.woff2": "/react-book-portfolio/static/media/noto-sans-kr-v27-korean_latin-300.362210c3832c54095487.woff2",
     "static/media/noto-sans-kr-v27-korean_latin-100.woff2": "/react-book-portfolio/static/media/noto-sans-kr-v27-korean_latin-100.b5277f6306eec398b60c.woff2",
     "index.html": "/react-book-portfolio/index.html",
-    "main.989a1e79.css.map": "/react-book-portfolio/static/css/main.989a1e79.css.map",
-    "main.4000d637.js.map": "/react-book-portfolio/static/js/main.4000d637.js.map"
+    "main.6157e677.css.map": "/react-book-portfolio/static/css/main.6157e677.css.map",
+    "main.71c61b94.js.map": "/react-book-portfolio/static/js/main.71c61b94.js.map"
   },
   "entrypoints": [
-    "static/css/main.989a1e79.css",
-    "static/js/main.4000d637.js"
+    "static/css/main.6157e677.css",
+    "static/js/main.71c61b94.js"
   ]
 }

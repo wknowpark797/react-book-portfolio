@@ -7,44 +7,32 @@ import {
 	faGooglePlusG,
 	faLinkedinIn,
 } from '@fortawesome/free-brands-svg-icons';
-import { useState, useEffect, useRef } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 
 function Signup() {
-	const history = useHistory();
+	const initGuide = ['회원가입을 위한 입력 항목입니다.', '입력 항목에 커서를 올리면 안내사항이 표시됩니다.'];
+	const initValue = useMemo(() => {
+		return {
+			userid: '',
+			pwd1: '',
+			pwd2: '',
+			email: '',
+			edu: '',
+			gender: '',
+			hobby: [],
+			comments: '',
+		};
+	}, []);
 
 	const selectEl = useRef(null);
 	const radioGroup = useRef(null);
 	const checkGroup = useRef(null);
-
-	const initValue = {
-		userid: '',
-		pwd1: '',
-		pwd2: '',
-		email: '',
-		edu: '',
-		gender: '',
-		hobby: [],
-		comments: '',
-	};
 	const [Value, setValue] = useState(initValue);
 	const [Errors, setErrors] = useState({});
 	const [Submit, setSubmit] = useState(false);
+	const [GuideList, setGuideList] = useState(initGuide);
 
-	useEffect(() => {
-		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-	}, []);
-
-	useEffect(() => {
-		const errLength = Object.keys(Errors).length;
-		if (errLength === 0 && Submit) {
-			alert('모든 인증을 통과하였습니다.');
-			// history.push('/signin');
-			resetForm();
-		}
-	}, [Errors]);
-
-	const resetForm = () => {
+	const resetForm = useCallback(() => {
 		const select = selectEl.current.options[0];
 		const radios = radioGroup.current.querySelectorAll('input');
 		const checks = checkGroup.current.querySelectorAll('input');
@@ -53,7 +41,7 @@ function Signup() {
 		radios.forEach((el) => (el.checked = false));
 		checks.forEach((el) => (el.checked = false));
 		setValue(initValue);
-	};
+	}, [initValue]);
 
 	const checkValid = (value) => {
 		const errors = {};
@@ -122,6 +110,18 @@ function Signup() {
 		setValue({ ...Value, [name]: checkArr });
 	};
 
+	useEffect(() => {
+		const errLength = Object.keys(Errors).length;
+		if (errLength === 0 && Submit) {
+			alert('회원가입이 완료되었습니다. 로그인 페이지로 이동합니다.');
+			resetForm();
+		}
+	}, [Errors, Submit, resetForm]);
+
+	useEffect(() => {
+		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+	}, []);
+
 	return (
 		<section className='sign-up'>
 			<div className='inner-container'>
@@ -135,8 +135,9 @@ function Signup() {
 
 					<div className='change-wrap'>
 						<ul className='guideListWrap'>
-							<li>회원가입을 위한 입력 항목입니다.</li>
-							<li>입력 항목에 커서를 올리면 안내사항이 표시됩니다.</li>
+							{GuideList.map((guide, idx) => {
+								return <li key={idx}>{guide}</li>;
+							})}
 						</ul>
 					</div>
 
@@ -191,6 +192,12 @@ function Signup() {
 									placeholder='아이디를 입력하세요.'
 									onChange={changeInput}
 									value={Value.userid}
+									onFocus={() => {
+										setGuideList(['아이디 입력 항목 입니다.', '입력 항목에 5글자 이상 입력하세요.']);
+									}}
+									onBlur={() => {
+										setGuideList(initGuide);
+									}}
 								/>
 
 								{Errors.userid && <p className='error'>{Errors.userid}</p>}
@@ -208,6 +215,16 @@ function Signup() {
 									placeholder='비밀번호를 입력하세요.'
 									onChange={changeInput}
 									value={Value.pwd1}
+									onFocus={() => {
+										setGuideList([
+											'비밀번호 입력 항목 입니다.',
+											'입력 항목에 4글자 이상 입력하세요.',
+											'특수문자와 영문자 그리고 숫자를 포함하여 입력하세요.',
+										]);
+									}}
+									onBlur={() => {
+										setGuideList(initGuide);
+									}}
 								/>
 
 								{Errors.pwd1 && <p className='error'>{Errors.pwd1}</p>}
@@ -224,6 +241,16 @@ function Signup() {
 									placeholder='비밀번호를 재 입력하세요.'
 									onChange={changeInput}
 									value={Value.pwd2}
+									onFocus={() => {
+										setGuideList([
+											'비밀번호 입력 항목 입니다.',
+											'입력 항목에 4글자 이상 입력하세요.',
+											'특수문자와 영문자 그리고 숫자를 포함하여 입력하세요.',
+										]);
+									}}
+									onBlur={() => {
+										setGuideList(initGuide);
+									}}
 								/>
 
 								{Errors.pwd2 && <p className='error'>{Errors.pwd2}</p>}
@@ -241,6 +268,17 @@ function Signup() {
 									placeholder='이메일 주소를 입력하세요.'
 									onChange={changeInput}
 									value={Value.email}
+									onFocus={() => {
+										setGuideList([
+											'이메일 입력 항목 입니다.',
+											'입력 항목에 @를 포함하여 입력하세요.',
+											'@ 앞쪽과 뒤쪽에 문자를 입력하세요.',
+											'@ 뒤쪽의 서비스명을 올바르게 입력하세요.',
+										]);
+									}}
+									onBlur={() => {
+										setGuideList(initGuide);
+									}}
 								/>
 
 								{Errors.email && <p className='error'>{Errors.email}</p>}
@@ -252,7 +290,18 @@ function Signup() {
 									Education
 								</label>
 
-								<select name='edu' id='edu' onChange={changeSelect} ref={selectEl}>
+								<select
+									name='edu'
+									id='edu'
+									onChange={changeSelect}
+									ref={selectEl}
+									onFocus={() => {
+										setGuideList(['최종학력 선택 항목 입니다.', '최종학력을 선택하세요.']);
+									}}
+									onBlur={() => {
+										setGuideList(initGuide);
+									}}
+								>
 									<option value=''>최종학력을 선택해주세요.</option>
 									<option value='elementary school'>초등학교 졸업</option>
 									<option value='middle school'>중학교 졸업</option>
@@ -324,6 +373,12 @@ function Signup() {
 									placeholder='남기는 글을 입력하세요.'
 									onChange={changeInput}
 									value={Value.comments}
+									onFocus={() => {
+										setGuideList(['남기는 글 입력 항목 입니다.', '입력 항목에 10글자 이상 입력하세요.']);
+									}}
+									onBlur={() => {
+										setGuideList(initGuide);
+									}}
 								></textarea>
 
 								{Errors.comments && <p className='error'>{Errors.comments}</p>}

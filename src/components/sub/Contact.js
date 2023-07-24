@@ -92,6 +92,7 @@ function Contact() {
 					<div className='library-info'>
 						<div id='infoWrap' className='inner-box'>
 							<h2>{markerInfo[Index]?.title}</h2>
+
 							<ul>
 								<li>
 									<FontAwesomeIcon icon={faLocationDot} />
@@ -110,6 +111,9 @@ function Contact() {
 									<p>{markerInfo[Index]?.phone}</p>
 								</li>
 							</ul>
+
+							<p className='desc-info'>{markerInfo[Index]?.description}</p>
+
 							<div className='sns-wrap'>
 								<Link to='#'>
 									<FontAwesomeIcon icon={faInstagram} />

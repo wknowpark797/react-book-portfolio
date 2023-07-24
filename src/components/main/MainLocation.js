@@ -1,7 +1,10 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { useSelector } from 'react-redux';
 
 function MainLocation() {
+	const libraryList = useSelector((store) => store.location.data.slice(1, 3));
+
 	return (
 		<section id='main-location' className='my-scroll'>
 			<div className='inner-container'>
@@ -13,39 +16,23 @@ function MainLocation() {
 				</div>
 
 				<div className='company-wrap'>
-					<article>
-						<div className='img-box'>
-							<img src={`${process.env.PUBLIC_URL}/image/example_library2.jpg`} alt='' />
-						</div>
-						<div className='info-box'>
-							<h2>남산 도서관</h2>
-							<p>
-								Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet, facere minima asperiores perspiciatis
-								dolorum quis.
-							</p>
+					{libraryList.map((item, idx) => {
+						return (
+							<article key={idx}>
+								<div className='img-box'>
+									<img src={`${process.env.PUBLIC_URL}/image/${item.thumbnailSrc}`} alt='' />
+								</div>
+								<div className='info-box'>
+									<h2>{item.title}</h2>
+									<p>{item.description}</p>
 
-							<a href='location.html?library=1'>
-								<FontAwesomeIcon icon={faCircleChevronRight} />
-							</a>
-						</div>
-					</article>
-
-					<article>
-						<div className='img-box'>
-							<img src={`${process.env.PUBLIC_URL}/image/example_library3.jpg`} alt='' />
-						</div>
-						<div className='info-box'>
-							<h2>별마당 도서관</h2>
-							<p>
-								Lorem ipsum dolor sit amet consectetur adipisicing elit. Amet, facere minima asperiores perspiciatis
-								dolorum quis.
-							</p>
-
-							<a href='location.html?library=2'>
-								<FontAwesomeIcon icon={faCircleChevronRight} />
-							</a>
-						</div>
-					</article>
+									<a href='location.html?library=1'>
+										<FontAwesomeIcon icon={faCircleChevronRight} />
+									</a>
+								</div>
+							</article>
+						);
+					})}
 				</div>
 			</div>
 		</section>

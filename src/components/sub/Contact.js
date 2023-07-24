@@ -1,13 +1,20 @@
 import SubLayout from '../common/SubLayout';
 import ContactForm from './ContactForm';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot, faGlobe, faPhone } from '@fortawesome/free-solid-svg-icons';
 import { faInstagram, faYoutube, faFacebookF } from '@fortawesome/free-brands-svg-icons';
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
+// queryString 사용
+function useQuery() {
+	const { search } = useLocation();
+	return useMemo(() => new URLSearchParams(search), [search]);
+}
+
 function Contact() {
+	const query = useQuery();
 	const { kakao } = window;
 	const mapContainer = useRef(null);
 	const [Map, setMap] = useState(null); // 지도 인스턴스
@@ -64,8 +71,9 @@ function Contact() {
 	}, [Traffic, Map, kakao]);
 
 	useEffect(() => {
+		query.get('library') && setIndex(parseInt(query.get('library')));
 		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-	}, []);
+	}, [query]);
 
 	return (
 		<SubLayout subPageName={'sub-contact'} breadCrumb={'HOME / CONTACT'} subPageTitle={'WHERE-WE ARE'}>

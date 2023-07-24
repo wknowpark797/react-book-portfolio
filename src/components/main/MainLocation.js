@@ -27,9 +27,9 @@ function MainLocation() {
 									<h2>{item.title}</h2>
 									<p>{item.description}</p>
 
-									<a href='location.html?library=1'>
+									<Link to={`/contact?library=${idx + 1}`}>
 										<FontAwesomeIcon icon={faCircleChevronRight} />
-									</a>
+									</Link>
 								</div>
 							</article>
 						);

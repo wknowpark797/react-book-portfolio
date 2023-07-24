@@ -15,7 +15,10 @@ function Contact() {
 	const [Traffic, setTraffic] = useState(false);
 	const markerInfo = useSelector((store) => store.location.data);
 
+	// custom 마커 이미지 정보
 	const marker = useMemo(() => {
+		if (markerInfo.length === 0) return;
+
 		return new kakao.maps.Marker({
 			position: new kakao.maps.LatLng(markerInfo[Index].position[0], markerInfo[Index].position[1]),
 			image: new kakao.maps.MarkerImage(
@@ -29,16 +32,15 @@ function Contact() {
 	}, [Index, kakao, markerInfo]);
 
 	useEffect(() => {
-		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-	}, []);
+		if (markerInfo.length === 0) return;
 
-	useEffect(() => {
 		mapContainer.current.innerHTML = ''; // 지도 초기화
 
+		// 지도 인스턴스 생성
 		const map = new kakao.maps.Map(mapContainer.current, {
 			center: new kakao.maps.LatLng(markerInfo[Index].position[0], markerInfo[Index].position[1]),
 			level: 3,
-		}); // 지도 인스턴스 생성
+		});
 		marker.setMap(map); // 마커 표시
 		map.addControl(new kakao.maps.MapTypeControl(), kakao.maps.ControlPosition.TOPRIGHT); // 지도타입 컨트롤 표시
 		map.addControl(new kakao.maps.ZoomControl(), kakao.maps.ControlPosition.RIGHT); // 확대 축소 컨트롤 표시
@@ -60,6 +62,10 @@ function Contact() {
 			? Map?.addOverlayMapTypeId(kakao.maps.MapTypeId.TRAFFIC)
 			: Map?.removeOverlayMapTypeId(kakao.maps.MapTypeId.TRAFFIC);
 	}, [Traffic, Map, kakao]);
+
+	useEffect(() => {
+		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+	}, []);
 
 	return (
 		<SubLayout subPageName={'sub-contact'} breadCrumb={'HOME / CONTACT'} subPageTitle={'WHERE-WE ARE'}>
@@ -85,23 +91,23 @@ function Contact() {
 
 					<div className='library-info'>
 						<div id='infoWrap' className='inner-box'>
-							<h2>{markerInfo[Index].title}</h2>
+							<h2>{markerInfo[Index]?.title}</h2>
 							<ul>
 								<li>
 									<FontAwesomeIcon icon={faLocationDot} />
-									<p>{markerInfo[Index].address}</p>
+									<p>{markerInfo[Index]?.address}</p>
 								</li>
 								<li>
 									<FontAwesomeIcon icon={faGlobe} />
 									<p>
-										<a rel='noopener noreferrer' href={markerInfo[Index].website.link} target='_blank'>
-											{markerInfo[Index].website.title}
+										<a rel='noopener noreferrer' href={markerInfo[Index]?.website.link} target='_blank'>
+											{markerInfo[Index]?.website.title}
 										</a>
 									</p>
 								</li>
 								<li>
 									<FontAwesomeIcon icon={faPhone} />
-									<p>{markerInfo[Index].phone}</p>
+									<p>{markerInfo[Index]?.phone}</p>
 								</li>
 							</ul>
 							<div className='sns-wrap'>

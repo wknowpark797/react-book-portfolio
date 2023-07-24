@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 function MainLocation() {
 	const libraryList = useSelector((store) => store.location.data.slice(1, 3));
@@ -10,9 +11,9 @@ function MainLocation() {
 			<div className='inner-container'>
 				<div className='title-wrap'>
 					<h1>Freight Company With a Difference.</h1>
-					<a href='location.html' className='btn-more'>
+					<Link to='/contact' className='btn-more'>
 						VIEW ALL
-					</a>
+					</Link>
 				</div>
 
 				<div className='company-wrap'>

@@ -114,7 +114,7 @@ function Members() {
 								nesciunt!
 							</h2>
 
-							<Link to='' className='btn-more'>
+							<Link to='/contact' className='btn-more'>
 								<FontAwesomeIcon icon={faCirclePlay} />
 								MORE VIEW
 							</Link>

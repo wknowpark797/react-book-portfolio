@@ -44,7 +44,7 @@ function Header({ type }) {
 				</ul>
 
 				<div className='login-wrap'>
-					<NavLink to='/'>SIGN IN</NavLink>
+					<NavLink to='/signin'>SIGN IN</NavLink>
 					<NavLink to='/signup'>SIGN UP</NavLink>
 				</div>
 

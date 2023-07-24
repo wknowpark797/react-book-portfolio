@@ -20,14 +20,16 @@ function ScrollNavi() {
 	const activation = () => {
 		const limit = -200;
 		const scroll = window.scrollY; // 현재 스크롤 위치
-		const naviArr = scrollNavi.current.children;
-		const sections = scrollNavi.current.parentElement.querySelectorAll('.my-scroll');
+		const naviArr = scrollNavi.current?.children;
+		const sections = scrollNavi.current?.parentElement.querySelectorAll('.my-scroll');
 
 		if (scroll <= 500) {
 			for (const section of sections) section.classList.remove('on');
 		}
 
 		position.current.forEach((pos, idx) => {
+			if (!naviArr) return;
+
 			if (scroll >= pos + limit) {
 				for (const navi of naviArr) navi.classList.remove('on');
 				naviArr[idx].classList.add('on');

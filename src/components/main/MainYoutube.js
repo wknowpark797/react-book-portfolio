@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCirclePlay } from '@fortawesome/free-regular-svg-icons';
 import { useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 function MainYoutube() {
 	const BookList = useSelector((store) => store.youtubeRead.data.slice(0, 2));
@@ -13,10 +14,10 @@ function MainYoutube() {
 						Youtube <br />
 						Discover The World.
 					</h1>
-					<a href='youtube.html' className='btn-video'>
+					<Link to='/youtube' className='btn-video'>
 						<FontAwesomeIcon icon={faCirclePlay} />
 						<span>WATCH THE VIDEO</span>
-					</a>
+					</Link>
 				</div>
 
 				<div className='inner-content'>

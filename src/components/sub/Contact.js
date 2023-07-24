@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot, faGlobe, faPhone } from '@fortawesome/free-solid-svg-icons';
 import { faInstagram, faYoutube, faFacebookF } from '@fortawesome/free-brands-svg-icons';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
 function Contact() {
@@ -15,16 +15,18 @@ function Contact() {
 	const [Traffic, setTraffic] = useState(false);
 	const markerInfo = useSelector((store) => store.location.data);
 
-	const mapOption = {
-		center: new kakao.maps.LatLng(markerInfo[Index].position[0], markerInfo[Index].position[1]),
-		level: 3,
-	};
-	const imageSrc = `${process.env.PUBLIC_URL}/image/${markerInfo[Index].imgSrc}`;
-	const imageSize = new kakao.maps.Size(markerInfo[Index].imgSize[0], markerInfo[Index].imgSize[1]);
-	const markerImage = new kakao.maps.MarkerImage(imageSrc, imageSize, {
-		offset: new kakao.maps.Point(markerInfo[Index].imgOption.offset[0], markerInfo[Index].imgOption.offset[1]),
-	});
-	const marker = new kakao.maps.Marker({ position: mapOption.center, image: markerImage });
+	const marker = useMemo(() => {
+		return new kakao.maps.Marker({
+			position: new kakao.maps.LatLng(markerInfo[Index].position[0], markerInfo[Index].position[1]),
+			image: new kakao.maps.MarkerImage(
+				`${process.env.PUBLIC_URL}/image/${markerInfo[Index].imgSrc}`,
+				new kakao.maps.Size(markerInfo[Index].imgSize[0], markerInfo[Index].imgSize[1]),
+				{
+					offset: new kakao.maps.Point(markerInfo[Index].imgOption.offset[0], markerInfo[Index].imgOption.offset[1]),
+				}
+			),
+		});
+	}, [Index, kakao, markerInfo]);
 
 	useEffect(() => {
 		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -33,7 +35,10 @@ function Contact() {
 	useEffect(() => {
 		mapContainer.current.innerHTML = ''; // 지도 초기화
 
-		const map = new kakao.maps.Map(mapContainer.current, mapOption); // 지도 인스턴스 생성
+		const map = new kakao.maps.Map(mapContainer.current, {
+			center: new kakao.maps.LatLng(markerInfo[Index].position[0], markerInfo[Index].position[1]),
+			level: 3,
+		}); // 지도 인스턴스 생성
 		marker.setMap(map); // 마커 표시
 		map.addControl(new kakao.maps.MapTypeControl(), kakao.maps.ControlPosition.TOPRIGHT); // 지도타입 컨트롤 표시
 		map.addControl(new kakao.maps.ZoomControl(), kakao.maps.ControlPosition.RIGHT); // 확대 축소 컨트롤 표시
@@ -47,14 +52,14 @@ function Contact() {
 		};
 		window.addEventListener('resize', setCenter);
 		return () => window.removeEventListener('resize', setCenter);
-	}, [Index]);
+	}, [Index, kakao, marker, markerInfo]);
 
 	useEffect(() => {
 		// 교통정보 표시
 		Traffic
 			? Map?.addOverlayMapTypeId(kakao.maps.MapTypeId.TRAFFIC)
 			: Map?.removeOverlayMapTypeId(kakao.maps.MapTypeId.TRAFFIC);
-	}, [Traffic]);
+	}, [Traffic, Map, kakao]);
 
 	return (
 		<SubLayout subPageName={'sub-contact'} breadCrumb={'HOME / CONTACT'} subPageTitle={'WHERE-WE ARE'}>

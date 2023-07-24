@@ -50,7 +50,7 @@ function Contact() {
 
 		// 지도 중심 이동 설정
 		const setCenter = () => {
-			map.setCenter(markerInfo[Index].position);
+			map.setCenter(new kakao.maps.LatLng(markerInfo[Index].position[0], markerInfo[Index].position[1]));
 		};
 		window.addEventListener('resize', setCenter);
 		return () => window.removeEventListener('resize', setCenter);

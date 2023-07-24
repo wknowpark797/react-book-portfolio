@@ -1,6 +1,6 @@
 import SubLayout from '../common/SubLayout';
 import { Link } from 'react-router-dom';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCirclePlay } from '@fortawesome/free-regular-svg-icons';
 import {
@@ -23,22 +23,28 @@ function Members() {
 	const [Directors, setDirectors] = useState([]);
 	const memberList = useSelector((store) => store.member.data);
 
-	const getMembersData = async () => {
+	const getMembersData = useCallback(() => {
 		const items = swiperFrame.current.querySelectorAll('.swiper-slide');
 		const key = items[Active].dataset.key;
 		setMembers(memberList.members.filter((member) => member.department === key));
-	};
+	}, [Active, memberList]);
 
-	const getDirectorsData = async () => {
+	const getDirectorsData = useCallback(() => {
 		setDirectors(memberList.directors);
-	};
+	}, [memberList]);
 
 	useEffect(() => {
+		if (memberList.length === 0) return;
 		getMembersData();
-	}, [Active]);
+		getDirectorsData();
+	}, [memberList, getMembersData, getDirectorsData]);
 
 	useEffect(() => {
-		getDirectorsData();
+		if (memberList.length === 0) return;
+		getMembersData();
+	}, [Active, getMembersData, memberList]);
+
+	useEffect(() => {
 		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
 	}, []);
 

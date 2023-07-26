@@ -70,9 +70,20 @@ function Review() {
 		*/
 	};
 
-	const deleteReview = (index) => {
+	const deleteReview = (num) => {
 		if (!window.confirm('게시물을 삭제하시겠습니까?')) return;
-		setReviews(Reviews.filter((_, idx) => idx !== index));
+
+		const params = { reviewNum: num };
+
+		axios.post('/api/review/delete', params).then((res) => {
+			if (res.data.success) {
+				alert('리뷰가 삭제되었습니다.');
+			} else {
+				alert('리뷰 삭제를 실패했습니다.');
+			}
+		});
+
+		// setReviews(Reviews.filter((_, idx) => idx !== num));
 	};
 
 	const enableUpdate = (index) => {
@@ -200,7 +211,7 @@ function Review() {
 												<button type='button' onClick={() => enableUpdate(idx)}>
 													EDIT
 												</button>
-												<button type='button' className='btn-delete' onClick={() => deleteReview(idx)}>
+												<button type='button' className='btn-delete' onClick={() => deleteReview(review.reviewNum)}>
 													DELETE
 												</button>
 											</div>

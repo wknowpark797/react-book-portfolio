@@ -3,25 +3,21 @@ import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 
 function Review() {
-	const getLocalData = () => {
-		const data = localStorage.getItem('reviews');
-		return JSON.parse(data);
-	};
-
 	const inputBookName = useRef(null);
 	const inputReviewContent = useRef(null);
 	const editBookName = useRef(null);
 	const editReviewContent = useRef(null);
-	const [Reviews, setReviews] = useState(getLocalData);
+	const [Reviews, setReviews] = useState([]);
 	const [Updating, setUpdating] = useState(false);
 
 	useEffect(() => {
 		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-	}, []);
 
-	useEffect(() => {
-		localStorage.setItem('reviews', JSON.stringify(Reviews));
-	}, [Reviews]);
+		axios.get('/api/review/read').then((res) => {
+			console.log('review list: ', res.data.reviewList);
+			setReviews(res.data.reviewList);
+		});
+	}, []);
 
 	const setToday = () => {
 		const today = new Date();
@@ -162,14 +158,14 @@ function Review() {
 												<input type='text' ref={editBookName} defaultValue={review.bookName} />
 											</div>
 											<div className='input-box'>
-												<textarea ref={editReviewContent} defaultValue={review.reviewContent}></textarea>
+												<textarea ref={editReviewContent} defaultValue={review.content}></textarea>
 											</div>
 										</>
 									) : (
 										<>
 											{/* 출력모드 */}
 											<h2>{review.bookName}</h2>
-											<p>{review.reviewContent}</p>
+											<p>{review.content}</p>
 										</>
 									)}
 
@@ -188,30 +184,26 @@ function Review() {
 									{review.enableUpdate ? (
 										<>
 											{/* 수정모드 */}
-											{review.userName === 'Woo Ara' && (
-												<div className='btn-wrap'>
-													<button type='button' onClick={() => disableUpdate(idx)}>
-														CANCEL
-													</button>
-													<button type='button' className='btn-update' onClick={() => updateReview(idx)}>
-														UPDATE
-													</button>
-												</div>
-											)}
+											<div className='btn-wrap'>
+												<button type='button' onClick={() => disableUpdate(idx)}>
+													CANCEL
+												</button>
+												<button type='button' className='btn-update' onClick={() => updateReview(idx)}>
+													UPDATE
+												</button>
+											</div>
 										</>
 									) : (
 										<>
 											{/* 출력모드 */}
-											{review.userName === 'Woo Ara' && (
-												<div className='btn-wrap'>
-													<button type='button' onClick={() => enableUpdate(idx)}>
-														EDIT
-													</button>
-													<button type='button' className='btn-delete' onClick={() => deleteReview(idx)}>
-														DELETE
-													</button>
-												</div>
-											)}
+											<div className='btn-wrap'>
+												<button type='button' onClick={() => enableUpdate(idx)}>
+													EDIT
+												</button>
+												<button type='button' className='btn-delete' onClick={() => deleteReview(idx)}>
+													DELETE
+												</button>
+											</div>
 										</>
 									)}
 								</article>

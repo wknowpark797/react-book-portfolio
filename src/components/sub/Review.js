@@ -1,5 +1,6 @@
 import SubLayout from '../common/SubLayout';
 import { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
 
 function Review() {
 	const getLocalData = () => {
@@ -42,17 +43,35 @@ function Review() {
 			return alert('도서명과 리뷰 내용을 모두 입력하세요.');
 		}
 
-		setReviews([
-			{
-				bookName: inputBookName.current.value,
-				reviewContent: inputReviewContent.current.value,
-				profileImg: 'my-profile.jpg',
-				userName: 'Woo Ara',
-				date: setToday(),
-			},
-			...Reviews,
-		]);
-		resetForm();
+		const params = {
+			bookName: inputBookName.current.value,
+			content: inputReviewContent.current.value,
+		};
+
+		axios
+			.post('/api/review/create', params)
+			.then((res) => {
+				console.log(res);
+				alert('리뷰를 성공적으로 등록하였습니다.');
+				resetForm();
+			})
+			.catch((err) => {
+				console.log(err);
+				alert('리뷰등록에 실패했습니다.');
+			});
+
+		/*
+			setReviews([
+				{
+					bookName: inputBookName.current.value,
+					reviewContent: inputReviewContent.current.value,
+					profileImg: 'my-profile.jpg',
+					userName: 'Woo Ara',
+					date: setToday(),
+				},
+				...Reviews,
+			]);
+		*/
 	};
 
 	const deleteReview = (index) => {

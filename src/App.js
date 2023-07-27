@@ -24,6 +24,8 @@ import { fetchBookDetail } from './redux/bookDetailSlice';
 import { fetchMember } from './redux/memberSlice';
 import { fetchFlickr } from './redux/flickrSlice';
 import { fetchLocation } from './redux/locationSlice';
+import { loginUser, logoutUser } from './redux/userSlice';
+import firebase from './firebase';
 
 function App() {
 	const dispatch = useDispatch();
@@ -37,6 +39,14 @@ function App() {
 		dispatch(fetchMember());
 		dispatch(fetchFlickr({ type: 'interest' }));
 		dispatch(fetchLocation());
+
+		// firebase로부터의 로그인 정보를 전역 state에 저장
+		firebase.auth().onAuthStateChanged((userInfo) => {
+			console.log('로그인 정보: ', userInfo);
+
+			if (userInfo === null) dispatch(logoutUser());
+			else dispatch(loginUser(userInfo.multiFactor.user));
+		});
 	}, [dispatch]);
 
 	return (

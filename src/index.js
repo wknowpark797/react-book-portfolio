@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import App from './App';
 import { HashRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import youtubeMusicReducer from './redux/youtubeMusicSlice';
 import youtubeReadReducer from './redux/youtubeReadSlice';
 import bookVisualReducer from './redux/bookVisualSlice';
@@ -13,6 +13,7 @@ import memberReducer from './redux/memberSlice';
 import flickrReducer from './redux/flickrSlice';
 import locationReducer from './redux/locationSlice';
 import menuReducer from './redux/menuSlice';
+import userReducer from './redux/userSlice';
 
 const store = configureStore({
 	reducer: {
@@ -25,7 +26,9 @@ const store = configureStore({
 		flickr: flickrReducer,
 		location: locationReducer,
 		menu: menuReducer,
+		user: userReducer,
 	},
+	middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }),
 });
 
 ReactDOM.render(

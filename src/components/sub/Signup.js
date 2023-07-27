@@ -8,19 +8,22 @@ import {
 	faLinkedinIn,
 } from '@fortawesome/free-brands-svg-icons';
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import firebase from '../../firebase';
+import axios from 'axios';
 
 function Signup() {
 	const initGuide = ['회원가입을 위한 입력 항목입니다.', '입력 항목에 커서를 올리면 안내사항이 표시됩니다.'];
 	const initValue = useMemo(() => {
 		return {
-			userid: '',
+			username: '',
 			pwd1: '',
 			pwd2: '',
 			email: '',
-			edu: '',
-			gender: '',
-			hobby: [],
-			comments: '',
+
+			// edu: '',
+			// gender: '',
+			// hobby: [],
+			// comments: '',
 		};
 	}, []);
 
@@ -31,6 +34,25 @@ function Signup() {
 	const [Errors, setErrors] = useState({});
 	const [Submit, setSubmit] = useState(false);
 	const [GuideList, setGuideList] = useState(initGuide);
+
+	const handleJoin = useCallback(async () => {
+		// firebase에 이메일, 비밀번호 등록
+		const createdUser = await firebase.auth().createUserWithEmailAndPassword(Value.email, Value.pwd1);
+		await createdUser.user.updateProfile({ displayName: Value.username });
+
+		// 몽고DB에 저장
+		const item = {
+			uid: createdUser.user.multiFactor.user.uid,
+			displayName: createdUser.user.multiFactor.user.displayName,
+		};
+		axios.post('/api/user/join', item).then((res) => {
+			if (res.data.success) {
+				alert('회원가입이 성공적으로 완료되었습니다.');
+			} else {
+				return alert('회원가입에 실패했습니다.');
+			}
+		});
+	}, [Value]);
 
 	const resetForm = useCallback(() => {
 		const select = selectEl.current.options[0];
@@ -49,8 +71,8 @@ function Signup() {
 		const num = /[0-9]/;
 		const spc = /[~!@#$%^&*()_+]/;
 
-		if (value.userid.length < 5) {
-			errors.userid = '아이디는 5글자 이상 입력하세요.';
+		if (value.username.length < 3) {
+			errors.username = '사용할 이름은 3글자 이상 입력하세요.';
 		}
 		if (value.pwd1.length < 4 || !eng.test(value.pwd1) || !num.test(value.pwd1) || !spc.test(value.pwd1)) {
 			errors.pwd1 = '비밀번호는 4글자 이상, 특수문자와 영문자 그리고 숫자를 포함하여 입력하세요.';
@@ -61,18 +83,21 @@ function Signup() {
 		if (value.email.length < 8 || !/@/.test(value.email)) {
 			errors.email = '이메일주소는 @를 포함하여 8글자 이상 입력하세요.';
 		}
-		if (value.edu === '') {
-			errors.edu = '최종학력을 선택하세요.';
-		}
-		if (value.gender === '') {
-			errors.gender = '성별을 선택하세요.';
-		}
-		if (value.hobby.length === 0) {
-			errors.hobby = '관심사를 하나 이상 선택하세요.';
-		}
-		if (value.comments.length < 10) {
-			errors.comments = '남기는 글은 10글자 이상 입력하세요.';
-		}
+
+		/*
+			if (value.edu === '') {
+				errors.edu = '최종학력을 선택하세요.';
+			}
+			if (value.gender === '') {
+				errors.gender = '성별을 선택하세요.';
+			}
+			if (value.hobby.length === 0) {
+				errors.hobby = '관심사를 하나 이상 선택하세요.';
+			}
+			if (value.comments.length < 10) {
+				errors.comments = '남기는 글은 10글자 이상 입력하세요.';
+			}
+		*/
 
 		return errors;
 	};
@@ -112,11 +137,13 @@ function Signup() {
 
 	useEffect(() => {
 		const errLength = Object.keys(Errors).length;
+
 		if (errLength === 0 && Submit) {
-			alert('회원가입이 완료되었습니다. 로그인 페이지로 이동합니다.');
-			resetForm();
+			handleJoin();
+			setSubmit(false);
+			// resetForm();
 		}
-	}, [Errors, Submit, resetForm]);
+	}, [Errors, Submit, handleJoin]);
 
 	useEffect(() => {
 		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -180,27 +207,27 @@ function Signup() {
 						<fieldset>
 							<legend className='h'>회원가입 form 입력 항목</legend>
 
-							{/* user id */}
+							{/* user name */}
 							<div className='input-box'>
-								<label htmlFor='userid' className='tit'>
-									User ID
+								<label htmlFor='username' className='tit'>
+									User Name
 								</label>
 								<input
 									type='text'
-									name='userid'
-									id='userid'
-									placeholder='아이디를 입력하세요.'
+									name='username'
+									id='username'
+									placeholder='사용할 이름을 입력하세요.'
 									onChange={changeInput}
-									value={Value.userid}
+									value={Value.username}
 									onFocus={() => {
-										setGuideList(['아이디 입력 항목 입니다.', '입력 항목에 5글자 이상 입력하세요.']);
+										setGuideList(['사용할 이름 입력 항목 입니다.', '입력 항목에 3글자 이상 입력하세요.']);
 									}}
 									onBlur={() => {
 										setGuideList(initGuide);
 									}}
 								/>
 
-								{Errors.userid && <p className='error'>{Errors.userid}</p>}
+								{Errors.username && <p className='error'>{Errors.username}</p>}
 							</div>
 
 							{/* password */}
@@ -285,7 +312,7 @@ function Signup() {
 							</div>
 
 							{/* Education */}
-							<div className='input-box'>
+							{/* <div className='input-box'>
 								<label htmlFor='edu' className='tit'>
 									Education
 								</label>
@@ -310,10 +337,10 @@ function Signup() {
 								</select>
 
 								{Errors.edu && <p className='error'>{Errors.edu}</p>}
-							</div>
+							</div> */}
 
 							{/* Gender */}
-							<div className='input-box'>
+							{/* <div className='input-box'>
 								<p className='tit'>Gender</p>
 
 								<div className='radio-wrap' ref={radioGroup}>
@@ -329,10 +356,10 @@ function Signup() {
 								</div>
 
 								{Errors.gender && <p className='error'>{Errors.gender}</p>}
-							</div>
+							</div> */}
 
 							{/* Interests */}
-							<div className='input-box'>
+							{/* <div className='input-box'>
 								<p className='tit'>Interests</p>
 
 								<div className='check-wrap' ref={checkGroup}>
@@ -358,10 +385,10 @@ function Signup() {
 								</div>
 
 								{Errors.hobby && <p className='error'>{Errors.hobby}</p>}
-							</div>
+							</div> */}
 
 							{/* Comments */}
-							<div className='input-box'>
+							{/* <div className='input-box'>
 								<label htmlFor='comments' className='tit'>
 									Comments
 								</label>
@@ -382,7 +409,7 @@ function Signup() {
 								></textarea>
 
 								{Errors.comments && <p className='error'>{Errors.comments}</p>}
-							</div>
+							</div> */}
 
 							<div className='btn-wrap'>
 								<input type='reset' value='RESET' onClick={() => setValue(initValue)} />

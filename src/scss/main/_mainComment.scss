@@ -97,6 +97,7 @@ $slideWidth: 500px;
 				display: flex;
 				align-items: center;
 				gap: 10px;
+				z-index: 1;
 
 				> button {
 					display: flex;

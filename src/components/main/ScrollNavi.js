@@ -18,7 +18,7 @@ function ScrollNavi() {
 	};
 
 	const activation = () => {
-		const limit = -200;
+		const limit = -window.innerHeight / 2;
 		const scroll = window.scrollY; // 현재 스크롤 위치
 		const naviArr = scrollNavi.current?.children;
 		const sections = scrollNavi.current?.parentElement.querySelectorAll('.my-scroll');

@@ -1,10 +1,16 @@
 /* 서브 페이지 공통 레이아웃 */
 
-import { Fragment } from 'react';
+import { Fragment, useEffect, useRef } from 'react';
 
 function SubLayout({ subPageName, breadCrumb, subPageTitle, children }) {
+	const subFrame = useRef(null);
+
+	useEffect(() => {
+		subFrame.current.classList.add('on');
+	}, []);
+
 	return (
-		<section className={`sub-content ${subPageName}`}>
+		<section className={`sub-content ${subPageName}`} ref={subFrame}>
 			<div className='sub-visual'>
 				<figure></figure>
 
@@ -23,7 +29,7 @@ function SubLayout({ subPageName, breadCrumb, subPageTitle, children }) {
 				</div>
 			</div>
 
-			{children}
+			<div className='sub-inner'>{children}</div>
 		</section>
 	);
 }

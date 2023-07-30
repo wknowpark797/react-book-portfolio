@@ -16,7 +16,6 @@ function Review() {
 
 	const [Reviews, setReviews] = useState([]); // 리뷰 리스트
 	const [UpdateIdx, setUpdateIdx] = useState(-1); // 선택 리뷰 index
-	const [Detail, setDetail] = useState({}); // 선택 리뷰 detail
 
 	/*
 		const setToday = () => {
@@ -34,6 +33,11 @@ function Review() {
 		setInputReviewContent('');
 	};
 
+	const resetEditForm = () => {
+		setEditBookName('');
+		setEditReviewContent('');
+	};
+
 	const enableUpdate = (num) => {
 		if (UpdateIdx > 0) return alert('수정 중인 리뷰가 있습니다.');
 		setUpdateIdx(num);
@@ -41,6 +45,7 @@ function Review() {
 
 	const disableUpdate = () => {
 		setUpdateIdx(-1);
+		resetEditForm();
 	};
 
 	// Review Create
@@ -60,10 +65,11 @@ function Review() {
 			.post('/api/review/create', params)
 			.then(() => {
 				alert('리뷰를 성공적으로 등록하였습니다.');
+				readReview();
 				resetInputForm();
 			})
 			.catch(() => {
-				alert('리뷰등록에 실패했습니다.');
+				alert('리뷰 등록에 실패했습니다.');
 			});
 
 		/*
@@ -89,11 +95,14 @@ function Review() {
 
 	// Review Detail
 	const detailReview = useCallback(() => {
+		if (UpdateIdx === -1) return;
+
 		axios
 			.get(`/api/review/detail/${UpdateIdx}`)
 			.then((res) => {
 				if (res.data.success) {
-					setDetail(res.data.detail);
+					setEditBookName(res.data.detail.bookName);
+					setEditReviewContent(res.data.detail.reviewContent);
 				} else {
 					alert('리뷰 내용 호출에 실패했습니다.');
 				}
@@ -119,7 +128,9 @@ function Review() {
 			.put('/api/review/update', params)
 			.then((res) => {
 				if (res.data.success) {
-					alert('리뷰 수정을 완료했습니다.');
+					alert('리뷰를 성공적으로 수정하였습니다.');
+					readReview();
+					disableUpdate();
 				} else {
 					alert('리뷰 수정에 실패했습니다.');
 				}
@@ -127,8 +138,6 @@ function Review() {
 			.catch((err) => {
 				console.log(err);
 			});
-
-		disableUpdate();
 	};
 
 	// Review Delete
@@ -140,6 +149,7 @@ function Review() {
 			.then((res) => {
 				if (res.data.success) {
 					alert('리뷰가 삭제되었습니다.');
+					readReview();
 				} else {
 					alert('리뷰 삭제를 실패했습니다.');
 				}
@@ -158,9 +168,7 @@ function Review() {
 
 	useEffect(() => {
 		detailReview();
-		setEditBookName(Detail?.bookName);
-		setEditReviewContent(Detail?.reviewContent);
-	}, [UpdateIdx, Detail, detailReview]);
+	}, [UpdateIdx, detailReview]);
 
 	return (
 		<SubLayout subPageName={'sub-review'} breadCrumb={'HOME / REVIEW'} subPageTitle={'EXPERIENCES-FOR BOOK'}>

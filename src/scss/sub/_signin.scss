@@ -68,7 +68,10 @@
 					margin-top: 70px;
 
 					input,
-					button {
+					a {
+						display: flex;
+						justify-content: center;
+						align-items: center;
 						width: 150px;
 						height: 45px;
 						font-size: 14px;

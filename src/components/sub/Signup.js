@@ -8,10 +8,15 @@ import {
 	faLinkedinIn,
 } from '@fortawesome/free-brands-svg-icons';
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
+import { useSelector } from 'react-redux';
+import { useHistory } from 'react-router-dom';
 import firebase from '../../firebase';
 import axios from 'axios';
 
 function Signup() {
+	const history = useHistory();
+	const user = useSelector((store) => store.user);
+
 	const initGuide = ['회원가입을 위한 입력 항목입니다.', '입력 항목에 커서를 올리면 안내사항이 표시됩니다.'];
 	const initValue = useMemo(() => {
 		return {
@@ -26,7 +31,6 @@ function Signup() {
 			// comments: '',
 		};
 	}, []);
-
 	const selectEl = useRef(null);
 	const radioGroup = useRef(null);
 	const checkGroup = useRef(null);
@@ -47,12 +51,14 @@ function Signup() {
 		};
 		axios.post('/api/user/join', item).then((res) => {
 			if (res.data.success) {
-				alert('회원가입이 성공적으로 완료되었습니다.');
+				firebase.auth().signOut();
+				alert('회원가입이 성공적으로 완료되었습니다. 로그인 페이지로 이동합니다.');
+				history.push('/signin');
 			} else {
 				return alert('회원가입에 실패했습니다.');
 			}
 		});
-	}, [Value]);
+	}, [Value, history]);
 
 	const resetForm = useCallback(() => {
 		const select = selectEl.current.options[0];
@@ -146,8 +152,9 @@ function Signup() {
 	}, [Errors, Submit, handleJoin]);
 
 	useEffect(() => {
+		if (user.uid) history.push('/');
 		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-	}, []);
+	}, [history, user]);
 
 	return (
 		<section className='sign-up'>
@@ -206,6 +213,34 @@ function Signup() {
 					<form id='formSignup' className='form-signup' onSubmit={handleSubmit}>
 						<fieldset>
 							<legend className='h'>회원가입 form 입력 항목</legend>
+
+							{/* Email */}
+							<div className='input-box'>
+								<label htmlFor='email' className='tit'>
+									E-mail
+								</label>
+								<input
+									type='text'
+									name='email'
+									id='email'
+									placeholder='이메일 주소를 입력하세요.'
+									onChange={changeInput}
+									value={Value.email}
+									onFocus={() => {
+										setGuideList([
+											'이메일 입력 항목 입니다.',
+											'입력 항목에 @를 포함하여 입력하세요.',
+											'@ 앞쪽과 뒤쪽에 문자를 입력하세요.',
+											'@ 뒤쪽의 서비스명을 올바르게 입력하세요.',
+										]);
+									}}
+									onBlur={() => {
+										setGuideList(initGuide);
+									}}
+								/>
+
+								{Errors.email && <p className='error'>{Errors.email}</p>}
+							</div>
 
 							{/* user name */}
 							<div className='input-box'>
@@ -281,34 +316,6 @@ function Signup() {
 								/>
 
 								{Errors.pwd2 && <p className='error'>{Errors.pwd2}</p>}
-							</div>
-
-							{/* Email */}
-							<div className='input-box'>
-								<label htmlFor='email' className='tit'>
-									E-mail
-								</label>
-								<input
-									type='text'
-									name='email'
-									id='email'
-									placeholder='이메일 주소를 입력하세요.'
-									onChange={changeInput}
-									value={Value.email}
-									onFocus={() => {
-										setGuideList([
-											'이메일 입력 항목 입니다.',
-											'입력 항목에 @를 포함하여 입력하세요.',
-											'@ 앞쪽과 뒤쪽에 문자를 입력하세요.',
-											'@ 뒤쪽의 서비스명을 올바르게 입력하세요.',
-										]);
-									}}
-									onBlur={() => {
-										setGuideList(initGuide);
-									}}
-								/>
-
-								{Errors.email && <p className='error'>{Errors.email}</p>}
 							</div>
 
 							{/* Education */}

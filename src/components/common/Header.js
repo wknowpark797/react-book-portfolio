@@ -1,11 +1,14 @@
 import { Link, NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
-import { useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { toggle } from '../../redux/menuSlice';
+import firebase from '../../firebase';
 
 function Header({ type }) {
 	const activeClass = 'on';
+
+	const user = useSelector((store) => store.user);
 	const dispatch = useDispatch();
 
 	return (
@@ -44,8 +47,25 @@ function Header({ type }) {
 				</ul>
 
 				<div className='login-wrap'>
-					<NavLink to='/signin'>SIGN IN</NavLink>
-					<NavLink to='/signup'>SIGN UP</NavLink>
+					{user.uid === '' ? (
+						<>
+							<NavLink to='/signin'>SIGN IN</NavLink>
+							<NavLink to='/signup'>SIGN UP</NavLink>
+						</>
+					) : (
+						<>
+							<div className='profile'>{user.displayName && user.displayName[0].toUpperCase()}</div>
+							<button
+								type='button'
+								onClick={() => {
+									firebase.auth().signOut();
+									alert('로그아웃 되었습니다.');
+								}}
+							>
+								SIGN OUT
+							</button>
+						</>
+					)}
 				</div>
 
 				{/* 모바일 메뉴 버튼 */}

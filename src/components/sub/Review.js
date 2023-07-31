@@ -161,6 +161,18 @@ function Review() {
 		// setReviews(Reviews.filter((_, idx) => idx !== num));
 	};
 
+	const splitDate = (initDate) => {
+		const splited = initDate.split('T');
+		const date = splited[0];
+		const time = splited[1].split('.')[0];
+
+		return `${date}, ${time}`;
+	};
+
+	const formEnter = (e) => {
+		e.key === 'Enter' && createReview();
+	};
+
 	useEffect(() => {
 		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
 		readReview();
@@ -176,47 +188,61 @@ function Review() {
 				<div className='inner-container'>
 					{/* review input */}
 					<div className='input-wrap'>
-						<div className='input-box'>
-							<label htmlFor='bookname' className='tit'>
-								Book Name
-							</label>
-							<input
-								type='text'
-								id='bookname'
-								placeholder='도서명을 입력하세요.'
-								value={InputBookName}
-								onChange={(e) => {
-									setInputBookName(e.target.value);
-								}}
-							/>
-						</div>
+						{user.uid === '' ? (
+							<>
+								<div className='no-signin'>
+									<p>로그인 후 리뷰 작성이 가능합니다.</p>
+								</div>
+							</>
+						) : (
+							<>
+								<div className='input-box'>
+									<label htmlFor='bookname' className='tit'>
+										Book Name
+									</label>
+									<input
+										type='text'
+										id='bookname'
+										placeholder='도서명을 입력하세요.'
+										value={InputBookName}
+										onChange={(e) => {
+											setInputBookName(e.target.value);
+										}}
+										onKeyPress={(e) => formEnter(e)}
+									/>
+								</div>
 
-						<div className='input-box'>
-							<label htmlFor='reviewcontent' className='tit'>
-								Review Content
-							</label>
-							<textarea
-								id='reviewcontent'
-								placeholder='리뷰 내용을 작성해주세요.'
-								value={InputReviewContent}
-								onChange={(e) => {
-									setInputReviewContent(e.target.value);
-								}}
-							></textarea>
-						</div>
+								<div className='input-box'>
+									<label htmlFor='reviewcontent' className='tit'>
+										Review Content
+									</label>
+									<textarea
+										id='reviewcontent'
+										placeholder='리뷰 내용을 작성해주세요.'
+										value={InputReviewContent}
+										onChange={(e) => {
+											setInputReviewContent(e.target.value);
+										}}
+										onKeyPress={(e) => formEnter(e)}
+									></textarea>
+								</div>
 
-						<div className='btn-wrap'>
-							<button type='button' onClick={resetInputForm}>
-								RESET
-							</button>
-							<button type='button' className='btn-write' onClick={createReview}>
-								WRITE
-							</button>
-						</div>
+								<div className='btn-wrap'>
+									<button type='button' onClick={resetInputForm}>
+										RESET
+									</button>
+									<button type='button' className='btn-write' onClick={createReview}>
+										WRITE
+									</button>
+								</div>
+							</>
+						)}
 					</div>
 
 					{/* review list */}
 					<div className='show-wrap'>
+						{Reviews.length === 0 && <p className='no-items'>등록된 리뷰가 없습니다.</p>}
+
 						{Reviews.map((review) => {
 							return (
 								<article key={review.reviewNum}>
@@ -251,12 +277,13 @@ function Review() {
 
 									<div className='info-wrap'>
 										<div className='profile-box'>
+											{review.writer.displayName[0].toUpperCase()}
 											{/* <img src={`${process.env.PUBLIC_URL}/image/${review.profileImg}`} alt='' /> */}
 										</div>
 										<div className='info-box'>
 											<p className='user'>{review.writer.displayName}</p>
-											<p>{review.createdAt}</p>
-											<p>{review.updatedAt} [마지막 수정 날짜]</p>
+											<p>{splitDate(review.createdAt)}</p>
+											<p>{splitDate(review.updatedAt)} [마지막 수정 날짜]</p>
 										</div>
 									</div>
 

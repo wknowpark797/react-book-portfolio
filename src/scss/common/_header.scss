@@ -37,12 +37,25 @@
 		.login-wrap {
 			display: flex;
 			align-items: center;
-			gap: 25px;
+			gap: 20px;
 
-			> a {
+			> a,
+			> button {
 				display: block;
 				font-size: 14px;
 				color: #444;
+				cursor: pointer;
+			}
+
+			.profile {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				width: 42px;
+				height: 42px;
+				background: #ffbd45;
+				border-radius: 50%;
+				overflow: hidden;
 			}
 		}
 

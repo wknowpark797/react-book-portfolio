@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Navigation } from 'swiper';
-import { useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchBookDetail } from '../../redux/bookDetailSlice';
 import 'swiper/css';
@@ -14,10 +14,17 @@ function Visual() {
 	const btnNextVisual = useRef(null);
 	const fractionFrame = useRef(null);
 	const ratingList = [5, 4, 3, 4, 5];
+	const [RefVisible, setRefVisible] = useState(false);
 
 	const dispatch = useDispatch();
 	const Items = useSelector((store) => store.bookVisual.data);
 	const Detail = useSelector((store) => store.bookDetail.data);
+
+	useEffect(() => {
+		if (!RefVisible) {
+			return;
+		}
+	}, [RefVisible]);
 
 	return (
 		<>
@@ -111,7 +118,13 @@ function Visual() {
 					</Swiper>
 
 					<div className='indicator'>
-						<div className='current-number' ref={fractionFrame}>
+						<div
+							className='current-number'
+							ref={(e) => {
+								fractionFrame.current = e;
+								setRefVisible(!!e);
+							}}
+						>
 							<span>01</span> / 05
 						</div>
 

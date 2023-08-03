@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation } from 'swiper';
-import { useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchBookDetail } from '../../redux/bookDetailSlice';
 import 'swiper/css';
@@ -12,10 +12,17 @@ function BookList() {
 	const modal = useRef(null);
 	const btnPrevBook = useRef(null);
 	const btnNextBook = useRef(null);
+	const [RefVisible, setRefVisible] = useState(false);
 
 	const dispatch = useDispatch();
 	const Items = useSelector((store) => store.bookInterest.data);
 	const Detail = useSelector((store) => store.bookDetail.data);
+
+	useEffect(() => {
+		if (!RefVisible) {
+			return;
+		}
+	}, [RefVisible]);
 
 	return (
 		<>
@@ -26,7 +33,15 @@ function BookList() {
 						<p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Minima, exercitationem.</p>
 
 						<div className='arrow'>
-							<button type='button' id='btnPrevBook' className='prev' ref={btnPrevBook}>
+							<button
+								type='button'
+								id='btnPrevBook'
+								className='prev'
+								ref={(e) => {
+									btnPrevBook.current = e;
+									setRefVisible(!!e);
+								}}
+							>
 								<FontAwesomeIcon icon={faChevronLeft} />
 							</button>
 							<button type='button' id='btnNextBook' className='next' ref={btnNextBook}>

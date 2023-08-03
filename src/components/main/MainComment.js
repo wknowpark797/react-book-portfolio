@@ -2,13 +2,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation } from 'swiper';
-import { useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import 'swiper/css';
 
 function MainComment() {
 	const btnPrevComment = useRef(null);
 	const btnNextComment = useRef(null);
+	const [RefVisible, setRefVisible] = useState(false);
 
 	const Reviews = useSelector((store) => store.review.data);
 
@@ -19,6 +20,12 @@ function MainComment() {
 
 		return `${date}, ${time}`;
 	};
+
+	useEffect(() => {
+		if (!RefVisible) {
+			return;
+		}
+	}, [RefVisible]);
 
 	return (
 		<section id='main-comment-list' className='my-scroll'>
@@ -55,7 +62,15 @@ function MainComment() {
 					</Swiper>
 
 					<div className='arrow'>
-						<button type='button' id='btnPrevComment' className='prev' ref={btnPrevComment}>
+						<button
+							type='button'
+							id='btnPrevComment'
+							className='prev'
+							ref={(e) => {
+								btnPrevComment.current = e;
+								setRefVisible(!!e);
+							}}
+						>
 							<FontAwesomeIcon icon={faChevronLeft} />
 						</button>
 						<button type='button' id='btnNextComment' className='next' ref={btnNextComment}>

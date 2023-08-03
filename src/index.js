@@ -12,6 +12,7 @@ import bookDetailReducer from './redux/bookDetailSlice';
 import memberReducer from './redux/memberSlice';
 import flickrReducer from './redux/flickrSlice';
 import locationReducer from './redux/locationSlice';
+import reviewReducer from './redux/reviewSlice';
 import menuReducer from './redux/menuSlice';
 import userReducer from './redux/userSlice';
 
@@ -25,6 +26,7 @@ const store = configureStore({
 		member: memberReducer,
 		flickr: flickrReducer,
 		location: locationReducer,
+		review: reviewReducer,
 		menu: menuReducer,
 		user: userReducer,
 	},

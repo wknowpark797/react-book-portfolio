@@ -37,13 +37,18 @@ $slideWidth: 500px;
 					padding-bottom: 85px;
 
 					.profile-box {
+						display: flex;
+						justify-content: center;
+						align-items: center;
 						width: 70px;
 						height: 70px;
+						background: #ffbd45;
 						border-radius: 50%;
-						background: #777;
-						margin-left: 35px;
-						position: relative;
 						overflow: hidden;
+						margin-left: 35px;
+						font-size: 20px;
+						color: #333;
+						position: relative;
 
 						img {
 							width: 100%;
@@ -159,7 +164,7 @@ $slideWidth: 500px;
 					// width: calc(100% * $slideLength);
 
 					.swiper-slide {
-						width: calc(100% / $slideLength);
+						width: calc(100% - 50px);
 					}
 				}
 			}

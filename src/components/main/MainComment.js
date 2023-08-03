@@ -2,52 +2,23 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation } from 'swiper';
-import { useState, useEffect, useRef } from 'react';
+import { useRef } from 'react';
+import { useSelector } from 'react-redux';
 import 'swiper/css';
 
 function MainComment() {
-	const dummyReviews = [
-		{
-			bookName: '일상의 빈칸',
-			reviewContent:
-				'Lorem ipsum dolor sit amet consectetur adipisicing elit. Id temporibus exercitationem culpa saepe, nulla veniam aliquam. Ea dicta officia dolorum.',
-			profileImg: 'my-profile.jpg',
-			userName: 'Woo Ara',
-			date: '2023.06.20',
-			updateDate: '2023.06.21',
-		},
-		{
-			bookName: '일상의 한칸',
-			reviewContent:
-				'Lorem ipsum dolor sit amet consectetur adipisicing elit. Id temporibus exercitationem culpa saepe, nulla veniam aliquam. Ea dicta officia dolorum.',
-			profileImg: 'example_user3.jpg',
-			userName: 'Paul Davison',
-			date: '2023.06.21',
-		},
-		{
-			bookName: '일상의 두칸',
-			reviewContent:
-				'Lorem ipsum dolor sit amet consectetur adipisicing elit. Id temporibus exercitationem culpa saepe, nulla veniam aliquam. Ea dicta officia dolorum.',
-			profileImg: 'example_user3.jpg',
-			userName: 'Paul Davison',
-			date: '2023.06.23',
-		},
-	];
-
 	const btnPrevComment = useRef(null);
 	const btnNextComment = useRef(null);
 
-	const getLocalData = () => {
-		const data = localStorage.getItem('reviews');
-		if (data) return JSON.parse(data);
-		else return dummyReviews;
+	const Reviews = useSelector((store) => store.review.data);
+
+	const splitDate = (initDate) => {
+		const splited = initDate.split('T');
+		const date = splited[0];
+		const time = splited[1].split('.')[0];
+
+		return `${date}, ${time}`;
 	};
-
-	const [Reviews] = useState(getLocalData());
-
-	useEffect(() => {
-		localStorage.setItem('reviews', JSON.stringify(Reviews));
-	}, [Reviews]);
 
 	return (
 		<section id='main-comment-list' className='my-scroll'>
@@ -70,15 +41,13 @@ function MainComment() {
 						{Reviews.map((review, idx) => {
 							return (
 								<SwiperSlide key={idx}>
-									<div className='profile-box'>
-										<img src={`${process.env.PUBLIC_URL}/image/${review.profileImg}`} alt='' />
-									</div>
+									<div className='profile-box'>{review.writer.displayName[0].toUpperCase()}</div>
 									<div className='info-box'>
 										<h2>{review.bookName}</h2>
 										<p>{review.reviewContent}</p>
-										<p className='user'>{review.userName}</p>
-										<p>{review.date}</p>
-										{review.updateDate && <p>{review.updateDate} [마지막 수정 날짜]</p>}
+										<p className='user'>{review.writer.displayName}</p>
+										<p>{splitDate(review.createdAt)}</p>
+										<p>{splitDate(review.updatedAt)} [마지막 수정 날짜]</p>
 									</div>
 								</SwiperSlide>
 							);

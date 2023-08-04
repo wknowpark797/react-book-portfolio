@@ -5,7 +5,6 @@ import { HashRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import bookVisualReducer from './redux/bookVisualSlice';
-import bookInterestReducer from './redux/bookInterestSlice';
 import bookDetailReducer from './redux/bookDetailSlice';
 import memberReducer from './redux/memberSlice';
 import flickrReducer from './redux/flickrSlice';
@@ -17,7 +16,6 @@ import userReducer from './redux/userSlice';
 const store = configureStore({
 	reducer: {
 		bookVisual: bookVisualReducer,
-		bookInterest: bookInterestReducer,
 		bookDetail: bookDetailReducer,
 		member: memberReducer,
 		flickr: flickrReducer,

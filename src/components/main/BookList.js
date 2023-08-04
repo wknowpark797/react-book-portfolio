@@ -5,6 +5,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation } from 'swiper';
 import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useBookInterestQuery } from '../../hooks/useBookInterestQuery';
 import { fetchBookDetail } from '../../redux/bookDetailSlice';
 import 'swiper/css';
 
@@ -14,8 +15,9 @@ function BookList() {
 	const btnNextBook = useRef(null);
 	const [RefVisible, setRefVisible] = useState(false);
 
+	const { data: Items, isSuccess: isInterestSuccess } = useBookInterestQuery();
+
 	const dispatch = useDispatch();
-	const Items = useSelector((store) => store.bookInterest.data);
 	const Detail = useSelector((store) => store.bookDetail.data);
 
 	useEffect(() => {
@@ -60,28 +62,29 @@ function BookList() {
 							navigation={{ nextEl: btnNextBook.current, prevEl: btnPrevBook.current }}
 							modules={[Autoplay, Navigation]}
 						>
-							{Items.map((item, idx) => {
-								return (
-									<SwiperSlide
-										key={idx}
-										onClick={() => {
-											dispatch(fetchBookDetail(item.id));
-											modal.current.open();
-										}}
-									>
-										<div className='ratio-wrap'>
-											<div className='img-box'>
-												<img src={item.volumeInfo.imageLinks.thumbnail.replace('zoom=1', 'zoom=10')} alt='' />
+							{isInterestSuccess &&
+								Items.map((item, idx) => {
+									return (
+										<SwiperSlide
+											key={idx}
+											onClick={() => {
+												dispatch(fetchBookDetail(item.id));
+												modal.current.open();
+											}}
+										>
+											<div className='ratio-wrap'>
+												<div className='img-box'>
+													<img src={item.volumeInfo.imageLinks.thumbnail.replace('zoom=1', 'zoom=10')} alt='' />
+												</div>
 											</div>
-										</div>
 
-										<div className='info-box'>
-											<h2>{item.volumeInfo.title}</h2>
-											<p>{item.volumeInfo.authors}</p>
-										</div>
-									</SwiperSlide>
-								);
-							})}
+											<div className='info-box'>
+												<h2>{item.volumeInfo.title}</h2>
+												<p>{item.volumeInfo.authors}</p>
+											</div>
+										</SwiperSlide>
+									);
+								})}
 						</Swiper>
 					</div>
 				</div>

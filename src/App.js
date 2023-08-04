@@ -28,7 +28,11 @@ import { fetchReview } from './redux/reviewSlice';
 import { loginUser, logoutUser } from './redux/userSlice';
 import firebase from './firebase';
 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+
 function App() {
+	const queryClient = new QueryClient();
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -52,7 +56,7 @@ function App() {
 	}, [dispatch]);
 
 	return (
-		<>
+		<QueryClientProvider client={queryClient}>
 			<Switch>
 				<Route exact path='/' render={() => <Main />} />
 				<Route path='/' render={() => <Header type={'sub'} />} />
@@ -69,7 +73,9 @@ function App() {
 			<Menu />
 			<Footer />
 			<BtnTop />
-		</>
+
+			<ReactQueryDevtools />
+		</QueryClientProvider>
 	);
 }
 

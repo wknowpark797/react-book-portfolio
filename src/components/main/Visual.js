@@ -5,6 +5,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Navigation } from 'swiper';
 import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+import { useBookVisualQuery } from '../../hooks/useBookVisualQuery';
 import { fetchBookDetail } from '../../redux/bookDetailSlice';
 import 'swiper/css';
 
@@ -16,8 +17,9 @@ function Visual() {
 	const ratingList = [5, 4, 3, 4, 5];
 	const [RefVisible, setRefVisible] = useState(false);
 
+	const { data: Items, isSuccess: isVisualSuccess } = useBookVisualQuery();
+
 	const dispatch = useDispatch();
-	const Items = useSelector((store) => store.bookVisual.data);
 	const Detail = useSelector((store) => store.bookDetail.data);
 
 	useEffect(() => {
@@ -55,66 +57,67 @@ function Visual() {
 						navigation={{ nextEl: btnNextVisual.current, prevEl: btnPrevVisual.current }}
 						modules={[Autoplay, Pagination, Navigation]}
 					>
-						{Items.map((item, idx) => {
-							return (
-								<SwiperSlide key={idx}>
-									<div className='detail-wrap'>
-										<h1>{item.volumeInfo.title}</h1>
+						{isVisualSuccess &&
+							Items.map((item, idx) => {
+								return (
+									<SwiperSlide key={idx}>
+										<div className='detail-wrap'>
+											<h1>{item.volumeInfo.title}</h1>
 
-										<div className='rating-wrap'>
-											<div className='star-box'>
-												<span className={ratingList[idx] >= 1 ? 'on' : ''}>
-													<FontAwesomeIcon icon={faStar} />
-												</span>
-												<span className={ratingList[idx] >= 2 ? 'on' : ''}>
-													<FontAwesomeIcon icon={faStar} />
-												</span>
-												<span className={ratingList[idx] >= 3 ? 'on' : ''}>
-													<FontAwesomeIcon icon={faStar} />
-												</span>
-												<span className={ratingList[idx] >= 4 ? 'on' : ''}>
-													<FontAwesomeIcon icon={faStar} />
-												</span>
-												<span className={ratingList[idx] >= 5 ? 'on' : ''}>
-													<FontAwesomeIcon icon={faStar} />
-												</span>
+											<div className='rating-wrap'>
+												<div className='star-box'>
+													<span className={ratingList[idx] >= 1 ? 'on' : ''}>
+														<FontAwesomeIcon icon={faStar} />
+													</span>
+													<span className={ratingList[idx] >= 2 ? 'on' : ''}>
+														<FontAwesomeIcon icon={faStar} />
+													</span>
+													<span className={ratingList[idx] >= 3 ? 'on' : ''}>
+														<FontAwesomeIcon icon={faStar} />
+													</span>
+													<span className={ratingList[idx] >= 4 ? 'on' : ''}>
+														<FontAwesomeIcon icon={faStar} />
+													</span>
+													<span className={ratingList[idx] >= 5 ? 'on' : ''}>
+														<FontAwesomeIcon icon={faStar} />
+													</span>
+												</div>
+												<p>{ratingList[idx] + '.0'}</p>
 											</div>
-											<p>{ratingList[idx] + '.0'}</p>
+
+											<p className='content'>{item.volumeInfo.description}</p>
+
+											<button
+												type='button'
+												className='btn-more'
+												onClick={() => {
+													dispatch(fetchBookDetail(item.id));
+													modal.current.open();
+												}}
+											>
+												VIEW DETAIL
+											</button>
 										</div>
 
-										<p className='content'>{item.volumeInfo.description}</p>
+										<div className='ratio-wrap'>
+											<div className='double-wrap'>
+												<div className='img-box origin'>
+													<img
+														src={item.volumeInfo.imageLinks.thumbnail
+															.replace('zoom=1', 'zoom=10')
+															.replace('edge=curl', 'edge=')}
+														alt=''
+													/>
+												</div>
 
-										<button
-											type='button'
-											className='btn-more'
-											onClick={() => {
-												dispatch(fetchBookDetail(item.id));
-												modal.current.open();
-											}}
-										>
-											VIEW DETAIL
-										</button>
-									</div>
-
-									<div className='ratio-wrap'>
-										<div className='double-wrap'>
-											<div className='img-box origin'>
-												<img
-													src={item.volumeInfo.imageLinks.thumbnail
-														.replace('zoom=1', 'zoom=10')
-														.replace('edge=curl', 'edge=')}
-													alt=''
-												/>
-											</div>
-
-											<div className='img-box shadow'>
-												<img src={item.volumeInfo.imageLinks.thumbnail.replace('edge=curl', 'edge=')} alt='' />
+												<div className='img-box shadow'>
+													<img src={item.volumeInfo.imageLinks.thumbnail.replace('edge=curl', 'edge=')} alt='' />
+												</div>
 											</div>
 										</div>
-									</div>
-								</SwiperSlide>
-							);
-						})}
+									</SwiperSlide>
+								);
+							})}
 					</Swiper>
 
 					<div className='indicator'>

@@ -4,7 +4,6 @@ import App from './App';
 import { HashRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
-import youtubeMusicReducer from './redux/youtubeMusicSlice';
 import youtubeReadReducer from './redux/youtubeReadSlice';
 import bookVisualReducer from './redux/bookVisualSlice';
 import bookInterestReducer from './redux/bookInterestSlice';
@@ -18,7 +17,6 @@ import userReducer from './redux/userSlice';
 
 const store = configureStore({
 	reducer: {
-		youtubeMusic: youtubeMusicReducer,
 		youtubeRead: youtubeReadReducer,
 		bookVisual: bookVisualReducer,
 		bookInterest: bookInterestReducer,

@@ -4,12 +4,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCirclePlay } from '@fortawesome/free-regular-svg-icons';
 import { useState, useEffect, useRef, Fragment } from 'react';
 import { useSelector } from 'react-redux';
+import { useYoutubeMusicQuery } from '../../hooks/useYoutubeMusicQuery';
 
 function Youtube() {
 	const modal = useRef(null);
 	const [Selected, setSelected] = useState(0);
 
-	const MusicList = useSelector((store) => store.youtubeMusic.data);
+	const { data: MusicList, isSuccess: isMusicSuccess } = useYoutubeMusicQuery();
 	const BestList = useSelector((store) => store.youtubeRead.data.slice(0, 1));
 	const BookList = useSelector((store) => store.youtubeRead.data.slice(1, 4));
 
@@ -23,38 +24,39 @@ function Youtube() {
 				<div className='top-wrap'>
 					<div className='inner-container'>
 						<div id='musicListWrap' className='list-wrap'>
-							{MusicList.map((item, idx) => {
-								return (
-									<article key={idx}>
-										<h3>{item.snippet.title}</h3>
-										<p className='date'>{item.snippet.publishedAt.split('T')[0].split('-').join('.')}</p>
+							{isMusicSuccess &&
+								MusicList.map((item, idx) => {
+									return (
+										<article key={idx}>
+											<h3>{item.snippet.title}</h3>
+											<p className='date'>{item.snippet.publishedAt.split('T')[0].split('-').join('.')}</p>
 
-										<div
-											className='video thumb'
-											data-videoid={item.snippet.resourceId.videoId}
-											onClick={() => {
-												setSelected(item.snippet.resourceId.videoId);
-												modal.current.open();
-											}}
-										>
-											<img src={item.snippet.thumbnails.standard.url} alt='' />
-										</div>
+											<div
+												className='video thumb'
+												data-videoid={item.snippet.resourceId.videoId}
+												onClick={() => {
+													setSelected(item.snippet.resourceId.videoId);
+													modal.current.open();
+												}}
+											>
+												<img src={item.snippet.thumbnails.standard.url} alt='' />
+											</div>
 
-										<button
-											type='button'
-											className='btn-more thumb'
-											data-videoid={item.snippet.resourceId.videoId}
-											onClick={() => {
-												setSelected(item.snippet.resourceId.videoId);
-												modal.current.open();
-											}}
-										>
-											<FontAwesomeIcon icon={faCirclePlay} />
-											<span>VIEW VIDEO</span>
-										</button>
-									</article>
-								);
-							})}
+											<button
+												type='button'
+												className='btn-more thumb'
+												data-videoid={item.snippet.resourceId.videoId}
+												onClick={() => {
+													setSelected(item.snippet.resourceId.videoId);
+													modal.current.open();
+												}}
+											>
+												<FontAwesomeIcon icon={faCirclePlay} />
+												<span>VIEW VIDEO</span>
+											</button>
+										</article>
+									);
+								})}
 						</div>
 					</div>
 				</div>

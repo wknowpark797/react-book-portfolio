@@ -16,7 +16,6 @@ import Menu from './components/common/Menu';
 
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { fetchBookDetail } from './redux/bookDetailSlice';
 import { fetchMember } from './redux/memberSlice';
 import { fetchFlickr } from './redux/flickrSlice';
 import { fetchLocation } from './redux/locationSlice';
@@ -32,7 +31,6 @@ function App() {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		dispatch(fetchBookDetail(''));
 		dispatch(fetchMember());
 		dispatch(fetchFlickr({ type: 'interest' }));
 		dispatch(fetchLocation());

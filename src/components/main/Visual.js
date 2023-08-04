@@ -3,11 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Navigation } from 'swiper';
-import { useState, useEffect, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useBookVisualQuery } from '../../hooks/useBookVisualQuery';
-import { fetchBookDetail } from '../../redux/bookDetailSlice';
 import 'swiper/css';
+import { useState, useEffect, useRef } from 'react';
+import { useBookVisualQuery } from '../../hooks/useBookVisualQuery';
+import { useBookDetailQuery } from '../../hooks/useBookDetailQuery';
 
 function Visual() {
 	const modal = useRef(null);
@@ -17,10 +16,9 @@ function Visual() {
 	const ratingList = [5, 4, 3, 4, 5];
 	const [RefVisible, setRefVisible] = useState(false);
 
+	const [BookId, setBookId] = useState('iP7BEAAAQBAJ');
+	const { data: Detail, isSuccess: isDetailSuccess } = useBookDetailQuery(BookId);
 	const { data: Items, isSuccess: isVisualSuccess } = useBookVisualQuery();
-
-	const dispatch = useDispatch();
-	const Detail = useSelector((store) => store.bookDetail.data);
 
 	useEffect(() => {
 		if (!RefVisible) {
@@ -91,7 +89,7 @@ function Visual() {
 												type='button'
 												className='btn-more'
 												onClick={() => {
-													dispatch(fetchBookDetail(item.id));
+													setBookId(item.id);
 													modal.current.open();
 												}}
 											>
@@ -145,20 +143,24 @@ function Visual() {
 
 			<Modal ref={modal}>
 				<div className='inner-detail'>
-					<div className='img-box'>
-						<img src={Detail?.imageLinks?.small.replace('edge=curl', 'edge=')} alt={Detail?.title} />
-					</div>
+					{isDetailSuccess && (
+						<>
+							<div className='img-box'>
+								<img src={Detail?.imageLinks?.small.replace('edge=curl', 'edge=')} alt={Detail?.title} />
+							</div>
 
-					<div className='info-wrap'>
-						<h1>{Detail?.title}</h1>
-						<h2>{Detail?.subtitle || ''}</h2>
+							<div className='info-wrap'>
+								<h1>{Detail?.title}</h1>
+								<h2>{Detail?.subtitle || ''}</h2>
 
-						<p className='authors'>작가 : {Detail?.authors}</p>
-						<div className='description' dangerouslySetInnerHTML={{ __html: Detail?.description }}></div>
-						<p>카테고리 : {Detail?.categories}</p>
-						<p>출판사 : {Detail?.publisher}</p>
-						<p>출판일 : {Detail?.publishedDate}</p>
-					</div>
+								<p className='authors'>작가 : {Detail?.authors}</p>
+								<div className='description' dangerouslySetInnerHTML={{ __html: Detail?.description }}></div>
+								<p>카테고리 : {Detail?.categories}</p>
+								<p>출판사 : {Detail?.publisher}</p>
+								<p>출판일 : {Detail?.publishedDate}</p>
+							</div>
+						</>
+					)}
 				</div>
 			</Modal>
 		</>

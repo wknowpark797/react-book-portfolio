@@ -4,7 +4,6 @@ import App from './App';
 import { HashRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
-import bookDetailReducer from './redux/bookDetailSlice';
 import memberReducer from './redux/memberSlice';
 import flickrReducer from './redux/flickrSlice';
 import locationReducer from './redux/locationSlice';
@@ -14,7 +13,6 @@ import userReducer from './redux/userSlice';
 
 const store = configureStore({
 	reducer: {
-		bookDetail: bookDetailReducer,
 		member: memberReducer,
 		flickr: flickrReducer,
 		location: locationReducer,

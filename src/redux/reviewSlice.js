@@ -3,7 +3,7 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 
 // review 목록 fetching
 export const fetchReview = createAsyncThunk('review/requestReview', async () => {
-	const response = await axios.get('/api/review/read/0');
+	const response = await axios.get('https://node-book-wknowpark797.koyeb.app/api/review/read/0');
 	return response.data.reviewList;
 });
 

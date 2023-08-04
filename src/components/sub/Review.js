@@ -62,7 +62,7 @@ function Review() {
 		};
 
 		axios
-			.post('/api/review/create', params)
+			.post('https://node-book-wknowpark797.koyeb.app/api/review/create', params)
 			.then(() => {
 				alert('리뷰를 성공적으로 등록하였습니다.');
 				readReview();
@@ -88,7 +88,7 @@ function Review() {
 
 	// Review Read (List)
 	const readReview = () => {
-		axios.get('/api/review/read/0').then((res) => {
+		axios.get('https://node-book-wknowpark797.koyeb.app/api/review/read/0').then((res) => {
 			setReviews(res.data.reviewList);
 		});
 	};
@@ -98,7 +98,7 @@ function Review() {
 		if (UpdateIdx === -1) return;
 
 		axios
-			.get(`/api/review/detail/${UpdateIdx}`)
+			.get(`https://node-book-wknowpark797.koyeb.app/api/review/detail/${UpdateIdx}`)
 			.then((res) => {
 				if (res.data.success) {
 					setEditBookName(res.data.detail.bookName);
@@ -125,7 +125,7 @@ function Review() {
 		};
 
 		axios
-			.put('/api/review/update', params)
+			.put('https://node-book-wknowpark797.koyeb.app/api/review/update', params)
 			.then((res) => {
 				if (res.data.success) {
 					alert('리뷰를 성공적으로 수정하였습니다.');
@@ -145,7 +145,7 @@ function Review() {
 		if (!window.confirm('리뷰를 삭제하시겠습니까?')) return;
 
 		axios
-			.delete(`/api/review/delete/${num}`)
+			.delete(`https://node-book-wknowpark797.koyeb.app/api/review/delete/${num}`)
 			.then((res) => {
 				if (res.data.success) {
 					alert('리뷰가 삭제되었습니다.');

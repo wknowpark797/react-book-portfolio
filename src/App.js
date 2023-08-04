@@ -16,7 +16,6 @@ import Menu from './components/common/Menu';
 
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { fetchYoutubeRead } from './redux/youtubeReadSlice';
 import { fetchBookVisual } from './redux/bookVisualSlice';
 import { fetchBookInterest } from './redux/bookInterestSlice';
 import { fetchBookDetail } from './redux/bookDetailSlice';
@@ -35,7 +34,6 @@ function App() {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		dispatch(fetchYoutubeRead());
 		dispatch(fetchBookVisual());
 		dispatch(fetchBookInterest());
 		dispatch(fetchBookDetail(''));

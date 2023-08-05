@@ -16,7 +16,6 @@ import Menu from './components/common/Menu';
 
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { fetchLocation } from './redux/locationSlice';
 import { fetchReview } from './redux/reviewSlice';
 import { loginUser, logoutUser } from './redux/userSlice';
 import firebase from './firebase';
@@ -29,7 +28,6 @@ function App() {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		dispatch(fetchLocation());
 		dispatch(fetchReview());
 
 		// firebase로부터의 로그인 정보를 전역 state에 저장

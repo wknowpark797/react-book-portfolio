@@ -1,10 +1,10 @@
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { useLocationQuery } from '../../hooks/useLocationQuery';
 
 function MainLocation() {
-	const libraryList = useSelector((store) => store.location.data.slice(1, 3));
+	const { data: libraryList, isSuccess } = useLocationQuery();
 
 	return (
 		<section id='main-location' className='my-scroll'>
@@ -17,23 +17,24 @@ function MainLocation() {
 				</div>
 
 				<div className='company-wrap'>
-					{libraryList.map((item, idx) => {
-						return (
-							<article key={idx}>
-								<div className='img-box'>
-									<img src={`${process.env.PUBLIC_URL}/image/${item.thumbnailSrc}`} alt='' />
-								</div>
-								<div className='info-box'>
-									<h2>{item.title}</h2>
-									<p>{item.description}</p>
+					{isSuccess &&
+						libraryList.slice(1, 3).map((item, idx) => {
+							return (
+								<article key={idx}>
+									<div className='img-box'>
+										<img src={`${process.env.PUBLIC_URL}/image/${item.thumbnailSrc}`} alt='' />
+									</div>
+									<div className='info-box'>
+										<h2>{item.title}</h2>
+										<p>{item.description}</p>
 
-									<Link to={`/contact?library=${idx + 1}`}>
-										<FontAwesomeIcon icon={faCircleChevronRight} />
-									</Link>
-								</div>
-							</article>
-						);
-					})}
+										<Link to={`/contact?library=${idx + 1}`}>
+											<FontAwesomeIcon icon={faCircleChevronRight} />
+										</Link>
+									</div>
+								</article>
+							);
+						})}
 				</div>
 			</div>
 		</section>

@@ -4,14 +4,12 @@ import App from './App';
 import { HashRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
-import locationReducer from './redux/locationSlice';
 import reviewReducer from './redux/reviewSlice';
 import menuReducer from './redux/menuSlice';
 import userReducer from './redux/userSlice';
 
 const store = configureStore({
 	reducer: {
-		location: locationReducer,
 		review: reviewReducer,
 		menu: menuReducer,
 		user: userReducer,

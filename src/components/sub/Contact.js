@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLocationDot, faGlobe, faPhone } from '@fortawesome/free-solid-svg-icons';
 import { faInstagram, faYoutube, faFacebookF } from '@fortawesome/free-brands-svg-icons';
 import { useState, useEffect, useRef, useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import { useLocationQuery } from '../../hooks/useLocationQuery';
 
 // queryString 사용
 function useQuery() {
@@ -20,10 +20,12 @@ function Contact() {
 	const [Map, setMap] = useState(null); // 지도 인스턴스
 	const [Index, setIndex] = useState(0); // 선택된 도서관 index
 	const [Traffic, setTraffic] = useState(false);
-	const markerInfo = useSelector((store) => store.location.data);
+
+	const { data: markerInfo, isSuccess } = useLocationQuery();
 
 	// custom 마커 이미지 정보
 	const marker = useMemo(() => {
+		if (!isSuccess) return;
 		if (markerInfo.length === 0) return;
 
 		return new kakao.maps.Marker({
@@ -36,9 +38,10 @@ function Contact() {
 				}
 			),
 		});
-	}, [Index, kakao, markerInfo]);
+	}, [Index, kakao, markerInfo, isSuccess]);
 
 	useEffect(() => {
+		if (!isSuccess) return;
 		if (markerInfo.length === 0) return;
 
 		mapContainer.current.innerHTML = ''; // 지도 초기화
@@ -61,7 +64,7 @@ function Contact() {
 		};
 		window.addEventListener('resize', setCenter);
 		return () => window.removeEventListener('resize', setCenter);
-	}, [Index, kakao, marker, markerInfo]);
+	}, [Index, kakao, marker, markerInfo, isSuccess]);
 
 	useEffect(() => {
 		// 교통정보 표시
@@ -83,13 +86,14 @@ function Contact() {
 						<div ref={mapContainer} id='map'></div>
 
 						<ul className='list-branch'>
-							{markerInfo.map((item, idx) => {
-								return (
-									<li key={idx} onClick={() => setIndex(idx)} className={Index === idx ? 'on' : ''}>
-										{item.title}
-									</li>
-								);
-							})}
+							{isSuccess &&
+								markerInfo.map((item, idx) => {
+									return (
+										<li key={idx} onClick={() => setIndex(idx)} className={Index === idx ? 'on' : ''}>
+											{item.title}
+										</li>
+									);
+								})}
 						</ul>
 
 						<button type='button' className='btn-traffic' onClick={() => setTraffic(!Traffic)}>
@@ -99,28 +103,32 @@ function Contact() {
 
 					<div className='library-info'>
 						<div id='infoWrap' className='inner-box'>
-							<h2>{markerInfo[Index]?.title}</h2>
+							{isSuccess && (
+								<>
+									<h2>{markerInfo[Index]?.title}</h2>
 
-							<ul>
-								<li>
-									<FontAwesomeIcon icon={faLocationDot} />
-									<p>{markerInfo[Index]?.address}</p>
-								</li>
-								<li>
-									<FontAwesomeIcon icon={faGlobe} />
-									<p>
-										<a rel='noopener noreferrer' href={markerInfo[Index]?.website.link} target='_blank'>
-											{markerInfo[Index]?.website.title}
-										</a>
-									</p>
-								</li>
-								<li>
-									<FontAwesomeIcon icon={faPhone} />
-									<p>{markerInfo[Index]?.phone}</p>
-								</li>
-							</ul>
+									<ul>
+										<li>
+											<FontAwesomeIcon icon={faLocationDot} />
+											<p>{markerInfo[Index]?.address}</p>
+										</li>
+										<li>
+											<FontAwesomeIcon icon={faGlobe} />
+											<p>
+												<a rel='noopener noreferrer' href={markerInfo[Index]?.website.link} target='_blank'>
+													{markerInfo[Index]?.website.title}
+												</a>
+											</p>
+										</li>
+										<li>
+											<FontAwesomeIcon icon={faPhone} />
+											<p>{markerInfo[Index]?.phone}</p>
+										</li>
+									</ul>
 
-							<p className='desc-info'>{markerInfo[Index]?.description}</p>
+									<p className='desc-info'>{markerInfo[Index]?.description}</p>
+								</>
+							)}
 
 							<div className='sns-wrap'>
 								<Link to='#'>

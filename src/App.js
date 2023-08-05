@@ -16,7 +16,6 @@ import Menu from './components/common/Menu';
 
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { fetchMember } from './redux/memberSlice';
 import { fetchLocation } from './redux/locationSlice';
 import { fetchReview } from './redux/reviewSlice';
 import { loginUser, logoutUser } from './redux/userSlice';
@@ -30,7 +29,6 @@ function App() {
 	const dispatch = useDispatch();
 
 	useEffect(() => {
-		dispatch(fetchMember());
 		dispatch(fetchLocation());
 		dispatch(fetchReview());
 

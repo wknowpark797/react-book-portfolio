@@ -6,8 +6,7 @@ import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 import Lottie from 'lottie-react';
 import loaderLottie from '../../asset/lottie/loaderLottie.json';
 import { useState, useEffect, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchFlickr } from '../../redux/flickrSlice';
+import { useFlickrQuery } from '../../hooks/useFlickrQuery';
 
 function Gallery() {
 	const frame = useRef(null);
@@ -21,8 +20,8 @@ function Gallery() {
 	const modal = useRef(null);
 	const [ModalIndex, setModalIndex] = useState(0);
 
-	const dispatch = useDispatch();
-	const Items = useSelector((store) => store.flickr.data);
+	const [Options, setOptions] = useState({ type: 'interest' });
+	const { data: Items, isSuccess } = useFlickrQuery(Options);
 
 	// 데이터 로딩 처리 함수
 	const dataLoading = () => {
@@ -60,7 +59,7 @@ function Gallery() {
 
 		btnActive.current = index;
 		resetGallery();
-		dispatch(fetchFlickr({ type: 'interest' }));
+		setOptions({ type: 'interest' });
 
 		enableUser.current = true;
 	};
@@ -72,7 +71,7 @@ function Gallery() {
 
 		btnActive.current = index;
 		resetGallery();
-		dispatch(fetchFlickr({ type: 'user', user: '198471371@N05' }));
+		setOptions({ type: 'user', user: '198471371@N05' });
 
 		enableUser.current = false;
 	};
@@ -84,7 +83,7 @@ function Gallery() {
 
 		btnActive.current = -1;
 		resetGallery();
-		dispatch(fetchFlickr({ type: 'user', user: userid }));
+		setOptions({ type: 'user', user: userid });
 
 		enableUser.current = false;
 	};
@@ -97,7 +96,7 @@ function Gallery() {
 
 		btnActive.current = -1;
 		resetGallery();
-		dispatch(fetchFlickr({ type: 'search', tags: tag }));
+		setOptions({ type: 'search', tags: tag });
 		searchInput.current.value = '';
 
 		enableUser.current = true;
@@ -105,7 +104,7 @@ function Gallery() {
 
 	useEffect(() => {
 		// 호출 데이터 유무 체크
-		if (Items.length === 0 && !firstLoaded.current) {
+		if (isSuccess && Items.length === 0 && !firstLoaded.current) {
 			setLoader(false);
 			frame.current.classList.add('on');
 			enableEvent.current = true;
@@ -118,7 +117,7 @@ function Gallery() {
 		firstLoaded.current = false;
 
 		dataLoading();
-	}, [Items]);
+	}, [Items, isSuccess]);
 
 	useEffect(() => {
 		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -164,44 +163,45 @@ function Gallery() {
 
 				<div className='pictures-wrap'>
 					<div className='inner-container' ref={frame}>
-						{Items.length > 0 ? (
+						{isSuccess && Items.length > 0 ? (
 							<Masonry elementType={'ul'} options={{ transitionDuration: '0.5s' }} id='galleryWrap'>
-								{Items.map((item, idx) => {
-									return (
-										<li className='item' key={idx}>
-											<div>
-												<div
-													className='img-box'
-													onClick={() => {
-														setModalIndex(idx);
-														modal.current.open();
-													}}
-												>
-													<img
-														className='picture'
-														src={`https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_m.jpg`}
-														alt={item.title}
-													/>
-												</div>
-
-												<div className='info-wrap'>
-													<div className='profile-wrap' onClick={() => showProfile(item.owner)}>
+								{isSuccess &&
+									Items.map((item, idx) => {
+										return (
+											<li className='item' key={idx}>
+												<div>
+													<div
+														className='img-box'
+														onClick={() => {
+															setModalIndex(idx);
+															modal.current.open();
+														}}
+													>
 														<img
-															className='profile-img'
-															src={`http://farm${item.farm}.staticflickr.com/${item.server}/buddyicons/${item.owner}.jpg`}
-															alt={item.owner}
-															onError={(e) => {
-																e.target.setAttribute('src', 'https://www.flickr.com/images/buddyicon.gif');
-															}}
+															className='picture'
+															src={`https://live.staticflickr.com/${item.server}/${item.id}_${item.secret}_m.jpg`}
+															alt={item.title}
 														/>
-														<p className='profile-user'>{item.owner}</p>
 													</div>
-													<h3>{item.title}</h3>
+
+													<div className='info-wrap'>
+														<div className='profile-wrap' onClick={() => showProfile(item.owner)}>
+															<img
+																className='profile-img'
+																src={`http://farm${item.farm}.staticflickr.com/${item.server}/buddyicons/${item.owner}.jpg`}
+																alt={item.owner}
+																onError={(e) => {
+																	e.target.setAttribute('src', 'https://www.flickr.com/images/buddyicon.gif');
+																}}
+															/>
+															<p className='profile-user'>{item.owner}</p>
+														</div>
+														<h3>{item.title}</h3>
+													</div>
 												</div>
-											</div>
-										</li>
-									);
-								})}
+											</li>
+										);
+									})}
 							</Masonry>
 						) : (
 							<p className='no-items'>해당 이미지가 없습니다.</p>
@@ -211,12 +211,14 @@ function Gallery() {
 			</SubLayout>
 
 			<Modal ref={modal}>
-				<div className='media-box'>
-					<img
-						src={`https://live.staticflickr.com/${Items[ModalIndex]?.server}/${Items[ModalIndex]?.id}_${Items[ModalIndex]?.secret}_b.jpg`}
-						alt={Items[ModalIndex]?.title}
-					/>
-				</div>
+				{isSuccess && (
+					<div className='media-box'>
+						<img
+							src={`https://live.staticflickr.com/${Items[ModalIndex]?.server}/${Items[ModalIndex]?.id}_${Items[ModalIndex]?.secret}_b.jpg`}
+							alt={Items[ModalIndex]?.title}
+						/>
+					</div>
+				)}
 			</Modal>
 		</>
 	);

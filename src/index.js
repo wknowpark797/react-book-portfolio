@@ -2,25 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import { HashRouter } from 'react-router-dom';
-import { Provider } from 'react-redux';
-import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
-import menuReducer from './redux/menuSlice';
-import userReducer from './redux/userSlice';
-
-const store = configureStore({
-	reducer: {
-		menu: menuReducer,
-		user: userReducer,
-	},
-	middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }),
-});
+import { GlobalProvider } from './hooks/useGlobalContext';
 
 ReactDOM.render(
 	<React.StrictMode>
 		<HashRouter>
-			<Provider store={store}>
+			<GlobalProvider>
 				<App />
-			</Provider>
+			</GlobalProvider>
 		</HashRouter>
 	</React.StrictMode>,
 	document.getElementById('root')

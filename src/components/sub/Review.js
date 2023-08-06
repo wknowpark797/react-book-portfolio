@@ -1,10 +1,10 @@
 import SubLayout from '../common/SubLayout';
 import { useState, useEffect, useCallback } from 'react';
-import { useSelector } from 'react-redux';
+import { useGlobalData } from '../../hooks/useGlobalContext';
 import axios from 'axios';
 
 function Review() {
-	const user = useSelector((store) => store.user);
+	const { Uid } = useGlobalData();
 
 	// 리뷰 작성 input
 	const [InputBookName, setInputBookName] = useState('');
@@ -58,7 +58,7 @@ function Review() {
 		const params = {
 			bookName: InputBookName,
 			reviewContent: InputReviewContent,
-			uid: user.uid,
+			uid: Uid,
 		};
 
 		axios
@@ -188,7 +188,7 @@ function Review() {
 				<div className='inner-container'>
 					{/* review input */}
 					<div className='input-wrap'>
-						{user.uid === '' ? (
+						{Uid === '' ? (
 							<>
 								<div className='no-signin'>
 									<p>로그인 후 리뷰 작성이 가능합니다.</p>
@@ -288,7 +288,7 @@ function Review() {
 									</div>
 
 									{/* 내가 작성한 게시물에서만 노출 */}
-									{review.writer.uid === user.uid && (
+									{review.writer.uid === Uid && (
 										<>
 											{review.reviewNum === UpdateIdx ? (
 												<>

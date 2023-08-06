@@ -1,5 +1,10 @@
 import { Route, Switch } from 'react-router-dom';
 import './scss/style.scss';
+import firebase from './firebase';
+import { useEffect } from 'react';
+import { useGlobalData } from './hooks/useGlobalContext';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
 import Header from './components/common/Header';
 import Footer from './components/common/Footer';
@@ -14,27 +19,26 @@ import Signin from './components/sub/Signin';
 import BtnTop from './components/common/BtnTop';
 import Menu from './components/common/Menu';
 
-import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { loginUser, logoutUser } from './redux/userSlice';
-import firebase from './firebase';
-
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
-
 function App() {
 	const queryClient = new QueryClient();
-	const dispatch = useDispatch();
+	const { setUid, setUserNum, setDisplayName } = useGlobalData();
 
 	useEffect(() => {
 		// firebase로부터의 로그인 정보를 전역 state에 저장
 		firebase.auth().onAuthStateChanged((userInfo) => {
 			console.log('로그인 정보: ', userInfo);
 
-			if (userInfo === null) dispatch(logoutUser());
-			else dispatch(loginUser(userInfo.multiFactor.user));
+			if (userInfo === null) {
+				setUid('');
+				setUserNum(-1);
+				setDisplayName('');
+			} else {
+				setUid(userInfo.multiFactor.user.uid);
+				setUserNum(userInfo.multiFactor.user.userNum);
+				setDisplayName(userInfo.multiFactor.user.displayName);
+			}
 		});
-	}, [dispatch]);
+	}, [setUid, setUserNum, setDisplayName]);
 
 	return (
 		<QueryClientProvider client={queryClient}>

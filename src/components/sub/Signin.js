@@ -1,11 +1,11 @@
-import { useState, useEffect, useCallback } from 'react';
-import { useSelector } from 'react-redux';
 import { Link, useHistory } from 'react-router-dom';
+import { useState, useEffect, useCallback } from 'react';
+import { useGlobalData } from '../../hooks/useGlobalContext';
 import firebase from '../../firebase';
 
 function Signin() {
 	const history = useHistory();
-	const user = useSelector((store) => store.user);
+	const { Uid } = useGlobalData();
 
 	const initValue = {
 		email: '',
@@ -61,9 +61,9 @@ function Signin() {
 	}, [Errors, Submit, handleLogin]);
 
 	useEffect(() => {
-		if (user.uid) history.push('/');
+		if (Uid) history.push('/');
 		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-	}, [history, user]);
+	}, [history, Uid]);
 
 	return (
 		<section className='sign-in'>

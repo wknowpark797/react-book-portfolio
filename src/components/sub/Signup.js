@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
 	faOptinMonster,
@@ -8,14 +8,13 @@ import {
 	faLinkedinIn,
 } from '@fortawesome/free-brands-svg-icons';
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { useSelector } from 'react-redux';
-import { useHistory } from 'react-router-dom';
+import { useGlobalData } from '../../hooks/useGlobalContext';
 import firebase from '../../firebase';
 import axios from 'axios';
 
 function Signup() {
 	const history = useHistory();
-	const user = useSelector((store) => store.user);
+	const { Uid } = useGlobalData();
 
 	const initGuide = ['회원가입을 위한 입력 항목입니다.', '입력 항목에 커서를 올리면 안내사항이 표시됩니다.'];
 	const initValue = useMemo(() => {
@@ -152,9 +151,9 @@ function Signup() {
 	}, [Errors, Submit, handleJoin]);
 
 	useEffect(() => {
-		if (user.uid) history.push('/');
+		if (Uid) history.push('/');
 		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-	}, [history, user]);
+	}, [history, Uid]);
 
 	return (
 		<section className='sign-up'>

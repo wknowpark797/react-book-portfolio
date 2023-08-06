@@ -1,34 +1,32 @@
-import { useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useSelector, useDispatch } from 'react-redux';
-import { close } from '../../redux/menuSlice';
+import { useEffect } from 'react';
+import { useGlobalData } from '../../hooks/useGlobalContext';
 
 function Menu() {
 	const activeClass = 'on';
-	const dispatch = useDispatch();
-	const IsOpen = useSelector((store) => store.menu.open);
+	const { MenuOpen, setMenuOpen } = useGlobalData();
 
 	useEffect(() => {
 		window.addEventListener('resize', () => {
-			if (window.innerWidth >= 999) dispatch(close());
+			if (window.innerWidth >= 999) setMenuOpen(false);
 		});
-	}, [dispatch]);
+	}, [setMenuOpen]);
 
 	useEffect(() => {
-		IsOpen ? (document.body.style.overflow = 'hidden') : (document.body.style.overflow = 'auto');
-	}, [IsOpen]);
+		MenuOpen ? (document.body.style.overflow = 'hidden') : (document.body.style.overflow = 'auto');
+	}, [MenuOpen]);
 
 	return (
 		<AnimatePresence>
-			{IsOpen && (
+			{MenuOpen && (
 				<motion.nav
 					className='mobile-menu'
 					initial={{ opacity: 0 }}
 					animate={{ opacity: 1, transition: { duration: 0.2 } }}
 					exit={{ opacity: 0, transition: { duration: 0.2 } }}
 					onClick={() => {
-						dispatch(close());
+						setMenuOpen(false);
 					}}
 				>
 					<motion.div
@@ -41,7 +39,7 @@ function Menu() {
 							type='button'
 							className='menu-close'
 							onClick={() => {
-								dispatch(close());
+								setMenuOpen(false);
 							}}
 						>
 							close

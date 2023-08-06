@@ -1,15 +1,12 @@
 import { Link, NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
-import { useSelector, useDispatch } from 'react-redux';
-import { toggle } from '../../redux/menuSlice';
+import { useGlobalData } from '../../hooks/useGlobalContext';
 import firebase from '../../firebase';
 
 function Header({ type }) {
 	const activeClass = 'on';
-
-	const user = useSelector((store) => store.user);
-	const dispatch = useDispatch();
+	const { MenuOpen, setMenuOpen, Uid, DisplayName } = useGlobalData();
 
 	return (
 		<header id='header' className={type}>
@@ -47,14 +44,14 @@ function Header({ type }) {
 				</ul>
 
 				<div className='login-wrap'>
-					{user.uid === '' ? (
+					{Uid === '' ? (
 						<>
 							<NavLink to='/signin'>SIGN IN</NavLink>
 							<NavLink to='/signup'>SIGN UP</NavLink>
 						</>
 					) : (
 						<>
-							<div className='profile'>{user.displayName && user.displayName[0].toUpperCase()}</div>
+							<div className='profile'>{DisplayName && DisplayName[0].toUpperCase()}</div>
 							<button
 								type='button'
 								onClick={() => {
@@ -73,7 +70,7 @@ function Header({ type }) {
 					type='button'
 					className='btn-menu'
 					onClick={() => {
-						dispatch(toggle());
+						setMenuOpen(!MenuOpen);
 					}}
 				>
 					<FontAwesomeIcon icon={faBars} />

@@ -3,11 +3,14 @@ import { Link, NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSelector, useDispatch } from 'react-redux';
 import { close } from '../../redux/menuSlice';
+import firebase from '../../firebase';
 
 function Menu() {
 	const activeClass = 'on';
+
 	const dispatch = useDispatch();
 	const IsOpen = useSelector((store) => store.menu.open);
+	const user = useSelector((store) => store.user);
 
 	useEffect(() => {
 		window.addEventListener('resize', () => {
@@ -80,12 +83,31 @@ function Menu() {
 						</ul>
 
 						<div className='login-wrap'>
-							<NavLink to='/signin' activeClassName={activeClass}>
-								SIGN IN
-							</NavLink>
-							<NavLink to='/signup' activeClassName={activeClass}>
-								SIGN UP
-							</NavLink>
+							{user.uid === '' ? (
+								<>
+									<NavLink to='/signin' activeClassName={activeClass}>
+										SIGN IN
+									</NavLink>
+									<NavLink to='/signup' activeClassName={activeClass}>
+										SIGN UP
+									</NavLink>
+								</>
+							) : (
+								<>
+									<div className='profile-wrap'>
+										<div className='profile'>{user.displayName && user.displayName[0].toUpperCase()}</div>
+										<button
+											type='button'
+											onClick={() => {
+												firebase.auth().signOut();
+												alert('로그아웃 되었습니다.');
+											}}
+										>
+											SIGN OUT
+										</button>
+									</div>
+								</>
+							)}
 						</div>
 					</motion.div>
 				</motion.nav>

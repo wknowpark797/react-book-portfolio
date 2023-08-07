@@ -2,10 +2,11 @@ import { Link, NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useEffect } from 'react';
 import { useGlobalData } from '../../hooks/useGlobalContext';
+import firebase from '../../firebase';
 
 function Menu() {
 	const activeClass = 'on';
-	const { MenuOpen, setMenuOpen } = useGlobalData();
+	const { MenuOpen, setMenuOpen, Uid, DisplayName } = useGlobalData();
 
 	useEffect(() => {
 		window.addEventListener('resize', () => {
@@ -78,12 +79,31 @@ function Menu() {
 						</ul>
 
 						<div className='login-wrap'>
-							<NavLink to='/signin' activeClassName={activeClass}>
-								SIGN IN
-							</NavLink>
-							<NavLink to='/signup' activeClassName={activeClass}>
-								SIGN UP
-							</NavLink>
+							{Uid === '' ? (
+								<>
+									<NavLink to='/signin' activeClassName={activeClass}>
+										SIGN IN
+									</NavLink>
+									<NavLink to='/signup' activeClassName={activeClass}>
+										SIGN UP
+									</NavLink>
+								</>
+							) : (
+								<>
+									<div className='profile-wrap'>
+										<div className='profile'>{DisplayName && DisplayName[0].toUpperCase()}</div>
+										<button
+											type='button'
+											onClick={() => {
+												firebase.auth().signOut();
+												alert('로그아웃 되었습니다.');
+											}}
+										>
+											SIGN OUT
+										</button>
+									</div>
+								</>
+							)}
 						</div>
 					</motion.div>
 				</motion.nav>

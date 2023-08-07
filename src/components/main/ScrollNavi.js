@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import { useThrottle } from '../../hooks/useThrottle';
 
 function ScrollNavi() {
 	const scrollNavi = useRef(null);
@@ -7,6 +8,8 @@ function ScrollNavi() {
 	const [Mounted, setMounted] = useState(true);
 
 	const getPosition = () => {
+		console.log('getPosition throttle test');
+
 		position.current = [];
 		const sections = scrollNavi.current?.parentElement.querySelectorAll('.my-scroll');
 
@@ -18,6 +21,8 @@ function ScrollNavi() {
 	};
 
 	const activation = () => {
+		console.log('activation throttle test');
+
 		const limit = -window.innerHeight / 2;
 		const scroll = window.scrollY; // 현재 스크롤 위치
 		const naviArr = scrollNavi.current?.children;
@@ -39,21 +44,25 @@ function ScrollNavi() {
 		});
 	};
 
+	// Throttle 적용
+	const getPositionThrottle = useThrottle(getPosition);
+	const activationThrottle = useThrottle(activation);
+
 	useEffect(() => {
 		setTimeout(() => {
 			Mounted && getPosition();
 		}, 1500);
 
 		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-		window.addEventListener('resize', getPosition);
-		window.addEventListener('scroll', activation);
+		window.addEventListener('resize', getPositionThrottle);
+		window.addEventListener('scroll', activationThrottle);
 
 		return () => {
-			window.removeEventListener('resize', getPosition);
-			window.removeEventListener('scroll', activation);
+			window.removeEventListener('resize', getPositionThrottle);
+			window.removeEventListener('scroll', activationThrottle);
 			setMounted(false);
 		};
-	}, [Mounted]);
+	}, [Mounted, getPositionThrottle, activationThrottle]);
 
 	return (
 		<ul className='scroll-navi' ref={scrollNavi}>

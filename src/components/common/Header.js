@@ -46,8 +46,12 @@ function Header({ type }) {
 				<div className='login-wrap'>
 					{Uid === '' ? (
 						<>
-							<NavLink to='/signin'>SIGN IN</NavLink>
-							<NavLink to='/signup'>SIGN UP</NavLink>
+							<NavLink to='/signin' activeClassName={activeClass}>
+								SIGN IN
+							</NavLink>
+							<NavLink to='/signup' activeClassName={activeClass}>
+								SIGN UP
+							</NavLink>
 						</>
 					) : (
 						<>

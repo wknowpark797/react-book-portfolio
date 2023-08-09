@@ -30,6 +30,10 @@
 				> a {
 					font-size: 15px;
 					color: #333;
+
+					&.on {
+						color: #2ba9a9;
+					}
 				}
 			}
 		}
@@ -45,6 +49,10 @@
 				font-size: 14px;
 				color: #444;
 				cursor: pointer;
+
+				&.on {
+					color: #2ba9a9;
+				}
 			}
 
 			.profile {

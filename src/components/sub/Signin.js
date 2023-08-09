@@ -2,6 +2,7 @@ import { Link, useHistory } from 'react-router-dom';
 import { useState, useEffect, useCallback } from 'react';
 import { useGlobalData } from '../../hooks/useGlobalContext';
 import firebase from '../../firebase';
+import { useDebounce } from '../../hooks/useDebounce';
 
 function Signin() {
 	const history = useHistory();
@@ -14,6 +15,12 @@ function Signin() {
 	const [Value, setValue] = useState(initValue);
 	const [Errors, setErrors] = useState({});
 	const [Submit, setSubmit] = useState(false);
+
+	const debouncedVal = useDebounce(Value);
+
+	const showError = useCallback(() => {
+		setErrors(checkValid(debouncedVal));
+	}, [debouncedVal]);
 
 	const handleLogin = useCallback(async () => {
 		try {
@@ -50,6 +57,10 @@ function Signin() {
 		const { name, value } = e.target;
 		setValue({ ...Value, [name]: value });
 	};
+
+	useEffect(() => {
+		showError();
+	}, [debouncedVal, showError]);
 
 	useEffect(() => {
 		const errLength = Object.keys(Errors).length;

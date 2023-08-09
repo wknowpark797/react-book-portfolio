@@ -11,6 +11,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { useGlobalData } from '../../hooks/useGlobalContext';
 import firebase from '../../firebase';
 import axios from 'axios';
+import { useDebounce } from '../../hooks/useDebounce';
 
 function Signup() {
 	const history = useHistory();
@@ -37,6 +38,12 @@ function Signup() {
 	const [Errors, setErrors] = useState({});
 	const [Submit, setSubmit] = useState(false);
 	const [GuideList, setGuideList] = useState(initGuide);
+
+	const debouncedVal = useDebounce(Value);
+
+	const showError = useCallback(() => {
+		setErrors(checkValid(debouncedVal));
+	}, [debouncedVal]);
 
 	const handleJoin = useCallback(async () => {
 		// firebase에 이메일, 비밀번호 등록
@@ -139,6 +146,10 @@ function Signup() {
 
 		setValue({ ...Value, [name]: checkArr });
 	};
+
+	useEffect(() => {
+		showError();
+	}, [debouncedVal, showError]);
 
 	useEffect(() => {
 		const errLength = Object.keys(Errors).length;

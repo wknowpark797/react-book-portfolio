@@ -13,7 +13,7 @@ import {
 import { faVrCardboard } from '@fortawesome/free-solid-svg-icons';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
-import { useMemberQuery } from '../../hooks/useMemberQuery';
+import { useSelector } from 'react-redux';
 
 function Members() {
 	const swiperFrame = useRef(null);
@@ -22,30 +22,28 @@ function Members() {
 	const [Members, setMembers] = useState([]);
 	const [Directors, setDirectors] = useState([]);
 
-	const { data: memberList, isSuccess } = useMemberQuery();
+	const memberList = useSelector((store) => store.memberReducer.member);
 
 	const getMembersData = useCallback(() => {
-		if (!isSuccess) return;
 		const items = swiperFrame.current.querySelectorAll('.swiper-slide');
 		const key = items[Active].dataset.key;
 		setMembers(memberList.members.filter((member) => member.department === key));
-	}, [Active, memberList, isSuccess]);
+	}, [Active, memberList]);
 
 	const getDirectorsData = useCallback(() => {
-		if (!isSuccess) return;
 		setDirectors(memberList.directors);
-	}, [memberList, isSuccess]);
+	}, [memberList]);
 
 	useEffect(() => {
-		if (isSuccess && memberList.length === 0) return;
+		if (memberList.length === 0) return;
 		getMembersData();
 		getDirectorsData();
-	}, [memberList, getMembersData, getDirectorsData, isSuccess]);
+	}, [memberList, getMembersData, getDirectorsData]);
 
 	useEffect(() => {
-		if (isSuccess && memberList.length === 0) return;
+		if (memberList.length === 0) return;
 		getMembersData();
-	}, [Active, getMembersData, memberList, isSuccess]);
+	}, [Active, getMembersData, memberList]);
 
 	useEffect(() => {
 		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });

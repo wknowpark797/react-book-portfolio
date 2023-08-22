@@ -5,18 +5,23 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation } from 'swiper';
 import 'swiper/css';
 import { useState, useEffect, useRef } from 'react';
-import { useBookInterestQuery } from '../../hooks/useBookInterestQuery';
-import { useBookDetailQuery } from '../../hooks/useBookDetailQuery';
+import { useSelector, useDispatch } from 'react-redux';
+import * as types from '../../redux/actionType';
 
 function BookList() {
 	const modal = useRef(null);
 	const btnPrevBook = useRef(null);
 	const btnNextBook = useRef(null);
 	const [RefVisible, setRefVisible] = useState(false);
-
 	const [BookId, setBookId] = useState('pYEaCgAAQBAJ');
-	const { data: Detail, isSuccess: isDetailSuccess } = useBookDetailQuery(BookId);
-	const { data: Items, isSuccess: isInterestSuccess } = useBookInterestQuery();
+
+	const dispatch = useDispatch();
+	const Detail = useSelector((store) => store.bookDetailReducer.bookDetail);
+	const Items = useSelector((store) => store.bookInterestReducer.bookInterest);
+
+	useEffect(() => {
+		dispatch({ type: types.BOOK_DETAIL.start, bookId: BookId });
+	}, [dispatch, BookId]);
 
 	useEffect(() => {
 		if (!RefVisible) {
@@ -60,29 +65,28 @@ function BookList() {
 							navigation={{ nextEl: btnNextBook.current, prevEl: btnPrevBook.current }}
 							modules={[Autoplay, Navigation]}
 						>
-							{isInterestSuccess &&
-								Items.map((item, idx) => {
-									return (
-										<SwiperSlide
-											key={idx}
-											onClick={() => {
-												setBookId(item.id);
-												modal.current.open();
-											}}
-										>
-											<div className='ratio-wrap'>
-												<div className='img-box'>
-													<img src={item.volumeInfo.imageLinks.thumbnail.replace('zoom=1', 'zoom=10')} alt='' />
-												</div>
+							{Items.map((item, idx) => {
+								return (
+									<SwiperSlide
+										key={idx}
+										onClick={() => {
+											setBookId(item.id);
+											modal.current.open();
+										}}
+									>
+										<div className='ratio-wrap'>
+											<div className='img-box'>
+												<img src={item.volumeInfo.imageLinks.thumbnail.replace('zoom=1', 'zoom=10')} alt='' />
 											</div>
+										</div>
 
-											<div className='info-box'>
-												<h2>{item.volumeInfo.title}</h2>
-												<p>{item.volumeInfo.authors}</p>
-											</div>
-										</SwiperSlide>
-									);
-								})}
+										<div className='info-box'>
+											<h2>{item.volumeInfo.title}</h2>
+											<p>{item.volumeInfo.authors}</p>
+										</div>
+									</SwiperSlide>
+								);
+							})}
 						</Swiper>
 					</div>
 				</div>
@@ -90,24 +94,20 @@ function BookList() {
 
 			<Modal ref={modal}>
 				<div className='inner-detail'>
-					{isDetailSuccess && (
-						<>
-							<div className='img-box'>
-								<img src={Detail?.imageLinks?.small.replace('edge=curl', 'edge=')} alt={Detail?.title} />
-							</div>
+					<div className='img-box'>
+						<img src={Detail?.imageLinks?.small.replace('edge=curl', 'edge=')} alt={Detail?.title} />
+					</div>
 
-							<div className='info-wrap'>
-								<h1>{Detail?.title}</h1>
-								<h2>{Detail?.subtitle || ''}</h2>
+					<div className='info-wrap'>
+						<h1>{Detail?.title}</h1>
+						<h2>{Detail?.subtitle || ''}</h2>
 
-								<p className='authors'>작가 : {Detail?.authors}</p>
-								<div className='description' dangerouslySetInnerHTML={{ __html: Detail?.description }}></div>
-								<p>카테고리 : {Detail?.categories}</p>
-								<p>출판사 : {Detail?.publisher}</p>
-								<p>출판일 : {Detail?.publishedDate}</p>
-							</div>
-						</>
-					)}
+						<p className='authors'>작가 : {Detail?.authors}</p>
+						<div className='description' dangerouslySetInnerHTML={{ __html: Detail?.description }}></div>
+						<p>카테고리 : {Detail?.categories}</p>
+						<p>출판사 : {Detail?.publisher}</p>
+						<p>출판일 : {Detail?.publishedDate}</p>
+					</div>
 				</div>
 			</Modal>
 		</>

@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCirclePlay } from '@fortawesome/free-regular-svg-icons';
-import { useYoutubeReadQuery } from '../../hooks/useYoutubeReadQuery';
+import { useSelector } from 'react-redux';
 
 function MainYoutube() {
-	const { data: BookList, isSuccess } = useYoutubeReadQuery();
+	const BookList = useSelector((store) => store.youtubeReadReducer.youtubeRead);
 
 	return (
 		<section id='main-youtube-list' className='my-scroll'>
@@ -27,14 +27,13 @@ function MainYoutube() {
 					</p>
 
 					<div id='mainYoutubeWrap' className='video-wrap'>
-						{isSuccess &&
-							BookList.slice(0, 2).map((item, idx) => {
-								return (
-									<article key={idx}>
-										<img src={item.snippet.thumbnails.standard.url} alt='' />
-									</article>
-								);
-							})}
+						{BookList.slice(0, 2).map((item, idx) => {
+							return (
+								<article key={idx}>
+									<img src={item.snippet.thumbnails.standard.url} alt='' />
+								</article>
+							);
+						})}
 					</div>
 				</div>
 			</div>

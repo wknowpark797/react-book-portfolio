@@ -1,18 +1,23 @@
 import { Link, NavLink } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useEffect } from 'react';
-import { useGlobalData } from '../../hooks/useGlobalContext';
+import { useSelector, useDispatch } from 'react-redux';
 import firebase from '../../firebase';
+import * as types from '../../redux/actionType';
 
 function Menu() {
 	const activeClass = 'on';
-	const { MenuOpen, setMenuOpen, Uid, DisplayName } = useGlobalData();
+
+	const dispatch = useDispatch();
+	const MenuOpen = useSelector((store) => store.menuOpenReducer.menuOpen);
+	const Uid = useSelector((store) => store.userInfoReducer.userInfo.Uid);
+	const DisplayName = useSelector((store) => store.userInfoReducer.userInfo.DisplayName);
 
 	useEffect(() => {
 		window.addEventListener('resize', () => {
-			if (window.innerWidth >= 999) setMenuOpen(false);
+			if (window.innerWidth >= 999) dispatch(types.setMenuOpen(false));
 		});
-	}, [setMenuOpen]);
+	}, [dispatch]);
 
 	useEffect(() => {
 		MenuOpen ? (document.body.style.overflow = 'hidden') : (document.body.style.overflow = 'auto');
@@ -27,7 +32,7 @@ function Menu() {
 					animate={{ opacity: 1, transition: { duration: 0.2 } }}
 					exit={{ opacity: 0, transition: { duration: 0.2 } }}
 					onClick={() => {
-						setMenuOpen(false);
+						dispatch(types.setMenuOpen(false));
 					}}
 				>
 					<motion.div
@@ -40,7 +45,7 @@ function Menu() {
 							type='button'
 							className='menu-close'
 							onClick={() => {
-								setMenuOpen(false);
+								dispatch(types.setMenuOpen(false));
 							}}
 						>
 							close

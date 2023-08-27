@@ -8,14 +8,14 @@ import {
 	faLinkedinIn,
 } from '@fortawesome/free-brands-svg-icons';
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
-import { useGlobalData } from '../../hooks/useGlobalContext';
+import { useSelector } from 'react-redux';
 import firebase from '../../firebase';
 import axios from 'axios';
 import { useDebounce } from '../../hooks/useDebounce';
 
 function Signup() {
 	const history = useHistory();
-	const { Uid } = useGlobalData();
+	const Uid = useSelector((store) => store.userInfoReducer.userInfo.Uid);
 
 	const initGuide = ['회원가입을 위한 입력 항목입니다.', '입력 항목에 커서를 올리면 안내사항이 표시됩니다.'];
 	const initValue = useMemo(() => {

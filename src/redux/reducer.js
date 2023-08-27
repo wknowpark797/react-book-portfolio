@@ -1,6 +1,26 @@
 import { combineReducers } from 'redux';
 import * as types from './actionType';
 
+// Redux
+const menuOpenReducer = (state = { menuOpen: false }, action) => {
+	switch (action.type) {
+		case 'SET_MENU_OPEN':
+			return { ...state, menuOpen: action.payload };
+		default:
+			return state;
+	}
+};
+
+const userInfoReducer = (state = { userInfo: {} }, action) => {
+	switch (action.type) {
+		case 'SET_USER_INFO':
+			return { ...state, userInfo: action.payload };
+		default:
+			return state;
+	}
+};
+
+// Redux Saga
 const bookVisualReducer = (state = { bookVisual: [] }, action) => {
 	switch (action.type) {
 		case types.BOOK_VISUAL.start:
@@ -14,10 +34,7 @@ const bookVisualReducer = (state = { bookVisual: [] }, action) => {
 	}
 };
 
-const bookInterestReducer = (
-	state = { bookInterest: [] },
-	action
-) => {
+const bookInterestReducer = (state = { bookInterest: [] }, action) => {
 	switch (action.type) {
 		case types.BOOK_INTEREST.start:
 			return state;
@@ -43,10 +60,7 @@ const bookDetailReducer = (state = { bookDetail: [] }, action) => {
 	}
 };
 
-const youtubeMusicReducer = (
-	state = { youtubeMusic: [] },
-	action
-) => {
+const youtubeMusicReducer = (state = { youtubeMusic: [] }, action) => {
 	switch (action.type) {
 		case types.YOUTUBE_MUSIC.start:
 			return state;
@@ -125,6 +139,9 @@ const reviewReducer = (state = { review: [] }, action) => {
 };
 
 const reducers = combineReducers({
+	menuOpenReducer,
+	userInfoReducer,
+
 	bookVisualReducer,
 	bookInterestReducer,
 	bookDetailReducer,

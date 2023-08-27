@@ -1,3 +1,19 @@
+// Redux
+export const setMenuOpen = (data) => {
+	return {
+		type: 'SET_MENU_OPEN',
+		payload: data,
+	};
+};
+
+export const setUserInfo = (data) => {
+	return {
+		type: 'SET_USER_INFO',
+		payload: data,
+	};
+};
+
+// Redux Saga
 export const BOOK_VISUAL = {
 	start: 'BOOK_VISUAL_START',
 	success: 'BOOK_VISUAL_SUCCESS',

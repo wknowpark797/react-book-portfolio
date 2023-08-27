@@ -1,10 +1,10 @@
 import SubLayout from '../common/SubLayout';
 import { useState, useEffect, useCallback } from 'react';
-import { useGlobalData } from '../../hooks/useGlobalContext';
+import { useSelector } from 'react-redux';
 import axios from 'axios';
 
 function Review() {
-	const { Uid } = useGlobalData();
+	const Uid = useSelector((store) => store.userInfoReducer.userInfo.Uid);
 
 	// 리뷰 작성 input
 	const [InputBookName, setInputBookName] = useState('');

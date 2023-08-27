@@ -1,12 +1,17 @@
 import { Link, NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars } from '@fortawesome/free-solid-svg-icons';
-import { useGlobalData } from '../../hooks/useGlobalContext';
+import { useSelector, useDispatch } from 'react-redux';
 import firebase from '../../firebase';
+import * as types from '../../redux/actionType';
 
 function Header({ type }) {
 	const activeClass = 'on';
-	const { MenuOpen, setMenuOpen, Uid, DisplayName } = useGlobalData();
+
+	const dispatch = useDispatch();
+	const MenuOpen = useSelector((store) => store.menuOpenReducer.menuOpen);
+	const Uid = useSelector((store) => store.userInfoReducer.userInfo.Uid);
+	const DisplayName = useSelector((store) => store.userInfoReducer.userInfo.DisplayName);
 
 	return (
 		<header id='header' className={type}>
@@ -74,7 +79,7 @@ function Header({ type }) {
 					type='button'
 					className='btn-menu'
 					onClick={() => {
-						setMenuOpen(!MenuOpen);
+						dispatch(types.setMenuOpen(!MenuOpen));
 					}}
 				>
 					<FontAwesomeIcon icon={faBars} />

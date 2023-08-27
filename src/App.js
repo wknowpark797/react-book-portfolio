@@ -2,6 +2,7 @@ import { Route, Switch } from 'react-router-dom';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import * as types from './redux/actionType';
+import firebase from './firebase';
 import './scss/style.scss';
 
 import Header from './components/common/Header';
@@ -18,25 +19,6 @@ import BtnTop from './components/common/BtnTop';
 import Menu from './components/common/Menu';
 
 function App() {
-	/*
-		useEffect(() => {
-			// firebase로부터의 로그인 정보를 전역 state에 저장
-			firebase.auth().onAuthStateChanged((userInfo) => {
-				console.log('로그인 정보: ', userInfo);
-
-				if (userInfo === null) {
-					setUid('');
-					setUserNum(-1);
-					setDisplayName('');
-				} else {
-					setUid(userInfo.multiFactor.user.uid);
-					setUserNum(userInfo.multiFactor.user.userNum);
-					setDisplayName(userInfo.multiFactor.user.displayName);
-				}
-			});
-		}, [setUid, setUserNum, setDisplayName]);
-	*/
-
 	const dispatch = useDispatch();
 
 	useEffect(() => {
@@ -55,6 +37,23 @@ function App() {
 		});
 		dispatch({ type: types.LOCATION.start });
 		dispatch({ type: types.REVIEW.start });
+
+		// firebase로부터의 로그인 정보를 전역 state에 저장
+		firebase.auth().onAuthStateChanged((userInfo) => {
+			console.log('로그인 정보: ', userInfo);
+
+			if (userInfo === null) {
+				dispatch(types.setUserInfo({}));
+				// setUid('');
+				// setUserNum(-1);
+				// setDisplayName('');
+			} else {
+				dispatch(types.setUserInfo(userInfo));
+				// setUid(userInfo.multiFactor.user.uid);
+				// setUserNum(userInfo.multiFactor.user.userNum);
+				// setDisplayName(userInfo.multiFactor.user.displayName);
+			}
+		});
 	}, [dispatch]);
 
 	return (

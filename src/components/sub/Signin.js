@@ -1,12 +1,12 @@
 import { Link, useHistory } from 'react-router-dom';
 import { useState, useEffect, useCallback } from 'react';
-import { useGlobalData } from '../../hooks/useGlobalContext';
+import { useSelector } from 'react-redux';
 import firebase from '../../firebase';
 import { useDebounce } from '../../hooks/useDebounce';
 
 function Signin() {
 	const history = useHistory();
-	const { Uid } = useGlobalData();
+	const Uid = useSelector((store) => store.userInfoReducer.userInfo.Uid);
 
 	const initValue = {
 		email: '',

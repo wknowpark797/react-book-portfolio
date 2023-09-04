@@ -38,20 +38,18 @@ function App() {
 		dispatch({ type: types.LOCATION.start });
 		dispatch({ type: types.REVIEW.start });
 
-		// firebase로부터의 로그인 정보를 전역 state에 저장
+		// firebase의 로그인 정보를 store에 저장
 		firebase.auth().onAuthStateChanged((userInfo) => {
-			console.log('로그인 정보: ', userInfo);
-
 			if (userInfo === null) {
-				dispatch(types.setUserInfo({}));
-				// setUid('');
-				// setUserNum(-1);
-				// setDisplayName('');
+				dispatch(types.setUserInfo({ uid: '', userNum: -1, displayName: '' }));
 			} else {
-				dispatch(types.setUserInfo(userInfo));
-				// setUid(userInfo.multiFactor.user.uid);
-				// setUserNum(userInfo.multiFactor.user.userNum);
-				// setDisplayName(userInfo.multiFactor.user.displayName);
+				dispatch(
+					types.setUserInfo({
+						uid: userInfo.multiFactor.user.uid,
+						userNum: userInfo.multiFactor.user.userNum,
+						displayName: userInfo.multiFactor.user.displayName,
+					})
+				);
 			}
 		});
 	}, [dispatch]);

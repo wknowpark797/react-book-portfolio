@@ -7,11 +7,12 @@ import * as types from '../../redux/actionType';
 
 function Menu() {
 	const activeClass = 'on';
-
 	const dispatch = useDispatch();
 	const MenuOpen = useSelector((store) => store.menuOpenReducer.menuOpen);
-	const Uid = useSelector((store) => store.userInfoReducer.userInfo.Uid);
-	const DisplayName = useSelector((store) => store.userInfoReducer.userInfo.DisplayName);
+	const Uid = useSelector((store) => store.userInfoReducer.userInfo.uid);
+	const DisplayName = useSelector(
+		(store) => store.userInfoReducer.userInfo.displayName
+	);
 
 	useEffect(() => {
 		window.addEventListener('resize', () => {
@@ -20,7 +21,9 @@ function Menu() {
 	}, [dispatch]);
 
 	useEffect(() => {
-		MenuOpen ? (document.body.style.overflow = 'hidden') : (document.body.style.overflow = 'auto');
+		MenuOpen
+			? (document.body.style.overflow = 'hidden')
+			: (document.body.style.overflow = 'auto');
 	}, [MenuOpen]);
 
 	return (
@@ -38,8 +41,16 @@ function Menu() {
 					<motion.div
 						className='inner-menu'
 						initial={{ opacity: 0, x: '70%' }}
-						animate={{ opacity: 1, x: '0', transition: { duration: 0.3, delay: 0.2 } }}
-						exit={{ opacity: 0, x: '70%', transition: { duration: 0.3, delay: 0 } }}
+						animate={{
+							opacity: 1,
+							x: '0',
+							transition: { duration: 0.3, delay: 0.2 },
+						}}
+						exit={{
+							opacity: 0,
+							x: '70%',
+							transition: { duration: 0.3, delay: 0 },
+						}}
 					>
 						<button
 							type='button'
@@ -96,7 +107,9 @@ function Menu() {
 							) : (
 								<>
 									<div className='profile-wrap'>
-										<div className='profile'>{DisplayName && DisplayName[0].toUpperCase()}</div>
+										<div className='profile'>
+											{DisplayName && DisplayName[0].toUpperCase()}
+										</div>
 										<button
 											type='button'
 											onClick={() => {

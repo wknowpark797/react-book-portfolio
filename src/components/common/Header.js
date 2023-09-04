@@ -7,11 +7,12 @@ import * as types from '../../redux/actionType';
 
 function Header({ type }) {
 	const activeClass = 'on';
-
 	const dispatch = useDispatch();
 	const MenuOpen = useSelector((store) => store.menuOpenReducer.menuOpen);
-	const Uid = useSelector((store) => store.userInfoReducer.userInfo.Uid);
-	const DisplayName = useSelector((store) => store.userInfoReducer.userInfo.DisplayName);
+	const Uid = useSelector((store) => store.userInfoReducer.userInfo.uid);
+	const DisplayName = useSelector(
+		(store) => store.userInfoReducer.userInfo.displayName
+	);
 
 	return (
 		<header id='header' className={type}>
@@ -60,7 +61,9 @@ function Header({ type }) {
 						</>
 					) : (
 						<>
-							<div className='profile'>{DisplayName && DisplayName[0].toUpperCase()}</div>
+							<div className='profile'>
+								{DisplayName && DisplayName[0].toUpperCase()}
+							</div>
 							<button
 								type='button'
 								onClick={() => {

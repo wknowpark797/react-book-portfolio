@@ -47,7 +47,7 @@ const bookInterestReducer = (state = { bookInterest: [] }, action) => {
 	}
 };
 
-const bookDetailReducer = (state = { bookDetail: [] }, action) => {
+const bookDetailReducer = (state = { bookDetail: {} }, action) => {
 	switch (action.type) {
 		case types.BOOK_DETAIL.start:
 			return state;
@@ -86,7 +86,7 @@ const youtubeReadReducer = (state = { youtubeRead: [] }, action) => {
 	}
 };
 
-const memberReducer = (state = { member: [] }, action) => {
+const memberReducer = (state = { member: {} }, action) => {
 	switch (action.type) {
 		case types.MEMBER.start:
 			return state;
@@ -141,7 +141,6 @@ const reviewReducer = (state = { review: [] }, action) => {
 const reducers = combineReducers({
 	menuOpenReducer,
 	userInfoReducer,
-
 	bookVisualReducer,
 	bookInterestReducer,
 	bookDetailReducer,

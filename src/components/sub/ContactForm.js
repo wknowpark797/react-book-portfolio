@@ -62,12 +62,24 @@ function ContactForm() {
 
 	return (
 		<>
-			<form ref={form} id='formContact' className='form-contact' onSubmit={sendEmail}>
+			<form
+				ref={form}
+				id='formContact'
+				className='form-contact'
+				onSubmit={sendEmail}
+			>
 				<div className='input-box'>
 					<label htmlFor='username' className='tit'>
 						Name
 					</label>
-					<input type='text' name='username' id='username' placeholder='이름을 입력하세요.' onChange={changeInput} value={Value.username} />
+					<input
+						type='text'
+						name='username'
+						id='username'
+						placeholder='이름을 입력하세요.'
+						onChange={changeInput}
+						value={Value.username}
+					/>
 
 					{Errors.username && <p className='error'>{Errors.username}</p>}
 				</div>
@@ -76,7 +88,14 @@ function ContactForm() {
 					<label htmlFor='email' className='tit'>
 						E-mail
 					</label>
-					<input type='text' name='email' id='email' placeholder='이메일 주소를 입력하세요.' onChange={changeInput} value={Value.email} />
+					<input
+						type='text'
+						name='email'
+						id='email'
+						placeholder='이메일 주소를 입력하세요.'
+						onChange={changeInput}
+						value={Value.email}
+					/>
 
 					{Errors.email && <p className='error'>{Errors.email}</p>}
 				</div>
@@ -85,7 +104,13 @@ function ContactForm() {
 					<label htmlFor='message' className='tit'>
 						Message
 					</label>
-					<textarea name='message' id='message' placeholder='문의사항을 입력하세요.' onChange={changeInput} value={Value.message}></textarea>
+					<textarea
+						name='message'
+						id='message'
+						placeholder='문의사항을 입력하세요.'
+						onChange={changeInput}
+						value={Value.message}
+					></textarea>
 
 					{Errors.message && <p className='error'>{Errors.message}</p>}
 				</div>

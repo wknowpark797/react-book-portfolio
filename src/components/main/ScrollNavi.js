@@ -8,7 +8,8 @@ function ScrollNavi() {
 
 	const getPosition = () => {
 		position.current = [];
-		const sections = scrollNavi.current?.parentElement.querySelectorAll('.my-scroll');
+		const sections =
+			scrollNavi.current?.parentElement.querySelectorAll('.my-scroll');
 
 		sections?.forEach((section) => {
 			position.current.push(section.offsetTop);
@@ -21,7 +22,8 @@ function ScrollNavi() {
 		const limit = -window.innerHeight / 2;
 		const scroll = window.scrollY; // 현재 스크롤 위치
 		const naviArr = scrollNavi.current?.children;
-		const sections = scrollNavi.current?.parentElement.querySelectorAll('.my-scroll');
+		const sections =
+			scrollNavi.current?.parentElement.querySelectorAll('.my-scroll');
 
 		if (scroll <= 500) {
 			for (const section of sections) section.classList.remove('on');

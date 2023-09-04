@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import axios from 'axios';
 
 function Review() {
-	const Uid = useSelector((store) => store.userInfoReducer.userInfo.Uid);
+	const Uid = useSelector((store) => store.userInfoReducer.userInfo.uid);
 
 	// 리뷰 작성 input
 	const [InputBookName, setInputBookName] = useState('');
@@ -62,7 +62,10 @@ function Review() {
 		};
 
 		axios
-			.post('https://node-book-wknowpark797.koyeb.app/api/review/create', params)
+			.post(
+				'https://node-book-wknowpark797.koyeb.app/api/review/create',
+				params
+			)
 			.then(() => {
 				alert('리뷰를 성공적으로 등록하였습니다.');
 				readReview();
@@ -71,26 +74,15 @@ function Review() {
 			.catch(() => {
 				alert('리뷰 등록에 실패했습니다.');
 			});
-
-		/*
-			setReviews([
-				{
-					bookName: inputBookName.current.value,
-					reviewContent: inputReviewContent.current.value,
-					profileImg: 'my-profile.jpg',
-					userName: 'Woo Ara',
-					date: setToday(),
-				},
-				...Reviews,
-			]);
-		*/
 	};
 
 	// Review Read (List)
 	const readReview = () => {
-		axios.get('https://node-book-wknowpark797.koyeb.app/api/review/read/0').then((res) => {
-			setReviews(res.data.reviewList);
-		});
+		axios
+			.get('https://node-book-wknowpark797.koyeb.app/api/review/read/0')
+			.then((res) => {
+				setReviews(res.data.reviewList);
+			});
 	};
 
 	// Review Detail
@@ -98,7 +90,9 @@ function Review() {
 		if (UpdateIdx === -1) return;
 
 		axios
-			.get(`https://node-book-wknowpark797.koyeb.app/api/review/detail/${UpdateIdx}`)
+			.get(
+				`https://node-book-wknowpark797.koyeb.app/api/review/detail/${UpdateIdx}`
+			)
 			.then((res) => {
 				if (res.data.success) {
 					setEditBookName(res.data.detail.bookName);
@@ -145,7 +139,9 @@ function Review() {
 		if (!window.confirm('리뷰를 삭제하시겠습니까?')) return;
 
 		axios
-			.delete(`https://node-book-wknowpark797.koyeb.app/api/review/delete/${num}`)
+			.delete(
+				`https://node-book-wknowpark797.koyeb.app/api/review/delete/${num}`
+			)
 			.then((res) => {
 				if (res.data.success) {
 					alert('리뷰가 삭제되었습니다.');
@@ -157,8 +153,6 @@ function Review() {
 			.catch((err) => {
 				console.log(err);
 			});
-
-		// setReviews(Reviews.filter((_, idx) => idx !== num));
 	};
 
 	const splitDate = (initDate) => {
@@ -183,7 +177,11 @@ function Review() {
 	}, [UpdateIdx, detailReview]);
 
 	return (
-		<SubLayout subPageName={'sub-review'} breadCrumb={'HOME / REVIEW'} subPageTitle={'OPINIONS-FOR BOOK'}>
+		<SubLayout
+			subPageName={'sub-review'}
+			breadCrumb={'HOME / REVIEW'}
+			subPageTitle={'OPINIONS-FOR BOOK'}
+		>
 			<div className='review-wrap'>
 				<div className='inner-container'>
 					{/* review input */}
@@ -231,7 +229,11 @@ function Review() {
 									<button type='button' onClick={resetInputForm}>
 										RESET
 									</button>
-									<button type='button' className='btn-write' onClick={createReview}>
+									<button
+										type='button'
+										className='btn-write'
+										onClick={createReview}
+									>
 										WRITE
 									</button>
 								</div>
@@ -241,7 +243,9 @@ function Review() {
 
 					{/* review list */}
 					<div className='show-wrap'>
-						{Reviews.length === 0 && <p className='no-items'>등록된 리뷰가 없습니다.</p>}
+						{Reviews.length === 0 && (
+							<p className='no-items'>등록된 리뷰가 없습니다.</p>
+						)}
 
 						{Reviews.map((review) => {
 							return (
@@ -297,7 +301,11 @@ function Review() {
 														<button type='button' onClick={disableUpdate}>
 															CANCEL
 														</button>
-														<button type='button' className='btn-update' onClick={() => updateReview(review.reviewNum)}>
+														<button
+															type='button'
+															className='btn-update'
+															onClick={() => updateReview(review.reviewNum)}
+														>
 															UPDATE
 														</button>
 													</div>
@@ -306,10 +314,17 @@ function Review() {
 												<>
 													{/* 출력모드 */}
 													<div className='btn-wrap'>
-														<button type='button' onClick={() => enableUpdate(review.reviewNum)}>
+														<button
+															type='button'
+															onClick={() => enableUpdate(review.reviewNum)}
+														>
 															EDIT
 														</button>
-														<button type='button' className='btn-delete' onClick={() => deleteReview(review.reviewNum)}>
+														<button
+															type='button'
+															className='btn-delete'
+															onClick={() => deleteReview(review.reviewNum)}
+														>
 															DELETE
 														</button>
 													</div>

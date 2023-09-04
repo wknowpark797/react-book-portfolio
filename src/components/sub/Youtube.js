@@ -9,7 +9,9 @@ function Youtube() {
 	const modal = useRef(null);
 	const [Selected, setSelected] = useState(0);
 
-	const MusicList = useSelector((store) => store.youtubeMusicReducer.youtubeMusic);
+	const MusicList = useSelector(
+		(store) => store.youtubeMusicReducer.youtubeMusic
+	);
 	const ReadList = useSelector((store) => store.youtubeReadReducer.youtubeRead);
 
 	useEffect(() => {
@@ -18,7 +20,11 @@ function Youtube() {
 
 	return (
 		<>
-			<SubLayout subPageName={'sub-youtube'} breadCrumb={'HOME / YOUTUBE'} subPageTitle={'PLAYLIST-FOR BOOK'}>
+			<SubLayout
+				subPageName={'sub-youtube'}
+				breadCrumb={'HOME / YOUTUBE'}
+				subPageTitle={'PLAYLIST-FOR BOOK'}
+			>
 				<div className='top-wrap'>
 					<div className='inner-container'>
 						<div id='musicListWrap' className='list-wrap'>
@@ -26,7 +32,12 @@ function Youtube() {
 								return (
 									<article key={idx}>
 										<h3>{item.snippet.title}</h3>
-										<p className='date'>{item.snippet.publishedAt.split('T')[0].split('-').join('.')}</p>
+										<p className='date'>
+											{item.snippet.publishedAt
+												.split('T')[0]
+												.split('-')
+												.join('.')}
+										</p>
 
 										<div
 											className='video thumb'
@@ -68,7 +79,12 @@ function Youtube() {
 
 										<div className='inner-title'>
 											<h2>{item.snippet.title}</h2>
-											<p className='date'>{item.snippet.publishedAt.split('T')[0].split('-').join('.')}</p>
+											<p className='date'>
+												{item.snippet.publishedAt
+													.split('T')[0]
+													.split('-')
+													.join('.')}
+											</p>
 										</div>
 									</div>
 									<div
@@ -96,7 +112,12 @@ function Youtube() {
 								return (
 									<article key={idx}>
 										<h3>{item.snippet.title}</h3>
-										<p className='date'>{item.snippet.publishedAt.split('T')[0].split('-').join('.')}</p>
+										<p className='date'>
+											{item.snippet.publishedAt
+												.split('T')[0]
+												.split('-')
+												.join('.')}
+										</p>
 
 										<div
 											className='video thumb'
@@ -131,7 +152,10 @@ function Youtube() {
 
 			<Modal ref={modal}>
 				<div className='media-box'>
-					<iframe title={Selected} src={`https://www.youtube.com/embed/${Selected}`}></iframe>
+					<iframe
+						title={Selected}
+						src={`https://www.youtube.com/embed/${Selected}`}
+					></iframe>
 				</div>
 			</Modal>
 		</>

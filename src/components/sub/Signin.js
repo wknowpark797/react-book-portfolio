@@ -6,7 +6,7 @@ import { useDebounce } from '../../hooks/useDebounce';
 
 function Signin() {
 	const history = useHistory();
-	const Uid = useSelector((store) => store.userInfoReducer.userInfo.Uid);
+	const Uid = useSelector((store) => store.userInfoReducer.userInfo.uid);
 
 	const initValue = {
 		email: '',
@@ -28,8 +28,10 @@ function Signin() {
 			alert('로그인 완료되었습니다.');
 			history.push('/');
 		} catch (err) {
-			if (err.code === 'auth/user-not-found') alert('존재하지 않는 이메일입니다.');
-			else if (err.code === 'auth/wrong-password') alert('비밀번호가 일치하지 않습니다.');
+			if (err.code === 'auth/user-not-found')
+				alert('존재하지 않는 이메일입니다.');
+			else if (err.code === 'auth/wrong-password')
+				alert('비밀번호가 일치하지 않습니다.');
 			else alert('로그인에 실패했습니다.');
 		}
 	}, [Value, history]);

@@ -15,9 +15,12 @@ import { useDebounce } from '../../hooks/useDebounce';
 
 function Signup() {
 	const history = useHistory();
-	const Uid = useSelector((store) => store.userInfoReducer.userInfo.Uid);
+	const Uid = useSelector((store) => store.userInfoReducer.userInfo.uid);
 
-	const initGuide = ['회원가입을 위한 입력 항목입니다.', '입력 항목에 커서를 올리면 안내사항이 표시됩니다.'];
+	const initGuide = [
+		'회원가입을 위한 입력 항목입니다.',
+		'입력 항목에 커서를 올리면 안내사항이 표시됩니다.',
+	];
 	const initValue = useMemo(() => {
 		return {
 			username: '',
@@ -47,7 +50,9 @@ function Signup() {
 
 	const handleJoin = useCallback(async () => {
 		// firebase에 이메일, 비밀번호 등록
-		const createdUser = await firebase.auth().createUserWithEmailAndPassword(Value.email, Value.pwd1);
+		const createdUser = await firebase
+			.auth()
+			.createUserWithEmailAndPassword(Value.email, Value.pwd1);
 		await createdUser.user.updateProfile({ displayName: Value.username });
 
 		// 몽고DB에 저장
@@ -58,7 +63,9 @@ function Signup() {
 		axios.post('/api/user/join', item).then((res) => {
 			if (res.data.success) {
 				firebase.auth().signOut();
-				alert('회원가입이 성공적으로 완료되었습니다. 로그인 페이지로 이동합니다.');
+				alert(
+					'회원가입이 성공적으로 완료되었습니다. 로그인 페이지로 이동합니다.'
+				);
 				history.push('/signin');
 			} else {
 				return alert('회원가입에 실패했습니다.');
@@ -86,8 +93,14 @@ function Signup() {
 		if (value.username.length < 3) {
 			errors.username = '사용할 이름은 3글자 이상 입력하세요.';
 		}
-		if (value.pwd1.length < 4 || !eng.test(value.pwd1) || !num.test(value.pwd1) || !spc.test(value.pwd1)) {
-			errors.pwd1 = '비밀번호는 4글자 이상, 특수문자와 영문자 그리고 숫자를 포함하여 입력하세요.';
+		if (
+			value.pwd1.length < 4 ||
+			!eng.test(value.pwd1) ||
+			!num.test(value.pwd1) ||
+			!spc.test(value.pwd1)
+		) {
+			errors.pwd1 =
+				'비밀번호는 4글자 이상, 특수문자와 영문자 그리고 숫자를 포함하여 입력하세요.';
 		}
 		if (value.pwd1 !== value.pwd2 || !value.pwd2) {
 			errors.pwd2 = '두개의 비밀번호를 동일하게 입력하세요.';
@@ -189,13 +202,15 @@ function Signup() {
 						<li>
 							<FontAwesomeIcon icon={faOptinMonster} />
 							<p>
-								Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem dolores perferendis asperiores.
+								Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+								Exercitationem dolores perferendis asperiores.
 							</p>
 						</li>
 						<li>
 							<FontAwesomeIcon icon={faEarlybirds} />
 							<p>
-								Lorem ipsum dolor, sit amet consectetur adipisicing elit. Exercitationem dolores perferendis asperiores.
+								Lorem ipsum dolor, sit amet consectetur adipisicing elit.
+								Exercitationem dolores perferendis asperiores.
 							</p>
 						</li>
 					</ul>
@@ -265,7 +280,10 @@ function Signup() {
 									onChange={changeInput}
 									value={Value.username}
 									onFocus={() => {
-										setGuideList(['사용할 이름 입력 항목 입니다.', '입력 항목에 3글자 이상 입력하세요.']);
+										setGuideList([
+											'사용할 이름 입력 항목 입니다.',
+											'입력 항목에 3글자 이상 입력하세요.',
+										]);
 									}}
 									onBlur={() => {
 										setGuideList(initGuide);
@@ -429,7 +447,11 @@ function Signup() {
 							</div> */}
 
 							<div className='btn-wrap'>
-								<input type='reset' value='RESET' onClick={() => setValue(initValue)} />
+								<input
+									type='reset'
+									value='RESET'
+									onClick={() => setValue(initValue)}
+								/>
 								<input type='submit' value='SIGN UP' />
 							</div>
 						</fieldset>

@@ -131,7 +131,11 @@ function Gallery() {
 
 	return (
 		<>
-			<SubLayout subPageName={'sub-gallery'} breadCrumb={'HOME / GALLERY'} subPageTitle={'PHOTOS-FOR BOOK'}>
+			<SubLayout
+				subPageName={'sub-gallery'}
+				breadCrumb={'HOME / GALLERY'}
+				subPageTitle={'PHOTOS-FOR BOOK'}
+			>
 				<div className='search-wrap'>
 					<div className='inner-container'>
 						<div className='search-box'>
@@ -150,10 +154,18 @@ function Gallery() {
 						</div>
 
 						<div className='btn-option' ref={btnSet}>
-							<button type='button' className='option-interest on' onClick={(e) => showInterest(e, 0)}>
+							<button
+								type='button'
+								className='option-interest on'
+								onClick={(e) => showInterest(e, 0)}
+							>
 								Interest
 							</button>
-							<button type='button' className='option-mine' onClick={(e) => showUser(e, 1)}>
+							<button
+								type='button'
+								className='option-mine'
+								onClick={(e) => showUser(e, 1)}
+							>
 								Book
 							</button>
 						</div>
@@ -170,7 +182,11 @@ function Gallery() {
 				<div className='pictures-wrap'>
 					<div className='inner-container' ref={frame}>
 						{Items.length > 0 ? (
-							<Masonry elementType={'ul'} options={{ transitionDuration: '0.5s' }} id='galleryWrap'>
+							<Masonry
+								elementType={'ul'}
+								options={{ transitionDuration: '0.5s' }}
+								id='galleryWrap'
+							>
 								{Items.map((item, idx) => {
 									return (
 										<li className='item' key={idx}>
@@ -190,13 +206,19 @@ function Gallery() {
 												</div>
 
 												<div className='info-wrap'>
-													<div className='profile-wrap' onClick={() => showProfile(item.owner)}>
+													<div
+														className='profile-wrap'
+														onClick={() => showProfile(item.owner)}
+													>
 														<img
 															className='profile-img'
 															src={`http://farm${item.farm}.staticflickr.com/${item.server}/buddyicons/${item.owner}.jpg`}
 															alt={item.owner}
 															onError={(e) => {
-																e.target.setAttribute('src', 'https://www.flickr.com/images/buddyicon.gif');
+																e.target.setAttribute(
+																	'src',
+																	'https://www.flickr.com/images/buddyicon.gif'
+																);
 															}}
 														/>
 														<p className='profile-user'>{item.owner}</p>

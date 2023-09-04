@@ -22,8 +22,9 @@ function MainYoutube() {
 
 				<div className='inner-content'>
 					<p>
-						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laborum non atque ex assumenda blanditiis modi
-						numquam dolores hic quos veritatis?
+						Lorem ipsum dolor sit amet, consectetur adipisicing elit. Laborum
+						non atque ex assumenda blanditiis modi numquam dolores hic quos
+						veritatis?
 					</p>
 
 					<div id='mainYoutubeWrap' className='video-wrap'>

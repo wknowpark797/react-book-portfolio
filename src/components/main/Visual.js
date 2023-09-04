@@ -1,6 +1,10 @@
 import Modal from '../common/Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons';
+import {
+	faStar,
+	faArrowLeft,
+	faArrowRight,
+} from '@fortawesome/free-solid-svg-icons';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Pagination, Navigation } from 'swiper';
 import 'swiper/css';
@@ -57,7 +61,10 @@ function Visual() {
 								return num < 10 && (num = '0' + num);
 							},
 						}}
-						navigation={{ nextEl: btnNextVisual.current, prevEl: btnPrevVisual.current }}
+						navigation={{
+							nextEl: btnNextVisual.current,
+							prevEl: btnPrevVisual.current,
+						}}
 						modules={[Autoplay, Pagination, Navigation]}
 					>
 						{Items.map((item, idx) => {
@@ -113,7 +120,13 @@ function Visual() {
 											</div>
 
 											<div className='img-box shadow'>
-												<img src={item.volumeInfo.imageLinks.thumbnail.replace('edge=curl', 'edge=')} alt='' />
+												<img
+													src={item.volumeInfo.imageLinks.thumbnail.replace(
+														'edge=curl',
+														'edge='
+													)}
+													alt=''
+												/>
 											</div>
 										</div>
 									</div>
@@ -148,7 +161,10 @@ function Visual() {
 			<Modal ref={modal}>
 				<div className='inner-detail'>
 					<div className='img-box'>
-						<img src={Detail?.imageLinks?.small.replace('edge=curl', 'edge=')} alt={Detail?.title} />
+						<img
+							src={Detail?.imageLinks?.small.replace('edge=curl', 'edge=')}
+							alt={Detail?.title}
+						/>
 					</div>
 
 					<div className='info-wrap'>
@@ -156,7 +172,10 @@ function Visual() {
 						<h2>{Detail?.subtitle || ''}</h2>
 
 						<p className='authors'>작가 : {Detail?.authors}</p>
-						<div className='description' dangerouslySetInnerHTML={{ __html: Detail?.description }}></div>
+						<div
+							className='description'
+							dangerouslySetInnerHTML={{ __html: Detail?.description }}
+						></div>
 						<p>카테고리 : {Detail?.categories}</p>
 						<p>출판사 : {Detail?.publisher}</p>
 						<p>출판일 : {Detail?.publishedDate}</p>

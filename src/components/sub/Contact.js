@@ -2,8 +2,16 @@ import SubLayout from '../common/SubLayout';
 import ContactForm from './ContactForm';
 import { Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLocationDot, faGlobe, faPhone } from '@fortawesome/free-solid-svg-icons';
-import { faInstagram, faYoutube, faFacebookF } from '@fortawesome/free-brands-svg-icons';
+import {
+	faLocationDot,
+	faGlobe,
+	faPhone,
+} from '@fortawesome/free-solid-svg-icons';
+import {
+	faInstagram,
+	faYoutube,
+	faFacebookF,
+} from '@fortawesome/free-brands-svg-icons';
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 
@@ -28,12 +36,21 @@ function Contact() {
 		if (markerInfo.length === 0) return;
 
 		return new kakao.maps.Marker({
-			position: new kakao.maps.LatLng(markerInfo[Index].position[0], markerInfo[Index].position[1]),
+			position: new kakao.maps.LatLng(
+				markerInfo[Index].position[0],
+				markerInfo[Index].position[1]
+			),
 			image: new kakao.maps.MarkerImage(
 				`${process.env.PUBLIC_URL}/image/${markerInfo[Index].imgSrc}`,
-				new kakao.maps.Size(markerInfo[Index].imgSize[0], markerInfo[Index].imgSize[1]),
+				new kakao.maps.Size(
+					markerInfo[Index].imgSize[0],
+					markerInfo[Index].imgSize[1]
+				),
 				{
-					offset: new kakao.maps.Point(markerInfo[Index].imgOption.offset[0], markerInfo[Index].imgOption.offset[1]),
+					offset: new kakao.maps.Point(
+						markerInfo[Index].imgOption.offset[0],
+						markerInfo[Index].imgOption.offset[1]
+					),
 				}
 			),
 		});
@@ -46,19 +63,33 @@ function Contact() {
 
 		// 지도 인스턴스 생성
 		const map = new kakao.maps.Map(mapContainer.current, {
-			center: new kakao.maps.LatLng(markerInfo[Index].position[0], markerInfo[Index].position[1]),
+			center: new kakao.maps.LatLng(
+				markerInfo[Index].position[0],
+				markerInfo[Index].position[1]
+			),
 			level: 3,
 		});
 		marker.setMap(map); // 마커 표시
-		map.addControl(new kakao.maps.MapTypeControl(), kakao.maps.ControlPosition.TOPRIGHT); // 지도타입 컨트롤 표시
-		map.addControl(new kakao.maps.ZoomControl(), kakao.maps.ControlPosition.RIGHT); // 확대 축소 컨트롤 표시
+		map.addControl(
+			new kakao.maps.MapTypeControl(),
+			kakao.maps.ControlPosition.TOPRIGHT
+		); // 지도타입 컨트롤 표시
+		map.addControl(
+			new kakao.maps.ZoomControl(),
+			kakao.maps.ControlPosition.RIGHT
+		); // 확대 축소 컨트롤 표시
 		map.setZoomable(false); // 마우스 휠 기능 비활성화
 
 		setMap(map);
 
 		// 지도 중심 이동 설정
 		const setCenter = () => {
-			map.setCenter(new kakao.maps.LatLng(markerInfo[Index].position[0], markerInfo[Index].position[1]));
+			map.setCenter(
+				new kakao.maps.LatLng(
+					markerInfo[Index].position[0],
+					markerInfo[Index].position[1]
+				)
+			);
 		};
 		window.addEventListener('resize', setCenter);
 		return () => window.removeEventListener('resize', setCenter);
@@ -77,7 +108,11 @@ function Contact() {
 	}, [query]);
 
 	return (
-		<SubLayout subPageName={'sub-contact'} breadCrumb={'HOME / CONTACT'} subPageTitle={'WHERE-WE ARE'}>
+		<SubLayout
+			subPageName={'sub-contact'}
+			breadCrumb={'HOME / CONTACT'}
+			subPageTitle={'WHERE-WE ARE'}
+		>
 			<div className='library-wrap'>
 				<div className='inner-container'>
 					<div className='map-wrap'>
@@ -86,14 +121,22 @@ function Contact() {
 						<ul className='list-branch'>
 							{markerInfo.map((item, idx) => {
 								return (
-									<li key={idx} onClick={() => setIndex(idx)} className={Index === idx ? 'on' : ''}>
+									<li
+										key={idx}
+										onClick={() => setIndex(idx)}
+										className={Index === idx ? 'on' : ''}
+									>
 										{item.title}
 									</li>
 								);
 							})}
 						</ul>
 
-						<button type='button' className='btn-traffic' onClick={() => setTraffic(!Traffic)}>
+						<button
+							type='button'
+							className='btn-traffic'
+							onClick={() => setTraffic(!Traffic)}
+						>
 							{Traffic ? '교통정보 ON' : '교통정보 OFF'}
 						</button>
 					</div>
@@ -110,7 +153,11 @@ function Contact() {
 								<li>
 									<FontAwesomeIcon icon={faGlobe} />
 									<p>
-										<a rel='noopener noreferrer' href={markerInfo[Index]?.website.link} target='_blank'>
+										<a
+											rel='noopener noreferrer'
+											href={markerInfo[Index]?.website.link}
+											target='_blank'
+										>
 											{markerInfo[Index]?.website.title}
 										</a>
 									</p>

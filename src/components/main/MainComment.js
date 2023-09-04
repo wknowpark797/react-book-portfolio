@@ -1,5 +1,8 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import {
+	faChevronLeft,
+	faChevronRight,
+} from '@fortawesome/free-solid-svg-icons';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay, Navigation } from 'swiper';
 import 'swiper/css';
@@ -42,13 +45,18 @@ function MainComment() {
 						slidesPerView={'auto'}
 						spaceBetween={30}
 						autoplay={{ delay: 2500, disableOnInteraction: true }}
-						navigation={{ nextEl: btnNextComment.current, prevEl: btnPrevComment.current }}
+						navigation={{
+							nextEl: btnNextComment.current,
+							prevEl: btnPrevComment.current,
+						}}
 						modules={[Autoplay, Navigation]}
 					>
 						{Reviews.map((review, idx) => {
 							return (
 								<SwiperSlide key={idx}>
-									<div className='profile-box'>{review.writer.displayName[0].toUpperCase()}</div>
+									<div className='profile-box'>
+										{review.writer.displayName[0].toUpperCase()}
+									</div>
 									<div className='info-box'>
 										<h2>{review.bookName}</h2>
 										<p>{review.reviewContent}</p>
@@ -73,7 +81,12 @@ function MainComment() {
 						>
 							<FontAwesomeIcon icon={faChevronLeft} />
 						</button>
-						<button type='button' id='btnNextComment' className='next' ref={btnNextComment}>
+						<button
+							type='button'
+							id='btnNextComment'
+							className='next'
+							ref={btnNextComment}
+						>
 							<FontAwesomeIcon icon={faChevronRight} />
 						</button>
 					</div>

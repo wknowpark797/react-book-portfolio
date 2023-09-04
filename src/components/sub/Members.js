@@ -27,7 +27,9 @@ function Members() {
 	const getMembersData = useCallback(() => {
 		const items = swiperFrame.current.querySelectorAll('.swiper-slide');
 		const key = items[Active].dataset.key;
-		setMembers(memberList.members.filter((member) => member.department === key));
+		setMembers(
+			memberList.members.filter((member) => member.department === key)
+		);
 	}, [Active, memberList]);
 
 	const getDirectorsData = useCallback(() => {
@@ -50,14 +52,21 @@ function Members() {
 	}, []);
 
 	return (
-		<SubLayout subPageName={'members'} breadCrumb={'HOME / MEMBERS'} subPageTitle={'WHO-WE ARE'}>
+		<SubLayout
+			subPageName={'members'}
+			breadCrumb={'HOME / MEMBERS'}
+			subPageTitle={'WHO-WE ARE'}
+		>
 			<div className='intro-wrap'>
 				<div id='directorsWrap' className='img-wrap'>
 					{Directors.map((director, idx) => {
 						return (
 							<article key={idx}>
 								<div className='img-box'>
-									<img src={`${process.env.PUBLIC_URL}/image/members/${director.pic}`} alt='' />
+									<img
+										src={`${process.env.PUBLIC_URL}/image/members/${director.pic}`}
+										alt=''
+									/>
 								</div>
 								<div className='info-box'>
 									<p className='name'>{director.name}</p>
@@ -71,18 +80,25 @@ function Members() {
 				<div className='inner-wrap'>
 					<h2>Creative Directors</h2>
 					<p>
-						Lorem ipsum, dolor sit amet consectetur adipisicing elit. Natus saepe iure aspernatur dicta repellendus cum
-						nihil aliquid, minus quod! Maxime.
+						Lorem ipsum, dolor sit amet consectetur adipisicing elit. Natus
+						saepe iure aspernatur dicta repellendus cum nihil aliquid, minus
+						quod! Maxime.
 					</p>
 
 					<ul>
 						<li>
 							<h3>Lorem ipsum dolor sit.</h3>
-							<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium, dolore?</p>
+							<p>
+								Lorem ipsum dolor sit amet consectetur adipisicing elit.
+								Accusantium, dolore?
+							</p>
 						</li>
 						<li>
 							<h3>Lorem ipsum dolor sit.</h3>
-							<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Accusantium, dolore?</p>
+							<p>
+								Lorem ipsum dolor sit amet consectetur adipisicing elit.
+								Accusantium, dolore?
+							</p>
 						</li>
 					</ul>
 				</div>
@@ -111,8 +127,8 @@ function Members() {
 						<div className='left'>
 							<p>Creative Members</p>
 							<h2>
-								Lorem ipsum dolor sit, amet consectetur adipisicing elit. Velit, dolore dolorem qui expedita voluptas
-								nesciunt!
+								Lorem ipsum dolor sit, amet consectetur adipisicing elit. Velit,
+								dolore dolorem qui expedita voluptas nesciunt!
 							</h2>
 
 							<Link to='/contact' className='btn-more'>
@@ -126,7 +142,10 @@ function Members() {
 								return (
 									<article key={idx}>
 										<div className='img-box'>
-											<img src={`${process.env.PUBLIC_URL}/image/members/${member.pic}`} alt='' />
+											<img
+												src={`${process.env.PUBLIC_URL}/image/members/${member.pic}`}
+												alt=''
+											/>
 										</div>
 										<div className='info-box'>
 											<p className='name'>{member.name}</p>

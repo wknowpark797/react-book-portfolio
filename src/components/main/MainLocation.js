@@ -21,7 +21,10 @@ function MainLocation() {
 						return (
 							<article key={idx}>
 								<div className='img-box'>
-									<img src={`${process.env.PUBLIC_URL}/image/${item.thumbnailSrc}`} alt='' />
+									<img
+										src={`${process.env.PUBLIC_URL}/image/${item.thumbnailSrc}`}
+										alt=''
+									/>
 								</div>
 								<div className='info-box'>
 									<h2>{item.title}</h2>

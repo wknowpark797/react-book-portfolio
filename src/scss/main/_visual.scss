@@ -245,10 +245,13 @@ $slideLength: 5;
 				color: #333;
 				text-align: right;
 
-				.swiper-pagination-current {
+				.active {
 					display: block;
 					font-size: 50px;
 					font-weight: 900;
+				}
+				.slash {
+					margin: 0 5px;
 				}
 			}
 

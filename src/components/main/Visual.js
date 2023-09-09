@@ -1,10 +1,6 @@
 import Modal from '../common/Modal';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-	faStar,
-	faArrowLeft,
-	faArrowRight,
-} from '@fortawesome/free-solid-svg-icons';
+import { faStar, faArrowLeft, faArrowRight, faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Autoplay } from 'swiper';
 import 'swiper/css';
@@ -15,12 +11,18 @@ import { useBookDetailQuery } from '../../hooks/useBookDetailQuery';
 function Visual() {
 	const ratingList = [5, 4, 3, 4, 5];
 	const swiperRef = useRef();
+	const btnStart = useRef();
+	const btnStop = useRef();
 	const modal = useRef(null);
 	const [SlideIdx, setSlideIdx] = useState(0);
 	const [BookId, setBookId] = useState('iP7BEAAAQBAJ');
-	const { data: Detail, isSuccess: isDetailSuccess } =
-		useBookDetailQuery(BookId);
+	const { data: Detail, isSuccess: isDetailSuccess } = useBookDetailQuery(BookId);
 	const { data: Items, isSuccess: isVisualSuccess } = useBookVisualQuery();
+
+	const activeBtnStop = () => {
+		btnStart.current.classList.remove('on');
+		btnStop.current.classList.add('on');
+	};
 
 	return (
 		<>
@@ -44,6 +46,7 @@ function Visual() {
 						loop={true}
 						loopedSlides={Items?.length}
 						onSlideChange={(el) => setSlideIdx(el.realIndex)}
+						onSliderMove={activeBtnStop}
 					>
 						{isVisualSuccess &&
 							Items.map((item, idx) => {
@@ -99,13 +102,7 @@ function Visual() {
 												</div>
 
 												<div className='img-box shadow'>
-													<img
-														src={item.volumeInfo.imageLinks.thumbnail.replace(
-															'edge=curl',
-															'edge='
-														)}
-														alt=''
-													/>
+													<img src={item.volumeInfo.imageLinks.thumbnail.replace('edge=curl', 'edge=')} alt='' />
 												</div>
 											</div>
 										</div>
@@ -115,10 +112,34 @@ function Visual() {
 					</Swiper>
 
 					<div className='indicator'>
+						<div className='btn-controls'>
+							<button
+								type='button'
+								className='on'
+								ref={btnStart}
+								onClick={() => {
+									btnStart.current.classList.add('on');
+									btnStop.current.classList.remove('on');
+									swiperRef.current.autoplay.start();
+								}}
+							>
+								<FontAwesomeIcon icon={faPlay} />
+							</button>
+							<button
+								type='button'
+								ref={btnStop}
+								onClick={() => {
+									btnStart.current.classList.remove('on');
+									btnStop.current.classList.add('on');
+									swiperRef.current.autoplay.stop();
+								}}
+							>
+								<FontAwesomeIcon icon={faPause} />
+							</button>
+						</div>
+
 						<div className='current-number'>
-							<span className='active'>
-								{SlideIdx < 10 ? '0' + (SlideIdx + 1) : SlideIdx + 1}
-							</span>
+							<span className='active'>{SlideIdx < 10 ? '0' + (SlideIdx + 1) : SlideIdx + 1}</span>
 							<span className='slash'>/</span>
 							{Items?.length < 10 ? '0' + Items?.length : Items?.length}
 						</div>
@@ -127,14 +148,20 @@ function Visual() {
 							<button
 								type='button'
 								id='btnPrevVisual'
-								onClick={() => swiperRef.current?.slidePrev()}
+								onClick={() => {
+									activeBtnStop();
+									swiperRef.current?.slidePrev();
+								}}
 							>
 								<FontAwesomeIcon icon={faArrowLeft} />
 							</button>
 							<button
 								type='button'
 								id='btnNextVisual'
-								onClick={() => swiperRef.current?.slideNext()}
+								onClick={() => {
+									activeBtnStop();
+									swiperRef.current?.slideNext();
+								}}
 							>
 								<FontAwesomeIcon icon={faArrowRight} />
 							</button>
@@ -148,10 +175,7 @@ function Visual() {
 					{isDetailSuccess && (
 						<>
 							<div className='img-box'>
-								<img
-									src={Detail?.imageLinks?.small.replace('edge=curl', 'edge=')}
-									alt={Detail?.title}
-								/>
+								<img src={Detail?.imageLinks?.small.replace('edge=curl', 'edge=')} alt={Detail?.title} />
 							</div>
 
 							<div className='info-wrap'>
@@ -159,10 +183,7 @@ function Visual() {
 								<h2>{Detail?.subtitle || ''}</h2>
 
 								<p className='authors'>작가 : {Detail?.authors}</p>
-								<div
-									className='description'
-									dangerouslySetInnerHTML={{ __html: Detail?.description }}
-								></div>
+								<div className='description' dangerouslySetInnerHTML={{ __html: Detail?.description }}></div>
 								<p>카테고리 : {Detail?.categories}</p>
 								<p>출판사 : {Detail?.publisher}</p>
 								<p>출판일 : {Detail?.publishedDate}</p>

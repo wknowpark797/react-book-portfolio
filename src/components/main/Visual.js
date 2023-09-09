@@ -82,6 +82,8 @@ function Visual() {
 												type='button'
 												className='btn-more'
 												onClick={() => {
+													swiperRef.current.autoplay.stop();
+													activeBtnStop();
 													setBookId(item.id);
 													modal.current.open();
 												}}

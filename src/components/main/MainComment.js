@@ -1,16 +1,15 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
+import { faChevronLeft, faChevronRight, faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
 import { Swiper, SwiperSlide } from 'swiper/react';
-import { Autoplay, Navigation } from 'swiper';
+import { Autoplay } from 'swiper';
 import 'swiper/css';
-import { useState, useEffect, useRef } from 'react';
+import { useRef } from 'react';
 import { useReviewQuery } from '../../hooks/useReviewQuery';
 
 function MainComment() {
-	const btnPrevComment = useRef(null);
-	const btnNextComment = useRef(null);
-	const [RefVisible, setRefVisible] = useState(false);
-
+	const swiperRef = useRef();
+	const btnStart = useRef();
+	const btnStop = useRef();
 	const { data: Reviews, isSuccess } = useReviewQuery();
 
 	const splitDate = (initDate) => {
@@ -21,11 +20,10 @@ function MainComment() {
 		return `${date}, ${time}`;
 	};
 
-	useEffect(() => {
-		if (!RefVisible) {
-			return;
-		}
-	}, [RefVisible]);
+	const activeBtnStop = () => {
+		btnStart.current.classList.remove('on');
+		btnStop.current.classList.add('on');
+	};
 
 	return (
 		<section id='main-comment-list' className='my-scroll'>
@@ -36,17 +34,21 @@ function MainComment() {
 				</div>
 
 				<div className='slide-wrap commentListSwiper'>
-					<Swiper
-						id='commentListPanel'
-						className='panel'
-						slidesPerView={'auto'}
-						spaceBetween={30}
-						autoplay={{ delay: 2500, disableOnInteraction: true }}
-						navigation={{ nextEl: btnNextComment.current, prevEl: btnPrevComment.current }}
-						modules={[Autoplay, Navigation]}
-					>
-						{isSuccess &&
-							Reviews.map((review, idx) => {
+					{isSuccess && (
+						<Swiper
+							id='commentListPanel'
+							className='panel'
+							onBeforeInit={(swiper) => (swiperRef.current = swiper)}
+							modules={[Autoplay]}
+							autoplay={{ delay: 2000, disableOnInteraction: true }}
+							slidesPerView={'auto'}
+							spaceBetween={30}
+							grabCursor={true}
+							loop={true}
+							loopedSlides={Reviews.length}
+							onSliderMove={activeBtnStop}
+						>
+							{Reviews.map((review, idx) => {
 								return (
 									<SwiperSlide key={idx}>
 										<div className='profile-box'>{review.writer.displayName[0].toUpperCase()}</div>
@@ -60,23 +62,58 @@ function MainComment() {
 									</SwiperSlide>
 								);
 							})}
-					</Swiper>
+						</Swiper>
+					)}
 
-					<div className='arrow'>
-						<button
-							type='button'
-							id='btnPrevComment'
-							className='prev'
-							ref={(e) => {
-								btnPrevComment.current = e;
-								setRefVisible(!!e);
-							}}
-						>
-							<FontAwesomeIcon icon={faChevronLeft} />
-						</button>
-						<button type='button' id='btnNextComment' className='next' ref={btnNextComment}>
-							<FontAwesomeIcon icon={faChevronRight} />
-						</button>
+					<div className='indicator'>
+						<div className='btn-arrow'>
+							<button
+								type='button'
+								id='btnPrevComment'
+								onClick={() => {
+									activeBtnStop();
+									swiperRef.current?.slidePrev();
+								}}
+							>
+								<FontAwesomeIcon icon={faChevronLeft} />
+							</button>
+							<button
+								type='button'
+								id='btnNextComment'
+								onClick={() => {
+									activeBtnStop();
+									swiperRef.current?.slideNext();
+								}}
+							>
+								<FontAwesomeIcon icon={faChevronRight} />
+							</button>
+						</div>
+
+						<div className='btn-controls'>
+							<button
+								type='button'
+								className='on'
+								ref={btnStart}
+								onClick={() => {
+									btnStart.current.classList.add('on');
+									btnStop.current.classList.remove('on');
+									swiperRef.current?.autoplay.start();
+								}}
+							>
+								<FontAwesomeIcon icon={faPlay} />
+							</button>
+							<button
+								type='button'
+								ref={btnStop}
+								onClick={() => {
+									btnStart.current.classList.remove('on');
+									btnStop.current.classList.add('on');
+									swiperRef.current?.autoplay.stop();
+								}}
+							>
+								<FontAwesomeIcon icon={faPause} />
+							</button>
+						</div>
 					</div>
 				</div>
 			</div>

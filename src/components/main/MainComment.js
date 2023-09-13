@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight, faPause, faPlay } from '@fortawesome/free-solid-svg-icons';
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -31,6 +32,9 @@ function MainComment() {
 				<div className='title-wrap'>
 					<h1>Book's Experiences</h1>
 					<p>Lorem ipsum dolor sit amet.</p>
+					<Link to='/review' className='btn-more'>
+						VIEW ALL
+					</Link>
 				</div>
 
 				<div className='slide-wrap commentListSwiper'>

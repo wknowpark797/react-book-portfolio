@@ -21,6 +21,19 @@ $slideWidth: 500px;
 				@include mainSubTitle();
 				margin-top: 15px;
 			}
+
+			.btn-more {
+				display: block;
+				width: 130px;
+				height: 40px;
+				font-size: 14px;
+				font-weight: 300;
+				line-height: 40px;
+				color: #fff;
+				background: #4eb3b3;
+				text-align: center;
+				margin-top: 25px;
+			}
 		}
 
 		.slide-wrap {
@@ -177,6 +190,13 @@ $slideWidth: 500px;
 			.title-wrap {
 				h1 {
 					font-size: 25px;
+				}
+
+				.btn-more {
+					width: 120px;
+					height: 35px;
+					font-size: 12px;
+					line-height: 35px;
 				}
 			}
 		}

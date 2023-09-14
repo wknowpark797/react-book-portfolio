@@ -1,10 +1,11 @@
 import { Link, useHistory } from 'react-router-dom';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useGlobalData } from '../../hooks/useGlobalContext';
 import firebase from '../../firebase';
 import { useDebounce } from '../../hooks/useDebounce';
 
 function Signin() {
+	const subFrame = useRef(null);
 	const history = useHistory();
 	const { Uid } = useGlobalData();
 
@@ -76,8 +77,12 @@ function Signin() {
 		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
 	}, [history, Uid]);
 
+	useEffect(() => {
+		subFrame.current.classList.add('on');
+	}, []);
+
 	return (
-		<section className='sign-in'>
+		<section className='sign-in' ref={subFrame}>
 			<div className='inner-container'>
 				<div className='signin-box'>
 					<div className='top-wrap'>

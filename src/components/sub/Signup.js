@@ -14,6 +14,7 @@ import axios from 'axios';
 import { useDebounce } from '../../hooks/useDebounce';
 
 function Signup() {
+	const subFrame = useRef(null);
 	const history = useHistory();
 	const { Uid } = useGlobalData();
 
@@ -166,8 +167,12 @@ function Signup() {
 		window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
 	}, [history, Uid]);
 
+	useEffect(() => {
+		subFrame.current.classList.add('on');
+	}, []);
+
 	return (
-		<section className='sign-up'>
+		<section className='sign-up' ref={subFrame}>
 			<div className='inner-container'>
 				<div className='desc-wrap'>
 					<div className='title-wrap'>

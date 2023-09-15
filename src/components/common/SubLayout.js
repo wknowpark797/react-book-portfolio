@@ -12,7 +12,9 @@ function SubLayout({ subPageName, breadCrumb, subPageTitle, children }) {
 	return (
 		<section className={`sub-content ${subPageName}`} ref={subFrame}>
 			<div className='sub-visual'>
-				<figure></figure>
+				<figure>
+					<img src={`${process.env.PUBLIC_URL}/image/sub-visual.jpg`} alt='' />
+				</figure>
 
 				<div className='title-wrap'>
 					<p className='bread-crumb'>{breadCrumb}</p>

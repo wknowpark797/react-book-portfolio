@@ -7,11 +7,94 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>React App</title>
   <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=138c090e69fe7f8783709c1f2242d6c7"></script>
+
+  <style>
+    .defaults {
+      position: absolute;
+      top: -99999px;
+    }
+
+    .mask {
+      width: 100%;
+      height: 100vh;
+      background: #111;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 10;
+      opacity: 1;
+      transition: opacity 2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: #fff;
+    }
+
+    .mask.off {
+      opacity: 0;
+    }
+  </style>
 </head>
 
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>
   <div id="root"></div>
+
+  <div class="defaults">Text Data for SEO</div>
+  <div class="mask">Loading...</div>
+
+  <script>
+    const defaults = document.querySelector('.defaults');
+    const mask = document.querySelector('.mask');
+    let tags = '';
+    const baskURL = 'https://wknowpark797.github.io/react-book-portfolio';
+
+    const imgs = [
+      baskURL + '/image/sub-visual.jpg',
+      baskURL + '/image/members/member1.jpg',
+      baskURL + '/image/members/member2.jpg',
+      baskURL + '/image/members/member3.jpg',
+      baskURL + '/image/members/member4.jpg',
+      baskURL + '/image/members/member5.jpg',
+      baskURL + '/image/members/member6.jpg',
+    ];
+    const lengthImg = imgs.length;
+
+    createDOM();
+
+    function createDOM() {
+      imgs.forEach(src => {
+        tags += `<img src=${src} />`;
+      })
+      defaults.innerHTML = tags;
+    }
+
+    function loadImg() {
+      return new Promise((res, rej) => {
+        let count = 0;
+        const imgDOM = defaults.querySelectorAll('img');
+        imgDOM.forEach(img => {
+          img.onload = () => {
+            count++;
+
+            if (count === lengthImg) {
+              res(true);
+            };
+          }
+        })
+      })
+    }
+
+    Promise.all([loadImg()]).then(result => {
+      mask.classList.add('off');
+
+      setTimeout(() => {
+        mask.remove();
+        defaults.remove();
+      }, 2000);
+    })
+  </script>
 </body>
 
 </html>

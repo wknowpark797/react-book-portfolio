@@ -4,7 +4,7 @@ import axios from 'axios';
 const fetchBookVisual = async () => {
 	const userId = '105834502729522452212';
 	const shelf = '1002';
-	const listURL = `https://www.googleapis.com/books/v1/users/${userId}/bookshelves/${shelf}/volumes?maxResults=30`;
+	const listURL = `https://www.googleapis.com/books/v1/users/${userId}/bookshelves/${shelf}/volumes?maxResults=5`;
 
 	const response = await axios.get(listURL);
 	return response.data.items;

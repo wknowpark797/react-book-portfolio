@@ -26,8 +26,6 @@ function App() {
 	useEffect(() => {
 		// firebase로부터의 로그인 정보를 전역 state에 저장
 		firebase.auth().onAuthStateChanged((userInfo) => {
-			console.log('로그인 정보: ', userInfo);
-
 			if (userInfo === null) {
 				setUid('');
 				setUserNum(-1);

@@ -8,8 +8,6 @@ function ScrollNavi() {
 	const [Mounted, setMounted] = useState(true);
 
 	const getPosition = () => {
-		console.log('getPosition throttle test');
-
 		position.current = [];
 		const sections = scrollNavi.current?.parentElement.querySelectorAll('.my-scroll');
 
@@ -21,8 +19,6 @@ function ScrollNavi() {
 	};
 
 	const activation = () => {
-		console.log('activation throttle test');
-
 		const limit = -window.innerHeight / 2;
 		const scroll = window.scrollY; // 현재 스크롤 위치
 		const naviArr = scrollNavi.current?.children;

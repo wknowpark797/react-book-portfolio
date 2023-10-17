@@ -4,6 +4,8 @@
 
 - Portfolio URL : <https://wknowpark797.github.io/react-book-portfolio>
 - Github Repository : <https://github.com/wknowpark797/react-book-portfolio>
+- Server Repository : <https://github.com/wknowpark797/node-book-portfolio>
+
 - 브랜치별 상태관리 적용
   - react-query 브랜치 (배포) : React Query, Context api 적용
   - redux-toolkit 브랜치 : Redux Toolkit 적용

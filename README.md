@@ -2,9 +2,9 @@
 
 주요 **컨텐츠는 도서**이며, Google Books API와 **다양한 오픈 API의 데이터를 활용한 기업형 프로젝트**입니다.
 
-- Portfolio URL : <https://wknowpark797.github.io/react-book-portfolio>
-- Github Repository : <https://github.com/wknowpark797/react-book-portfolio>
-- Server Repository : <https://github.com/wknowpark797/node-book-portfolio>
+Portfolio URL : <https://wknowpark797.github.io/react-book-portfolio>  
+Github Repository : <https://github.com/wknowpark797/react-book-portfolio>  
+Server Repository : <https://github.com/wknowpark797/node-book-portfolio>
 
 - 브랜치별 상태관리 적용
   - react-query 브랜치 (배포) : React Query, Context api 적용
